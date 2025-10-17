@@ -1,25 +1,20 @@
 // --- Firebase SDK Imports ---
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-import { getFirestore, collection, getDocs, doc, getDoc, addDoc, deleteDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+import { getFirestore, collection, getDocs, doc, getDoc, addDoc, deleteDoc, onSnapshot, query } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
 // --- IMPORTANT: Replace with your Firebase project's configuration ---
-// This object is used if the app is run locally or not in a special environment.
 const firebaseConfig = {
-  apiKey: "AIzaSyDkGs23-01csSCtZ_-qWVqiM1EIqZ7FNfY",
-  authDomain: "quiz-webapp-ea71c.firebaseapp.com",
-  projectId: "quiz-webapp-ea71c",
-  storageBucket: "quiz-webapp-ea71c.firebasestorage.app",
-  messagingSenderId: "906101996239",
-  appId: "1:906101996239:web:c1bbc3a9082ddd79db95ba"
+    apiKey: "AIzaSyDkGs23-01csSCtZ_-qWVqiM1EIqZ7FNfY",
+    authDomain: "quiz-webapp-ea71c.firebaseapp.com",
+    projectId: "quiz-webapp-ea71c",
+    storageBucket: "quiz-webapp-ea71c.appspot.com",
+    messagingSenderId: "906101996239",
+    appId: "1:906101996239:web:c1bbc3a9082ddd79db95ba"
 };
 
 // --- Environment Setup ---
-// Checks for a global config object provided by some hosting environments.
-// If it exists, it uses it; otherwise, it falls back to the one above.
 const envFirebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : firebaseConfig;
-
-// Initialize Firebase
 const app = initializeApp(envFirebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
@@ -30,22 +25,18 @@ let currentQuizId = null;
 let currentQuizData = null;
 let currentQuestionIndex = 0;
 let score = 0;
-const ADMIN_PASSWORD = "admin"; // Simple password for the admin panel
+let allQuizzes = [];
+let currentSubject = '';
+const ADMIN_PASSWORD = "admin";
 
 // --- DOM Elements ---
 const views = document.querySelectorAll('.view');
-const quizListContainer = document.getElementById('quiz-list');
+const quizListContainer = document.getElementById('quiz-list-container');
 const adminQuizListContainer = document.getElementById('admin-quiz-list');
 
 // --- View Management ---
-/**
- * Switches the visible view in the application.
- * @param {string} viewId The ID of the view to make active.
- */
 const showView = (viewId) => {
-    views.forEach(view => {
-        view.classList.toggle('active', view.id === viewId);
-    });
+    views.forEach(view => view.classList.toggle('active', view.id === viewId));
 };
 
 // --- Authentication Logic ---
@@ -55,40 +46,30 @@ const loggedInView = document.getElementById('logged-in-view');
 const loggedOutView = document.getElementById('logged-out-view');
 const userNameEl = document.getElementById('user-name');
 
-googleSignInBtn.addEventListener('click', () => {
-    signInWithPopup(auth, googleProvider).catch(error => {
-        console.error("Google Sign-In Error:", error.message);
-    });
-});
-
-logoutBtn.addEventListener('click', () => {
-    signOut(auth).catch(error => {
-        console.error("Sign Out Error:", error.message);
-    });
-});
+googleSignInBtn.addEventListener('click', () => signInWithPopup(auth, googleProvider).catch(e => console.error("Sign-In Error:", e.message)));
+logoutBtn.addEventListener('click', () => signOut(auth).catch(e => console.error("Sign Out Error:", e.message)));
 
 onAuthStateChanged(auth, user => {
-    if (user) {
-        // User is signed in
-        userNameEl.textContent = user.displayName;
-        loggedInView.classList.remove('hidden');
-        loggedOutView.classList.add('hidden');
-    } else {
-        // User is signed out
-        loggedInView.classList.add('hidden');
-        loggedOutView.classList.remove('hidden');
-    }
+    userNameEl.textContent = user ? user.displayName : '';
+    loggedInView.classList.toggle('hidden', !user);
+    loggedOutView.classList.toggle('hidden', !!user);
 });
 
-// --- Quiz Logic ---
-/** Renders the list of available quizzes on the home screen. */
-const renderQuizList = (quizzes) => {
+// --- Main App Flow ---
+
+/** Renders the list of chapters/quizzes for a given subject. */
+const renderChapterList = (subject) => {
+    currentSubject = subject;
+    document.getElementById('chapter-list-title').textContent = `${subject} Chapters`;
+    const filteredQuizzes = allQuizzes.filter(quiz => quiz.subject === subject);
+    
     quizListContainer.innerHTML = '';
-    if (quizzes.length === 0) {
-        quizListContainer.innerHTML = `<p class="loading-text">No quizzes available yet.</p>`;
+    if (filteredQuizzes.length === 0) {
+        quizListContainer.innerHTML = `<p class="loading-text">No chapters available for ${subject} yet.</p>`;
         return;
     }
-    quizzes.forEach(quiz => {
+
+    filteredQuizzes.forEach(quiz => {
         const button = document.createElement('button');
         button.className = 'btn quiz-list-item';
         button.textContent = quiz.title;
@@ -97,7 +78,7 @@ const renderQuizList = (quizzes) => {
     });
 };
 
-/** Starts a selected quiz, fetching its questions from Firestore. */
+/** Starts a selected quiz, fetching its questions. */
 const startQuiz = async (quizId) => {
     currentQuizId = quizId;
     currentQuestionIndex = 0;
@@ -105,19 +86,16 @@ const startQuiz = async (quizId) => {
     try {
         const quizDocRef = doc(db, "quizzes", quizId);
         const quizDoc = await getDoc(quizDocRef);
-        if (!quizDoc.exists()) {
-            console.error("Quiz not found!");
-            return;
-        }
-        const questionsQuery = query(collection(quizDocRef, "questions"));
-        const questionsSnapshot = await getDocs(questionsQuery);
+        if (!quizDoc.exists()) throw new Error("Quiz not found!");
+
+        const questionsSnapshot = await getDocs(collection(quizDocRef, "questions"));
         currentQuizData = {
             title: quizDoc.data().title,
             questions: questionsSnapshot.docs.map(d => d.data())
         };
 
         if (currentQuizData.questions.length === 0) {
-            alert("This quiz has no questions yet!");
+            alert("This chapter has no questions yet!");
             return;
         }
 
@@ -129,7 +107,7 @@ const startQuiz = async (quizId) => {
     }
 };
 
-/** Loads the current question and its options into the view. */
+/** Loads the current question and its options. */
 const loadQuestion = () => {
     if (currentQuestionIndex >= currentQuizData.questions.length) {
         showResults();
@@ -156,10 +134,9 @@ const loadQuestion = () => {
     nextBtn.textContent = (currentQuestionIndex === currentQuizData.questions.length - 1) ? 'Finish' : 'Next';
 };
 
-/** Handles the user selecting an answer option. */
+/** Handles user selecting an answer. */
 const selectOption = (selectedBtn) => {
-    const allBtns = document.querySelectorAll('.option-btn');
-    allBtns.forEach(btn => {
+    document.querySelectorAll('.option-btn').forEach(btn => {
         btn.classList.remove('selected');
         btn.disabled = true;
     });
@@ -167,6 +144,7 @@ const selectOption = (selectedBtn) => {
     document.getElementById('next-question-btn').disabled = false;
 };
 
+/** Logic for the 'Next' button click. */
 document.getElementById('next-question-btn').addEventListener('click', () => {
     const selectedOpt = document.querySelector('.option-btn.selected');
     if (!selectedOpt) return;
@@ -174,42 +152,35 @@ document.getElementById('next-question-btn').addEventListener('click', () => {
     const answerIdx = parseInt(selectedOpt.dataset.index);
     const question = currentQuizData.questions[currentQuestionIndex];
 
-    // Visually confirm the answer
     if (answerIdx === question.correctAnswerIndex) {
         score++;
         selectedOpt.classList.add('correct');
     } else {
         selectedOpt.classList.add('incorrect');
         const correctBtn = document.querySelector(`.option-btn[data-index='${question.correctAnswerIndex}']`);
-        if(correctBtn) correctBtn.classList.add('correct');
+        if (correctBtn) correctBtn.classList.add('correct');
     }
     
-    // Wait a moment, then move to the next question
     setTimeout(() => {
         currentQuestionIndex++;
         loadQuestion();
     }, 1200);
 });
 
-/** Displays the final score and results to the user. */
+/** Displays the final results. */
 const showResults = () => {
     const total = currentQuizData.questions.length;
     const percentage = total > 0 ? Math.round((score / total) * 100) : 0;
     document.getElementById('final-score').textContent = `${score}/${total}`;
     document.getElementById('score-percentage').textContent = `${percentage}%`;
-
-    let feedback = "Great effort!";
-    if (percentage > 80) feedback = "Excellent work!";
-    else if (percentage < 40) feedback = "Keep practicing!";
-    document.getElementById('score-feedback').textContent = feedback;
+    document.getElementById('score-feedback').textContent = percentage > 80 ? "Excellent work!" : percentage < 40 ? "Keep practicing!" : "Great effort!";
     showView('results-view');
 };
 
 // --- Admin Panel Logic ---
-/** Renders the list of quizzes in the admin panel for management. */
 const renderAdminQuizList = (quizzes) => {
     adminQuizListContainer.innerHTML = '';
-     if (quizzes.length === 0) {
+    if (quizzes.length === 0) {
         adminQuizListContainer.innerHTML = `<p class="loading-text">No quizzes created yet.</p>`;
         return;
     }
@@ -218,7 +189,10 @@ const renderAdminQuizList = (quizzes) => {
         quizCard.className = 'admin-quiz-card';
         quizCard.innerHTML = `
             <div class="admin-quiz-header">
-                <h3 class="admin-quiz-title">${quiz.title}</h3>
+                <div>
+                    <h3 class="admin-quiz-title">${quiz.title}</h3>
+                    <span class="admin-quiz-subject">${quiz.subject}</span>
+                </div>
                 <button data-id="${quiz.id}" class="btn delete-quiz-btn">Delete</button>
             </div>
             <div class="add-question-form">
@@ -243,105 +217,76 @@ const renderAdminQuizList = (quizzes) => {
 };
 
 document.getElementById('create-quiz-btn').addEventListener('click', async () => {
-    const titleInput = document.getElementById('new-quiz-title');
-    const title = titleInput.value.trim();
+    const title = document.getElementById('new-quiz-title').value.trim();
+    const subject = document.getElementById('new-quiz-subject').value;
     if (!title) return;
-    try {
-        await addDoc(collection(db, "quizzes"), { title });
-        titleInput.value = '';
-    } catch (e) {
-        console.error("Error creating quiz: ", e);
-    }
+    await addDoc(collection(db, "quizzes"), { title, subject });
+    document.getElementById('new-quiz-title').value = '';
 });
 
 adminQuizListContainer.addEventListener('click', async (e) => {
-    const target = e.target;
-
-    // Handle Quiz Deletion
-    if (target.classList.contains('delete-quiz-btn')) {
-        const quizId = target.dataset.id;
-        if (confirm('Are you sure you want to delete this quiz and all its questions? This cannot be undone.')) {
-            try {
-                // Note: Deleting subcollections is more complex. For this app, we'll just delete the parent doc.
-                // In a production app, you'd use a cloud function to delete subcollection documents.
-                await deleteDoc(doc(db, "quizzes", quizId));
-            } catch (error) {
-                console.error("Error deleting quiz: ", error);
-            }
+    const { classList, dataset } = e.target;
+    if (classList.contains('delete-quiz-btn')) {
+        if (confirm('Are you sure you want to delete this quiz?')) {
+            await deleteDoc(doc(db, "quizzes", dataset.id));
         }
     }
-
-    // Handle Add Question
-    if (target.classList.contains('add-question-btn')) {
-        const quizId = target.dataset.id;
-        const container = target.closest('.add-question-form');
-
+    if (classList.contains('add-question-btn')) {
+        const container = e.target.closest('.add-question-form');
         const questionText = container.querySelector('.question-input').value.trim();
         const options = Array.from(container.querySelectorAll('.option-input')).map(input => input.value.trim());
         const correctAnswerIndex = parseInt(container.querySelector('.correct-answer-select').value);
-
-        if (!questionText || options.some(opt => !opt)) {
-            alert('Please fill out the question and all four option fields.');
-            return;
-        }
-
-        try {
-            await addDoc(collection(doc(db, "quizzes", quizId), "questions"), {
-                questionText,
-                options,
-                correctAnswerIndex
-            });
-            
-            // Clear inputs after adding
-            container.querySelector('.question-input').value = '';
-            container.querySelectorAll('.option-input').forEach(input => input.value = '');
-            alert('Question added successfully!');
-        } catch (error) {
-            console.error("Error adding question: ", error);
-        }
+        if (!questionText || options.some(opt => !opt)) return alert('Please fill all fields.');
+        await addDoc(collection(doc(db, "quizzes", dataset.id), "questions"), { questionText, options, correctAnswerIndex });
+        container.querySelector('.question-input').value = '';
+        container.querySelectorAll('.option-input').forEach(input => input.value = '');
+        alert('Question added!');
     }
 });
 
 // --- Event Listeners & Initialization ---
+document.querySelectorAll('.subject-card').forEach(card => {
+    card.addEventListener('click', () => {
+        renderChapterList(card.dataset.subject);
+        showView('chapter-selection-view');
+    });
+});
+
+document.getElementById('back-to-subjects-btn').addEventListener('click', () => showView('subject-selection-view'));
 document.getElementById('show-admin-login-btn').addEventListener('click', () => showView('admin-login-view'));
-document.getElementById('back-to-home-from-login-btn').addEventListener('click', () => showView('home-view'));
+document.getElementById('back-to-home-from-login-btn').addEventListener('click', () => showView('subject-selection-view'));
+document.getElementById('admin-logout-btn').addEventListener('click', () => showView('subject-selection-view'));
+document.getElementById('back-to-chapters-btn').addEventListener('click', () => showView('chapter-selection-view'));
+document.getElementById('return-to-chapters-btn').addEventListener('click', () => showView('chapter-selection-view'));
+document.getElementById('restart-quiz-btn').addEventListener('click', () => startQuiz(currentQuizId));
 
 document.getElementById('admin-login-btn').addEventListener('click', () => {
-    const passwordInput = document.getElementById('admin-password');
-    const loginError = document.getElementById('login-error');
-    if (passwordInput.value === ADMIN_PASSWORD) {
+    const password = document.getElementById('admin-password').value;
+    if (password === ADMIN_PASSWORD) {
         showView('admin-panel-view');
-        passwordInput.value = '';
-        loginError.textContent = '';
+        document.getElementById('admin-password').value = '';
+        document.getElementById('login-error').textContent = '';
     } else {
-        loginError.textContent = 'Incorrect password.';
+        document.getElementById('login-error').textContent = 'Incorrect password.';
     }
 });
 
-document.getElementById('admin-logout-btn').addEventListener('click', () => showView('home-view'));
-document.getElementById('restart-quiz-btn').addEventListener('click', () => startQuiz(currentQuizId));
-document.getElementById('back-to-home-btn').addEventListener('click', () => showView('home-view'));
-document.getElementById('return-home-btn').addEventListener('click', () => showView('home-view'));
-
 // --- Initial Data Load & App Start ---
 window.onload = () => {
-    // Listen for real-time updates to the quizzes collection
-    const quizzesQuery = query(collection(db, "quizzes"));
-    onSnapshot(quizzesQuery, (snapshot) => {
-        const quizzes = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        renderQuizList(quizzes);
-        // If admin panel is active, refresh its list too
+    onSnapshot(query(collection(db, "quizzes")), snapshot => {
+        allQuizzes = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         if (document.getElementById('admin-panel-view').classList.contains('active')) {
-            renderAdminQuizList(quizzes);
+            renderAdminQuizList(allQuizzes);
         }
-    }, (error) => {
+        if (document.getElementById('chapter-selection-view').classList.contains('active')) {
+            renderChapterList(currentSubject);
+        }
+    }, error => {
         console.error("Error fetching quizzes:", error);
-        quizListContainer.innerHTML = `<p class="error-text">Could not load quizzes. Please check your connection and Firebase setup.</p>`;
+        document.getElementById('quiz-list-container').innerHTML = `<p class="error-text">Could not load quizzes.</p>`;
     });
 
-    // Start on the home view
-    showView('home-view');
-    // Trigger fade-in animation
+    showView('subject-selection-view');
     document.body.classList.remove('loading');
 };
 
