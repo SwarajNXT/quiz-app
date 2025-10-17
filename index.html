@@ -3,171 +3,206 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TrackPrep - NEET UG Practice Platform</title>
+    <title>Vidyucation - Free NEET Practice Tests & Mock Exams</title>
+    <meta name="description" content="Ace the NEET exam with unlimited free practice tests, mock exams, and detailed performance analysis. Vidyucation is a 100% free platform for all aspiring medical students.">
     
-    <!-- Google Font: Poppins -->
+    <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
+    <!-- Feather Icons -->
+    <script src="https://unpkg.com/feather-icons"></script>
+
     <!-- Stylesheet -->
     <link rel="stylesheet" href="style.css">
-    
-    <!-- JavaScript (Module for Firebase) -->
-    <script src="script.js" type="module" defer></script>
+
+    <!-- JavaScript -->
+    <script src="script.js" defer></script>
 </head>
-<body class="loading">
+<body>
 
-    <!-- Animated Background Shapes -->
-    <div class="background-shapes">
-        <div class="shape shape1"></div>
-        <div class="shape shape2"></div>
-        <div class="shape shape3"></div>
-    </div>
-
-    <!-- Main Application Container -->
-    <main class="app-container">
-        
-        <!-- ===================================================================== -->
-        <!-- Auth Header (Sign-In / User Info)                                     -->
-        <!-- ===================================================================== -->
-        <header id="auth-container" class="auth-header">
-            <!-- Logged Out State -->
-            <div id="logged-out-view">
-                <button id="google-signin-btn" class="btn btn-primary">
-                    <svg class="icon" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.657-6.08 8-11.303 8c-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4C12.955 4 4 12.955 4 24s8.955 20 20 20s20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z"></path><path fill="#FF3D00" d="M6.306 14.691l6.057 4.844C14.655 15.108 18.96 12 24 12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4C16.318 4 9.656 8.337 6.306 14.691z"></path><path fill="#4CAF50" d="M24 44c5.166 0 9.86-1.977 13.409-5.192l-6.19-5.238C29.211 35.091 26.715 36 24 36c-5.202 0-9.619-3.317-11.283-7.946l-6.522 5.025C9.505 39.556 16.227 44 24 44z"></path><path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303c-.792 2.237-2.231 4.166-4.087 5.571l6.19 5.238C42.021 35.596 44 30.032 44 24c0-1.341-.138-2.65-.389-3.917z"></path></svg>
-                    <span>Sign in with Google</span>
-                </button>
+    <!-- Header Section -->
+    <header class="header">
+        <div class="container">
+            <a href="#" class="logo">Vidyucation</a>
+            <nav class="main-nav">
+                <ul class="nav-list">
+                    <li><a href="#" class="nav-link active">Home</a></li>
+                    <li><a href="#about" class="nav-link">About Us</a></li>
+                    <li><a href="#practice" class="nav-link">Practice</a></li>
+                    <li><a href="#features" class="nav-link">Features</a></li>
+                    <li><a href="#support" class="nav-link">Support</a></li>
+                </ul>
+            </nav>
+            <div class="header-actions">
+                <a href="#" class="btn btn-secondary">Login</a>
+                <a href="#" class="btn btn-primary">Sign Up</a>
             </div>
-            <!-- Logged In State -->
-            <div id="logged-in-view" class="hidden">
-                <p>Welcome, <span id="user-name" class="font-semibold"></span>!</p>
-                <button id="logout-btn" class="btn btn-secondary">Logout</button>
-            </div>
-        </header>
+            <button class="hamburger" id="hamburger-menu" aria-label="Open Menu">
+                <i data-feather="menu"></i>
+            </button>
+        </div>
+    </header>
 
-        <!-- ===================================================================== -->
-        <!-- View 1: Subject Selection (New Home Screen)                           -->
-        <!-- ===================================================================== -->
-        <section id="subject-selection-view" class="view active">
-            <div class="glass-card text-center">
-                <h1 class="title">NEET UG Practice</h1>
-                <p class="subtitle">Select a subject to start practicing high-yield MCQs.</p>
-                <div class="subject-grid">
-                    <div class="subject-card" data-subject="Physics">
-                        <h3>Physics</h3>
-                        <p>Master concepts from mechanics to modern physics.</p>
+    <!-- Main Content -->
+    <main>
+
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="container text-center">
+                <h1 class="hero-title">Master NEET with Confidence. For Free.</h1>
+                <p class="hero-subtitle">Track your progress, analyze your performance, and achieve your goals with Vidyucation’s free learning platform.</p>
+                <div class="hero-buttons">
+                    <a href="#practice" class="btn btn-primary btn-lg">Get Started</a>
+                    <a href="#features" class="btn btn-secondary btn-lg">Learn More</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dashboard Preview Section -->
+        <section id="about" class="dashboard-preview">
+            <div class="container">
+                <div class="dashboard-image">
+                     
+                </div>
+                <div class="dashboard-content">
+                    <h2 class="section-title">Your Personalized Path to Success</h2>
+                    <p class="section-description">Our intuitive dashboard gives you a clear view of your preparation journey. Everything you need, all in one place.</p>
+                    <ul class="dashboard-features-list">
+                        <li><i data-feather="pie-chart"></i> <strong>Custom Tests & Reports:</strong> Analyze your strengths and weaknesses with detailed, question-level feedback.</li>
+                        <li><i data-feather="target"></i> <strong>Syllabus Tracker:</strong> Monitor your progress through every chapter of the NEET syllabus.</li>
+                        <li><i data-feather="bar-chart-2"></i> <strong>Performance Stats:</strong> Instantly see your average scores, study time, and improvement trends.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Feature Highlights Section -->
+        <section id="features" class="feature-highlights">
+            <div class="container">
+                <h2 class="section-title text-center">Unlock Your Full Potential, Completely Free</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon"><i data-feather="activity"></i></div>
+                        <h3>Real-time Progress Insights</h3>
+                        <p>Get instant feedback on your performance to know exactly where you stand and what to focus on next.</p>
                     </div>
-                    <div class="subject-card" data-subject="Chemistry">
-                        <h3>Chemistry</h3>
-                        <p>Excel in physical, organic, and inorganic chemistry.</p>
+                    <div class="feature-card">
+                        <div class="feature-icon"><i data-feather="compass"></i></div>
+                        <h3>Personalized Recommendations</h3>
+                        <p>Our smart system suggests topics and questions based on your performance to improve your weak areas.</p>
                     </div>
-                    <div class="subject-card" data-subject="Biology">
-                        <h3>Biology</h3>
-                        <p>Conquer botany, zoology, and human physiology.</p>
+                    <div class="feature-card">
+                        <div class="feature-icon"><i data-feather="users"></i></div>
+                        <h3>Collaborative Learning</h3>
+                        <p>Create or join study groups to discuss concepts, solve problems, and motivate each other.</p>
                     </div>
-                </div>
-                 <button id="show-admin-login-btn" class="link-btn">Admin Panel</button>
-            </div>
-        </section>
-
-        <!-- ===================================================================== -->
-        <!-- View 2: Chapter Selection Screen                                      -->
-        <!-- ===================================================================== -->
-        <section id="chapter-selection-view" class="view">
-            <div class="glass-card">
-                 <div class="view-header">
-                    <button id="back-to-subjects-btn" class="back-btn">&larr; Back to Subjects</button>
-                    <h1 id="chapter-list-title" class="title text-center">Chapters</h1>
-                </div>
-                <div id="quiz-list-container" class="quiz-list-container">
-                    <p class="loading-text">Loading chapters...</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- ===================================================================== -->
-        <!-- View 3: Quiz Screen                                                   -->
-        <!-- ===================================================================== -->
-        <section id="quiz-view" class="view">
-            <div class="glass-card">
-                <div class="quiz-header">
-                    <h2 id="quiz-title" class="quiz-title">Quiz Title</h2>
-                    <div class="question-counter">
-                        <span id="question-counter-current">1</span> / <span id="question-counter-total">10</span>
-                    </div>
-                </div>
-                <div id="question-container" class="question-area">
-                    <p id="question-text" class="question-text">Question text goes here...</p>
-                    <div id="options-container" class="options-grid"></div>
-                </div>
-                <div class="quiz-footer">
-                    <button id="back-to-chapters-btn" class="btn btn-secondary">Back to Chapters</button>
-                    <button id="next-question-btn" class="btn btn-primary" disabled>Next</button>
-                </div>
-            </div>
-        </section>
-
-        <!-- ===================================================================== -->
-        <!-- View 4: Results Screen                                                -->
-        <!-- ===================================================================== -->
-        <section id="results-view" class="view">
-             <div class="glass-card text-center">
-                <h1 class="title">Quiz Complete!</h1>
-                <p class="subtitle">Here's your performance analysis:</p>
-                <div class="score-display">
-                    <p id="final-score">0/0</p>
-                </div>
-                <p class="score-percentage" id="score-percentage">0%</p>
-                <p class="score-feedback" id="score-feedback">Keep trying!</p>
-                <div class="results-actions">
-                    <button id="restart-quiz-btn" class="btn btn-primary">Try Again</button>
-                    <button id="return-to-chapters-btn" class="btn btn-secondary">Back to Chapters</button>
-                </div>
-            </div>
-        </section>
-
-        <!-- ===================================================================== -->
-        <!-- View 5: Admin Login                                                   -->
-        <!-- ===================================================================== -->
-        <section id="admin-login-view" class="view">
-            <div class="glass-card text-center">
-                <h1 class="title">Admin Login</h1>
-                <input type="password" id="admin-password" placeholder="Enter Admin Password" class="input-field">
-                <button id="admin-login-btn" class="btn btn-primary full-width">Login</button>
-                <button id="back-to-home-from-login-btn" class="link-btn">Back to Home</button>
-                <p id="login-error" class="error-text"></p>
-            </div>
-        </section>
-
-        <!-- ===================================================================== -->
-        <!-- View 6: Admin Panel                                                   -->
-        <!-- ===================================================================== -->
-        <section id="admin-panel-view" class="view">
-            <div class="glass-card admin-panel">
-                <div class="admin-header">
-                    <h1 class="title">Admin Panel</h1>
-                    <button id="admin-logout-btn" class="btn btn-secondary">Logout</button>
-                </div>
-                <div class="admin-section">
-                    <h2 class="subtitle">Create New Quiz/Chapter</h2>
-                    <select id="new-quiz-subject" class="select-field">
-                        <option value="Physics">Physics</option>
-                        <option value="Chemistry">Chemistry</option>
-                        <option value="Biology">Biology</option>
-                    </select>
-                    <input type="text" id="new-quiz-title" placeholder="Quiz Title (e.g., 'Microbes in Human Welfare')" class="input-field">
-                    <button id="create-quiz-btn" class="btn btn-primary full-width">Create Quiz</button>
-                </div>
-                <div class="admin-section">
-                    <h2 class="subtitle">Manage Quizzes</h2>
-                    <div id="admin-quiz-list" class="admin-quiz-list-container">
-                       <p class="loading-text">Loading quizzes...</p>
+                    <div class="feature-card">
+                        <div class="feature-icon"><i data-feather="calendar"></i></div>
+                        <h3>Organized Scheduling</h3>
+                        <p>Plan your study sessions and mock tests with our built-in scheduler and get timely reminders.</p>
                     </div>
                 </div>
             </div>
         </section>
+
+        <!-- Practice Test Section -->
+        <section id="practice" class="practice-test-cta">
+            <div class="container text-center">
+                <h2 class="cta-title">Unlimited NEET Practice Questions. 100% Free.</h2>
+                <p class="cta-subtitle">Dive into our massive question bank covering the complete Physics, Chemistry, and Biology syllabus.</p>
+                <a href="#" class="btn btn-primary btn-lg">Start NEET Practice Test Today</a>
+            </div>
+        </section>
+
+        <!-- Subject & Topic Breakdown Section -->
+        <section class="subject-breakdown">
+            <div class="container">
+                <h2 class="section-title text-center">Comprehensive Syllabus Coverage</h2>
+                <div class="subject-tabs">
+                    <button class="tab-link active" data-subject="physics">Physics</button>
+                    <button class="tab-link" data-subject="chemistry">Chemistry</button>
+                    <button class="tab-link" data-subject="biology">Biology</button>
+                </div>
+                <div class="subject-content active" id="physics">
+                    <div class="chapter-list">
+                        <div class="chapter-item"><span>Kinematics</span><span class="question-count">120 Qs</span></div>
+                        <div class="chapter-item"><span>Laws of Motion</span><span class="question-count">95 Qs</span></div>
+                        <div class="chapter-item"><span>Thermodynamics</span><span class="question-count">150 Qs</span></div>
+                        <div class="chapter-item"><span>Optics</span><span class="question-count">180 Qs</span></div>
+                        <div class="chapter-item"><span>Electromagnetism</span><span class="question-count">210 Qs</span></div>
+                        <div class="chapter-item"><span>Modern Physics</span><span class="question-count">110 Qs</span></div>
+                    </div>
+                </div>
+                <div class="subject-content" id="chemistry">
+                    <div class="chapter-list">
+                        <div class="chapter-item"><span>Atomic Structure</span><span class="question-count">130 Qs</span></div>
+                        <div class="chapter-item"><span>Chemical Bonding</span><span class="question-count">115 Qs</span></div>
+                        <div class="chapter-item"><span>Equilibrium</span><span class="question-count">140 Qs</span></div>
+                        <div class="chapter-item"><span>Organic Chemistry</span><span class="question-count">250 Qs</span></div>
+                        <div class="chapter-item"><span>p-Block Elements</span><span class="question-count">160 Qs</span></div>
+                        <div class="chapter-item"><span>Biomolecules</span><span class="question-count">90 Qs</span></div>
+                    </div>
+                </div>
+                <div class="subject-content" id="biology">
+                     <div class="chapter-list">
+                        <div class="chapter-item"><span>Diversity of Living World</span><span class="question-count">220 Qs</span></div>
+                        <div class="chapter-item"><span>Cell Structure & Function</span><span class="question-count">190 Qs</span></div>
+                        <div class="chapter-item"><span>Plant Physiology</span><span class="question-count">210 Qs</span></div>
+                        <div class="chapter-item"><span>Human Physiology</span><span class="question-count">280 Qs</span></div>
+                        <div class="chapter-item"><span>Genetics and Evolution</span><span class="question-count">240 Qs</span></div>
+                        <div class="chapter-item"><span>Ecology and Environment</span><span class="question-count">180 Qs</span></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
     </main>
+
+    <!-- Footer Section -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <a href="#" class="logo">Vidyucation</a>
+                    <p class="footer-tagline">Your free partner in NEET success.</p>
+                    <div class="social-links">
+                        <a href="#" aria-label="Twitter"><i data-feather="twitter"></i></a>
+                        <a href="#" aria-label="Facebook"><i data-feather="facebook"></i></a>
+                        <a href="#" aria-label="Instagram"><i data-feather="instagram"></i></a>
+                        <a href="#" aria-label="LinkedIn"><i data-feather="linkedin"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="#practice">Practice Tests</a></li>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Subjects</h4>
+                    <ul>
+                        <li><a href="#practice">Physics</a></li>
+                        <li><a href="#practice">Chemistry</a></li>
+                        <li><a href="#practice">Biology</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Support</h4>
+                    <p>contact@vidyucation.com</p>
+                    <p>+91 12345 67890</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Vidyucation. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
 
 </body>
 </html>
