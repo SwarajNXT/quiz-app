@@ -6,12 +6,12 @@ import { getFirestore, collection, getDocs, doc, getDoc, addDoc, deleteDoc, onSn
 // --- IMPORTANT: Replace with your Firebase project's configuration ---
 // This object is used if the app is run locally or not in a special environment.
 const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_AUTH_DOMAIN",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_STORAGE_BUCKET",
-    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-    appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyDkGs23-01csSCtZ_-qWVqiM1EIqZ7FNfY",
+  authDomain: "quiz-webapp-ea71c.firebaseapp.com",
+  projectId: "quiz-webapp-ea71c",
+  storageBucket: "quiz-webapp-ea71c.firebasestorage.app",
+  messagingSenderId: "906101996239",
+  appId: "1:906101996239:web:c1bbc3a9082ddd79db95ba"
 };
 
 // --- Environment Setup ---
