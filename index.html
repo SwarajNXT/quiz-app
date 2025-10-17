@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stellar Quiz - Test Your Knowledge</title>
+    <title>TrackPrep - NEET UG Practice Platform</title>
     
     <!-- Google Font: Poppins -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -47,21 +47,47 @@
         </header>
 
         <!-- ===================================================================== -->
-        <!-- View 1: Home Screen (Quiz List)                                       -->
+        <!-- View 1: Subject Selection (New Home Screen)                           -->
         <!-- ===================================================================== -->
-        <section id="home-view" class="view active">
+        <section id="subject-selection-view" class="view active">
             <div class="glass-card text-center">
-                <h1 class="title">Stellar Quiz</h1>
-                <p class="subtitle">Select a quiz to begin your cosmic journey of knowledge.</p>
-                <div id="quiz-list" class="quiz-list-container">
-                    <p class="loading-text">Loading quizzes...</p>
+                <h1 class="title">NEET UG Practice</h1>
+                <p class="subtitle">Select a subject to start practicing high-yield MCQs.</p>
+                <div class="subject-grid">
+                    <div class="subject-card" data-subject="Physics">
+                        <h3>Physics</h3>
+                        <p>Master concepts from mechanics to modern physics.</p>
+                    </div>
+                    <div class="subject-card" data-subject="Chemistry">
+                        <h3>Chemistry</h3>
+                        <p>Excel in physical, organic, and inorganic chemistry.</p>
+                    </div>
+                    <div class="subject-card" data-subject="Biology">
+                        <h3>Biology</h3>
+                        <p>Conquer botany, zoology, and human physiology.</p>
+                    </div>
                 </div>
-                <button id="show-admin-login-btn" class="link-btn">Admin Panel</button>
+                 <button id="show-admin-login-btn" class="link-btn">Admin Panel</button>
             </div>
         </section>
 
         <!-- ===================================================================== -->
-        <!-- View 2: Quiz Screen                                                   -->
+        <!-- View 2: Chapter Selection Screen                                      -->
+        <!-- ===================================================================== -->
+        <section id="chapter-selection-view" class="view">
+            <div class="glass-card">
+                 <div class="view-header">
+                    <button id="back-to-subjects-btn" class="back-btn">&larr; Back to Subjects</button>
+                    <h1 id="chapter-list-title" class="title text-center">Chapters</h1>
+                </div>
+                <div id="quiz-list-container" class="quiz-list-container">
+                    <p class="loading-text">Loading chapters...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===================================================================== -->
+        <!-- View 3: Quiz Screen                                                   -->
         <!-- ===================================================================== -->
         <section id="quiz-view" class="view">
             <div class="glass-card">
@@ -76,19 +102,19 @@
                     <div id="options-container" class="options-grid"></div>
                 </div>
                 <div class="quiz-footer">
-                    <button id="back-to-home-btn" class="btn btn-secondary">Back to List</button>
+                    <button id="back-to-chapters-btn" class="btn btn-secondary">Back to Chapters</button>
                     <button id="next-question-btn" class="btn btn-primary" disabled>Next</button>
                 </div>
             </div>
         </section>
 
         <!-- ===================================================================== -->
-        <!-- View 3: Results Screen                                                -->
+        <!-- View 4: Results Screen                                                -->
         <!-- ===================================================================== -->
         <section id="results-view" class="view">
-            <div class="glass-card text-center">
+             <div class="glass-card text-center">
                 <h1 class="title">Quiz Complete!</h1>
-                <p class="subtitle">Here's how you performed:</p>
+                <p class="subtitle">Here's your performance analysis:</p>
                 <div class="score-display">
                     <p id="final-score">0/0</p>
                 </div>
@@ -96,26 +122,26 @@
                 <p class="score-feedback" id="score-feedback">Keep trying!</p>
                 <div class="results-actions">
                     <button id="restart-quiz-btn" class="btn btn-primary">Try Again</button>
-                    <button id="return-home-btn" class="btn btn-secondary">Back to Home</button>
+                    <button id="return-to-chapters-btn" class="btn btn-secondary">Back to Chapters</button>
                 </div>
             </div>
         </section>
 
         <!-- ===================================================================== -->
-        <!-- View 4: Admin Login                                                   -->
+        <!-- View 5: Admin Login                                                   -->
         <!-- ===================================================================== -->
         <section id="admin-login-view" class="view">
             <div class="glass-card text-center">
                 <h1 class="title">Admin Login</h1>
                 <input type="password" id="admin-password" placeholder="Enter Admin Password" class="input-field">
                 <button id="admin-login-btn" class="btn btn-primary full-width">Login</button>
-                <button id="back-to-home-from-login-btn" class="link-btn">Back to Quiz List</button>
+                <button id="back-to-home-from-login-btn" class="link-btn">Back to Home</button>
                 <p id="login-error" class="error-text"></p>
             </div>
         </section>
 
         <!-- ===================================================================== -->
-        <!-- View 5: Admin Panel                                                   -->
+        <!-- View 6: Admin Panel                                                   -->
         <!-- ===================================================================== -->
         <section id="admin-panel-view" class="view">
             <div class="glass-card admin-panel">
@@ -124,8 +150,13 @@
                     <button id="admin-logout-btn" class="btn btn-secondary">Logout</button>
                 </div>
                 <div class="admin-section">
-                    <h2 class="subtitle">Create New Quiz</h2>
-                    <input type="text" id="new-quiz-title" placeholder="Quiz Title (e.g., 'History 101')" class="input-field">
+                    <h2 class="subtitle">Create New Quiz/Chapter</h2>
+                    <select id="new-quiz-subject" class="select-field">
+                        <option value="Physics">Physics</option>
+                        <option value="Chemistry">Chemistry</option>
+                        <option value="Biology">Biology</option>
+                    </select>
+                    <input type="text" id="new-quiz-title" placeholder="Quiz Title (e.g., 'Microbes in Human Welfare')" class="input-field">
                     <button id="create-quiz-btn" class="btn btn-primary full-width">Create Quiz</button>
                 </div>
                 <div class="admin-section">
