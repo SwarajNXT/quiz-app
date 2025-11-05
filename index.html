@@ -6,6 +6,7 @@
     <title>Vidyucation - NEET Exam Preparation</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
     <style>
         * {
             margin: 0;
@@ -25,11 +26,10 @@
             --dark-light: #334155;
             --gray: #64748b;
             --success: #10b981;
+            --error: #ef4444;
             --glass: rgba(255, 255, 255, 0.1);
-            --glass-dark: rgba(0, 0, 0, 0.1);
             --border: rgba(255, 255, 255, 0.2);
             --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
-            --shadow-light: 0 4px 16px 0 rgba(31, 38, 135, 0.1);
         }
 
         body {
@@ -88,22 +88,6 @@
             left: 60%;
         }
 
-        /* Glassmorphism Utility Classes */
-        .glass {
-            background: var(--glass);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid var(--border);
-            box-shadow: var(--shadow);
-        }
-
-        .glass-dark {
-            background: var(--glass-dark);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
         /* Header Styles */
         header {
             padding: 20px 0;
@@ -120,9 +104,8 @@
             border-radius: 20px;
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+            box-shadow: var(--shadow);
         }
 
         .logo {
@@ -212,6 +195,23 @@
         .btn-primary:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
         }
 
         /* Hero Section */
@@ -306,7 +306,6 @@
             border-radius: 20px;
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
             border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: var(--shadow);
             transition: all 0.3s ease;
@@ -349,7 +348,6 @@
             border-radius: 20px;
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
             border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: var(--shadow);
             transition: all 0.3s ease;
@@ -408,22 +406,10 @@
             padding: 60px 40px;
             background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
             backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
             border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: var(--shadow);
             position: relative;
             overflow: hidden;
-        }
-
-        .question-bank-content::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="rgba(255,255,255,0.03)"/></svg>');
-            background-size: cover;
         }
 
         .stats-container {
@@ -438,7 +424,6 @@
             border-radius: 18px;
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
             text-align: center;
             transition: all 0.3s ease;
@@ -476,21 +461,8 @@
             border-radius: 25px;
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
             border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: var(--shadow);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .test-creation-content::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, transparent 70%);
         }
 
         .test-creation h2 {
@@ -510,7 +482,6 @@
         footer {
             background: rgba(15, 23, 42, 0.8);
             backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
             border-top: 1px solid rgba(255, 255, 255, 0.05);
             padding: 60px 0 20px;
             margin-top: 60px;
@@ -539,7 +510,6 @@
             width: 40px;
             height: 3px;
             background: linear-gradient(90deg, var(--primary), var(--secondary));
-            border-radius: 2px;
         }
 
         .footer-column ul {
@@ -554,9 +524,6 @@
             color: #cbd5e1;
             text-decoration: none;
             transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
 
         .footer-column ul li a:hover {
@@ -572,7 +539,7 @@
             font-size: 0.9rem;
         }
 
-        /* Login Modal */
+        /* Modal Styles */
         .modal {
             display: none;
             position: fixed;
@@ -592,9 +559,8 @@
         }
 
         .modal-content {
-            background: rgba(30, 41, 59, 0.9);
+            background: rgba(30, 41, 59, 0.95);
             backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
             margin: 5% auto;
             border-radius: 25px;
             width: 90%;
@@ -623,6 +589,11 @@
             font-weight: 600;
         }
 
+        .modal-header p {
+            color: #cbd5e1;
+            margin-top: 8px;
+        }
+
         .close {
             position: absolute;
             top: 20px;
@@ -632,24 +603,106 @@
             cursor: pointer;
             color: #cbd5e1;
             transition: color 0.3s ease;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
         }
 
         .close:hover {
             color: var(--accent-light);
-            background: rgba(255, 255, 255, 0.1);
         }
 
         .modal-body {
             padding: 30px;
         }
 
-        /* Responsive Styles */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--light);
+        }
+
+        .input-with-icon {
+            position: relative;
+        }
+
+        .input-with-icon i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+        }
+
+        .input-with-icon input {
+            width: 100%;
+            padding: 12px 15px 12px 45px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--light);
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .input-with-icon input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .btn-full {
+            width: 100%;
+            justify-content: center;
+            padding: 14px;
+            margin: 20px 0;
+        }
+
+        .auth-message {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 500;
+            display: none;
+        }
+
+        .auth-message.success {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: #10b981;
+        }
+
+        .auth-message.error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #ef4444;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .signup-link, .login-link {
+            text-align: center;
+            color: #cbd5e1;
+        }
+
+        .signup-link a, .login-link a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .signup-link a:hover, .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
         @media (max-width: 768px) {
             .header-content {
                 flex-direction: column;
@@ -693,7 +746,7 @@
     <!-- Header Section -->
     <header>
         <div class="container">
-            <div class="header-content glass">
+            <div class="header-content">
                 <div class="logo">
                     <div class="logo-icon">
                         <i class="fas fa-graduation-cap"></i>
@@ -709,7 +762,7 @@
                         <li><a href="#"><i class="fas fa-file-alt"></i> Resources</a></li>
                     </ul>
                 </nav>
-                <div class="auth-buttons">
+                <div class="auth-buttons" id="authButtons">
                     <button class="btn btn-outline login-btn"><i class="fas fa-sign-in-alt"></i> Login</button>
                     <button class="btn btn-primary signup-btn"><i class="fas fa-user-plus"></i> Sign Up</button>
                 </div>
@@ -742,19 +795,19 @@
             <p class="section-subtitle">Monitor your performance, identify strengths and weaknesses, and achieve your goals with Vidyucation's comprehensive tracking system.</p>
             
             <div class="progress-container">
-                <div class="progress-card glass">
+                <div class="progress-card">
                     <div class="progress-value">4.0</div>
                     <div class="progress-label">Overall Score</div>
                 </div>
-                <div class="progress-card glass">
+                <div class="progress-card">
                     <div class="progress-value">92.5%</div>
                     <div class="progress-label">Accuracy</div>
                 </div>
-                <div class="progress-card glass">
+                <div class="progress-card">
                     <div class="progress-value">8/12</div>
                     <div class="progress-label">Completed Topics</div>
                 </div>
-                <div class="progress-card glass">
+                <div class="progress-card">
                     <div class="progress-value">14</div>
                     <div class="progress-label">Tests Taken</div>
                 </div>
@@ -888,6 +941,7 @@
                 <p>Continue your NEET preparation journey</p>
             </div>
             <div class="modal-body">
+                <div id="authMessage" class="auth-message"></div>
                 <form id="loginForm">
                     <div class="form-group">
                         <label for="email">Email Address</label>
@@ -905,35 +959,11 @@
                         </div>
                     </div>
                     
-                    <div class="form-options">
-                        <label class="checkbox-container">
-                            <input type="checkbox" id="rememberMe">
-                            <span class="checkmark"></span>
-                            Remember me
-                        </label>
-                        <a href="#" class="forgot-password">Forgot Password?</a>
-                    </div>
-                    
-                    <button type="submit" class="btn btn-primary btn-full">
+                    <button type="submit" class="btn btn-primary btn-full" id="loginBtn">
                         <i class="fas fa-sign-in-alt"></i>
                         Login to Your Account
                     </button>
                 </form>
-                
-                <div class="divider">
-                    <span>Or continue with</span>
-                </div>
-                
-                <div class="social-login">
-                    <button class="btn-social google">
-                        <i class="fab fa-google"></i>
-                        Google
-                    </button>
-                    <button class="btn-social facebook">
-                        <i class="fab fa-facebook-f"></i>
-                        Facebook
-                    </button>
-                </div>
                 
                 <div class="signup-link">
                     Don't have an account? <a href="#" id="showSignup">Sign up now</a>
@@ -942,41 +972,234 @@
         </div>
     </div>
 
+    <!-- Signup Modal -->
+    <div id="signupModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close">&times;</span>
+                <h2>Join Vidyucation</h2>
+                <p>Start your NEET preparation journey</p>
+            </div>
+            <div class="modal-body">
+                <div id="signupMessage" class="auth-message"></div>
+                <form id="signupForm">
+                    <div class="form-group">
+                        <label for="signupEmail">Email Address</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" id="signupEmail" name="email" placeholder="Enter your email" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="signupPassword">Password</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="signupPassword" name="password" placeholder="Create a password (min. 6 characters)" required>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-full" id="signupBtn">
+                        <i class="fas fa-user-plus"></i>
+                        Create Account
+                    </button>
+                </form>
+                
+                <div class="login-link">
+                    Already have an account? <a href="#" id="showLogin">Login here</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase and App JavaScript -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
+        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyD7UYp7ApLTpku2y4gAw8QprAkCNGhRsLI",
+            authDomain: "quiz-app-ad5de.firebaseapp.com",
+            projectId: "quiz-app-ad5de",
+            storageBucket: "quiz-app-ad5de.firebasestorage.app",
+            messagingSenderId: "17935383217",
+            appId: "1:17935383217:web:f34559709c88a1d9670090",
+            measurementId: "G-ZWVX3GZ1DX"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Make Firebase available globally
+        window.firebase = { auth, db, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, doc, setDoc };
+    </script>
+
     <script>
+        // Authentication Functions
+        function showMessage(message, type, elementId) {
+            const messageEl = document.getElementById(elementId);
+            messageEl.textContent = message;
+            messageEl.className = `auth-message ${type}`;
+            messageEl.style.display = 'block';
+            
+            setTimeout(() => {
+                messageEl.style.display = 'none';
+            }, 5000);
+        }
+
+        async function loginUser(email, password) {
+            const loginBtn = document.getElementById('loginBtn');
+            loginBtn.disabled = true;
+            loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
+            
+            try {
+                const userCredential = await window.firebase.signInWithEmailAndPassword(
+                    window.firebase.auth, 
+                    email, 
+                    password
+                );
+                
+                showMessage('Login successful! Redirecting...', 'success', 'authMessage');
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1500);
+            } catch (error) {
+                let errorMessage = 'Login failed. Please try again.';
+                if (error.code === 'auth/user-not-found') {
+                    errorMessage = 'No account found with this email.';
+                } else if (error.code === 'auth/wrong-password') {
+                    errorMessage = 'Incorrect password. Please try again.';
+                } else if (error.code === 'auth/invalid-email') {
+                    errorMessage = 'Please enter a valid email address.';
+                }
+                showMessage(errorMessage, 'error', 'authMessage');
+            } finally {
+                loginBtn.disabled = false;
+                loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login to Your Account';
+            }
+        }
+
+        async function signupUser(email, password) {
+            const signupBtn = document.getElementById('signupBtn');
+            signupBtn.disabled = true;
+            signupBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating Account...';
+            
+            try {
+                const userCredential = await window.firebase.createUserWithEmailAndPassword(
+                    window.firebase.auth,
+                    email,
+                    password
+                );
+                
+                const user = userCredential.user;
+                
+                await window.firebase.setDoc(
+                    window.firebase.doc(window.firebase.db, "users", user.uid),
+                    {
+                        email: email,
+                        createdAt: new Date(),
+                        lastLogin: new Date(),
+                        accountType: 'student',
+                        neetYear: '2025'
+                    }
+                );
+                
+                showMessage('Account created successfully!', 'success', 'signupMessage');
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1500);
+            } catch (error) {
+                let errorMessage = 'Signup failed. Please try again.';
+                if (error.code === 'auth/email-already-in-use') {
+                    errorMessage = 'This email is already registered. Please login instead.';
+                } else if (error.code === 'auth/weak-password') {
+                    errorMessage = 'Password should be at least 6 characters.';
+                } else if (error.code === 'auth/invalid-email') {
+                    errorMessage = 'Please enter a valid email address.';
+                }
+                showMessage(errorMessage, 'error', 'signupMessage');
+            } finally {
+                signupBtn.disabled = false;
+                signupBtn.innerHTML = '<i class="fas fa-user-plus"></i> Create Account';
+            }
+        }
+
+        // Check auth state
+        window.firebase.onAuthStateChanged(window.firebase.auth, (user) => {
+            if (user) {
+                document.getElementById('authButtons').innerHTML = `
+                    <div class="user-profile">
+                        <div class="user-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <span>Welcome, ${user.email.split('@')[0]}</span>
+                        <button class="btn btn-outline logout-btn">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </button>
+                    </div>
+                `;
+                
+                document.querySelector('.logout-btn').addEventListener('click', () => {
+                    window.firebase.signOut(window.firebase.auth);
+                });
+            }
+        });
+
         // Modal functionality
         document.addEventListener('DOMContentLoaded', function() {
             const loginModal = document.getElementById('loginModal');
-            const closeBtn = document.querySelector('.close');
-            const loginButtons = document.querySelectorAll('.login-btn, .practice-btn, .test-btn, .signup-btn, .create-test-btn');
+            const signupModal = document.getElementById('signupModal');
+            const closeButtons = document.querySelectorAll('.close');
             
-            // Open modal when any relevant button is clicked
-            loginButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    loginModal.style.display = 'block';
-                    document.body.style.overflow = 'hidden';
+            // Open modals
+            document.querySelectorAll('.login-btn, .practice-btn, .test-btn, .create-test-btn').forEach(btn => {
+                btn.addEventListener('click', () => loginModal.style.display = 'block');
+            });
+            
+            document.querySelector('.signup-btn').addEventListener('click', () => signupModal.style.display = 'block');
+            
+            // Switch between modals
+            document.getElementById('showSignup').addEventListener('click', (e) => {
+                e.preventDefault();
+                loginModal.style.display = 'none';
+                signupModal.style.display = 'block';
+            });
+            
+            document.getElementById('showLogin').addEventListener('click', (e) => {
+                e.preventDefault();
+                signupModal.style.display = 'none';
+                loginModal.style.display = 'block';
+            });
+            
+            // Close modals
+            closeButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    loginModal.style.display = 'none';
+                    signupModal.style.display = 'none';
                 });
             });
             
-            // Close modal
-            closeBtn.addEventListener('click', function() {
-                loginModal.style.display = 'none';
-                document.body.style.overflow = 'auto';
+            // Form submissions
+            document.getElementById('loginForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+                loginUser(email, password);
+            });
+            
+            document.getElementById('signupForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const email = document.getElementById('signupEmail').value;
+                const password = document.getElementById('signupPassword').value;
+                signupUser(email, password);
             });
             
             // Close modal when clicking outside
-            window.addEventListener('click', function(event) {
-                if (event.target === loginModal) {
-                    loginModal.style.display = 'none';
-                    document.body.style.overflow = 'auto';
-                }
-            });
-            
-            // Form submission
-            document.getElementById('loginForm').addEventListener('submit', function(e) {
-                e.preventDefault();
-                alert('Login functionality will be implemented in the next version!');
-                loginModal.style.display = 'none';
-                document.body.style.overflow = 'auto';
+            window.addEventListener('click', (e) => {
+                if (e.target === loginModal) loginModal.style.display = 'none';
+                if (e.target === signupModal) signupModal.style.display = 'none';
             });
         });
     </script>
