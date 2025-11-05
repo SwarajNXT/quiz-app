@@ -4,28 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vidyucation - NEET Exam Preparation</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', sans-serif;
         }
 
         :root {
-            --primary: #4a6cf7;
-            --secondary: #6a75ff;
-            --accent: #ff6b6b;
-            --light: #f8f9fa;
-            --dark: #2d3748;
-            --gray: #718096;
-            --success: #48bb78;
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #8b5cf6;
+            --accent: #f59e0b;
+            --accent-light: #fbbf24;
+            --light: #f8fafc;
+            --dark: #1e293b;
+            --dark-light: #334155;
+            --gray: #64748b;
+            --success: #10b981;
+            --glass: rgba(255, 255, 255, 0.1);
+            --glass-dark: rgba(0, 0, 0, 0.1);
+            --border: rgba(255, 255, 255, 0.2);
+            --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
+            --shadow-light: 0 4px 16px 0 rgba(31, 38, 135, 0.1);
         }
 
         body {
-            background-color: #f5f7ff;
-            color: var(--dark);
+            background: linear-gradient(135deg, #0f172a, #1e293b, #334155);
+            color: var(--light);
             line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
         }
 
         .container {
@@ -34,49 +46,131 @@
             padding: 0 20px;
         }
 
+        /* Background Elements */
+        .bg-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-circle {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.15;
+        }
+
+        .circle-1 {
+            width: 400px;
+            height: 400px;
+            background: var(--primary);
+            top: -100px;
+            left: -100px;
+        }
+
+        .circle-2 {
+            width: 300px;
+            height: 300px;
+            background: var(--secondary);
+            bottom: -50px;
+            right: 10%;
+        }
+
+        .circle-3 {
+            width: 200px;
+            height: 200px;
+            background: var(--accent);
+            top: 40%;
+            left: 60%;
+        }
+
+        /* Glassmorphism Utility Classes */
+        .glass {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+        }
+
+        .glass-dark {
+            background: var(--glass-dark);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
         /* Header Styles */
         header {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            padding: 15px 0;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
         .header-content {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding: 15px 25px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
         }
 
         .logo {
-            font-size: 24px;
-            font-weight: 700;
             display: flex;
             align-items: center;
+            gap: 12px;
         }
 
-        .logo span {
-            color: #ffeb3b;
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+
+        .logo-text {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--light), #cbd5e1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         nav ul {
             display: flex;
             list-style: none;
-        }
-
-        nav ul li {
-            margin-left: 25px;
+            gap: 30px;
         }
 
         nav ul li a {
-            color: white;
+            color: var(--light);
             text-decoration: none;
             font-weight: 500;
             transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 12px;
         }
 
         nav ul li a:hover {
-            color: #ffeb3b;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--accent-light);
         }
 
         .auth-buttons {
@@ -85,55 +179,87 @@
         }
 
         .btn {
-            padding: 8px 20px;
-            border-radius: 30px;
+            padding: 12px 24px;
+            border-radius: 12px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
             border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
         }
 
         .btn-outline {
             background: transparent;
-            border: 2px solid white;
-            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--light);
         }
 
         .btn-outline:hover {
-            background: white;
-            color: var(--primary);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
         }
 
         .btn-primary {
-            background: var(--accent);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
         }
 
         .btn-primary:hover {
-            background: #ff5252;
             transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
         }
 
         /* Hero Section */
         .hero {
-            padding: 60px 0;
-            background: linear-gradient(135deg, #e3f2fd, #f3e5f5);
+            padding: 100px 0;
             text-align: center;
-            border-radius: 0 0 30px 30px;
-            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            color: var(--accent-light);
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
         }
 
         .hero h1 {
-            font-size: 2.5rem;
+            font-size: 3.5rem;
+            font-weight: 700;
             margin-bottom: 20px;
-            color: var(--dark);
+            background: linear-gradient(135deg, var(--light), #cbd5e1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.2;
         }
 
         .hero p {
             font-size: 1.2rem;
-            max-width: 700px;
-            margin: 0 auto 30px;
-            color: var(--gray);
+            color: #cbd5e1;
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .hero-buttons {
@@ -144,193 +270,257 @@
         }
 
         .btn-large {
-            padding: 12px 30px;
-            font-size: 1.1rem;
+            padding: 16px 32px;
+            font-size: 16px;
+            border-radius: 14px;
         }
 
         /* Progress Section */
         .progress-section {
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            margin-bottom: 40px;
+            padding: 60px 0;
         }
 
         .section-title {
-            font-size: 1.8rem;
-            margin-bottom: 25px;
-            color: var(--dark);
-            position: relative;
-            padding-bottom: 10px;
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+            font-weight: 700;
+            text-align: center;
         }
 
-        .section-title::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 60px;
-            height: 4px;
-            background: var(--primary);
-            border-radius: 2px;
+        .section-subtitle {
+            text-align: center;
+            color: #cbd5e1;
+            max-width: 600px;
+            margin: 0 auto 50px;
+            font-size: 1.1rem;
         }
 
         .progress-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
+            gap: 25px;
         }
 
         .progress-card {
-            background: var(--light);
-            border-radius: 10px;
-            padding: 20px;
+            padding: 30px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
             text-align: center;
-            transition: transform 0.3s ease;
         }
 
         .progress-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            border-color: rgba(255, 255, 255, 0.2);
         }
 
         .progress-value {
-            font-size: 2.5rem;
+            font-size: 3rem;
             font-weight: 700;
-            color: var(--primary);
             margin-bottom: 10px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .progress-label {
-            color: var(--gray);
+            color: #cbd5e1;
             font-weight: 500;
         }
 
         /* Features Section */
         .features-section {
-            margin-bottom: 40px;
+            padding: 80px 0;
         }
 
         .features-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
+            gap: 30px;
         }
 
         .feature-card {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 35px 30px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: var(--shadow);
             transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
         }
 
         .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            border-color: rgba(255, 255, 255, 0.2);
         }
 
         .feature-icon {
-            width: 60px;
-            height: 60px;
-            background: var(--primary);
-            border-radius: 50%;
+            width: 70px;
+            height: 70px;
+            border-radius: 18px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 20px;
-            color: white;
-            font-size: 1.5rem;
+            margin-bottom: 25px;
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            font-size: 28px;
+            color: var(--primary);
         }
 
         .feature-title {
-            font-size: 1.3rem;
+            font-size: 1.4rem;
             margin-bottom: 15px;
-            color: var(--dark);
+            font-weight: 600;
         }
 
         .feature-desc {
-            color: var(--gray);
+            color: #cbd5e1;
             margin-bottom: 20px;
         }
 
         /* Question Bank Section */
         .question-bank {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            border-radius: 15px;
-            padding: 40px;
-            margin-bottom: 40px;
+            padding: 80px 0;
         }
 
-        .question-bank .section-title {
-            color: white;
+        .question-bank-content {
+            border-radius: 25px;
+            padding: 60px 40px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
         }
 
-        .question-bank .section-title::after {
-            background: white;
+        .question-bank-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="rgba(255,255,255,0.03)"/></svg>');
+            background-size: cover;
         }
 
         .stats-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-top: 30px;
+            gap: 25px;
+            margin-top: 40px;
         }
 
         .stat-card {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            padding: 20px;
-            text-align: center;
+            padding: 25px;
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.08);
         }
 
         .stat-value {
-            font-size: 2rem;
+            font-size: 2.5rem;
             font-weight: 700;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, var(--accent-light), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .stat-label {
-            font-size: 0.9rem;
-            opacity: 0.9;
+            color: #cbd5e1;
+            font-size: 0.95rem;
         }
 
         /* Test Creation Section */
         .test-creation {
-            background: white;
-            border-radius: 15px;
-            padding: 40px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            margin-bottom: 40px;
+            padding: 80px 0;
             text-align: center;
         }
 
+        .test-creation-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 60px 40px;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .test-creation-content::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, transparent 70%);
+        }
+
         .test-creation h2 {
-            font-size: 2rem;
+            font-size: 2.5rem;
             margin-bottom: 20px;
-            color: var(--dark);
+            font-weight: 700;
         }
 
         .test-creation p {
-            color: var(--gray);
-            max-width: 700px;
+            color: #cbd5e1;
+            max-width: 600px;
             margin: 0 auto 30px;
+            font-size: 1.1rem;
         }
 
         /* Footer */
         footer {
-            background: var(--dark);
-            color: white;
-            padding: 40px 0 20px;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 60px 0 20px;
+            margin-top: 60px;
         }
 
         .footer-content {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 30px;
-            margin-bottom: 30px;
+            gap: 40px;
+            margin-bottom: 40px;
         }
 
         .footer-column h3 {
@@ -338,6 +528,7 @@
             margin-bottom: 20px;
             position: relative;
             padding-bottom: 10px;
+            font-weight: 600;
         }
 
         .footer-column h3::after {
@@ -347,7 +538,8 @@
             left: 0;
             width: 40px;
             height: 3px;
-            background: var(--primary);
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 2px;
         }
 
         .footer-column ul {
@@ -355,55 +547,123 @@
         }
 
         .footer-column ul li {
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
 
         .footer-column ul li a {
-            color: #cbd5e0;
+            color: #cbd5e1;
             text-decoration: none;
             transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .footer-column ul li a:hover {
-            color: white;
+            color: var(--accent-light);
             padding-left: 5px;
         }
 
         .copyright {
             text-align: center;
-            padding-top: 20px;
-            border-top: 1px solid #4a5568;
-            color: #a0aec0;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #94a3b8;
             font-size: 0.9rem;
+        }
+
+        /* Login Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: rgba(30, 41, 59, 0.9);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            margin: 5% auto;
+            border-radius: 25px;
+            width: 90%;
+            max-width: 450px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(139, 92, 246, 0.2));
+            padding: 25px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .modal-header h2 {
+            font-size: 1.8rem;
+            margin: 0;
+            font-weight: 600;
+        }
+
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #cbd5e1;
+            transition: color 0.3s ease;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .close:hover {
+            color: var(--accent-light);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .modal-body {
+            padding: 30px;
         }
 
         /* Responsive Styles */
         @media (max-width: 768px) {
             .header-content {
                 flex-direction: column;
-                text-align: center;
+                gap: 20px;
             }
 
             nav ul {
-                margin-top: 15px;
                 flex-wrap: wrap;
                 justify-content: center;
-            }
-
-            nav ul li {
-                margin: 5px 10px;
-            }
-
-            .auth-buttons {
-                margin-top: 15px;
+                gap: 10px;
             }
 
             .hero h1 {
-                font-size: 2rem;
-            }
-
-            .hero p {
-                font-size: 1rem;
+                font-size: 2.5rem;
             }
 
             .hero-buttons {
@@ -413,31 +673,45 @@
 
             .btn-large {
                 width: 100%;
-                max-width: 250px;
+                max-width: 300px;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
             }
         }
     </style>
 </head>
 <body>
+    <!-- Background Elements -->
+    <div class="bg-elements">
+        <div class="bg-circle circle-1"></div>
+        <div class="bg-circle circle-2"></div>
+        <div class="bg-circle circle-3"></div>
+    </div>
+
     <!-- Header Section -->
     <header>
         <div class="container">
-            <div class="header-content">
+            <div class="header-content glass">
                 <div class="logo">
-                    <span>Vidyucation</span>
+                    <div class="logo-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <div class="logo-text">Vidyucation</div>
                 </div>
                 <nav>
                     <ul>
-                        <li><a href="#">Home</a></li>
-                        <li><a href="#">Practice</a></li>
-                        <li><a href="#">Tests</a></li>
-                        <li><a href="#">Performance</a></li>
-                        <li><a href="#">Resources</a></li>
+                        <li><a href="#"><i class="fas fa-home"></i> Home</a></li>
+                        <li><a href="#"><i class="fas fa-book-open"></i> Practice</a></li>
+                        <li><a href="#"><i class="fas fa-chart-bar"></i> Tests</a></li>
+                        <li><a href="#"><i class="fas fa-analytics"></i> Performance</a></li>
+                        <li><a href="#"><i class="fas fa-file-alt"></i> Resources</a></li>
                     </ul>
                 </nav>
                 <div class="auth-buttons">
-                    <button class="btn btn-outline">Login</button>
-                    <button class="btn btn-primary">Sign Up</button>
+                    <button class="btn btn-outline login-btn"><i class="fas fa-sign-in-alt"></i> Login</button>
+                    <button class="btn btn-primary signup-btn"><i class="fas fa-user-plus"></i> Sign Up</button>
                 </div>
             </div>
         </div>
@@ -446,101 +720,122 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="container">
-            <h1>Track Your NEET Learning Progress</h1>
-            <p>Monitor your performance, identify strengths and weaknesses, and achieve your goals with Vidyucation's comprehensive learning platform.</p>
-            <div class="hero-buttons">
-                <button class="btn btn-primary btn-large">Start Practicing Now</button>
-                <button class="btn btn-outline btn-large">Take a Diagnostic Test</button>
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <i class="fas fa-rocket"></i>
+                    <span>NEET 2025 Preparation Started</span>
+                </div>
+                <h1>Track Your NEET Learning Progress</h1>
+                <p>Monitor your performance, identify strengths and weaknesses, and achieve your goals with Vidyucation's comprehensive learning platform.</p>
+                <div class="hero-buttons">
+                    <button class="btn btn-primary btn-large practice-btn"><i class="fas fa-play-circle"></i> Start Practicing Now</button>
+                    <button class="btn btn-outline btn-large test-btn"><i class="fas fa-clipboard-list"></i> Take a Diagnostic Test</button>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Main Content -->
-    <div class="container">
-        <!-- Progress Section -->
-        <section class="progress-section">
+    <!-- Progress Section -->
+    <section class="progress-section">
+        <div class="container">
             <h2 class="section-title">Track Your Learning Progress</h2>
-            <p>Monitor your performance, identify strengths and weaknesses, and achieve your goals with Vidyucation's comprehensive tracking system.</p>
+            <p class="section-subtitle">Monitor your performance, identify strengths and weaknesses, and achieve your goals with Vidyucation's comprehensive tracking system.</p>
             
             <div class="progress-container">
-                <div class="progress-card">
+                <div class="progress-card glass">
                     <div class="progress-value">4.0</div>
                     <div class="progress-label">Overall Score</div>
                 </div>
-                <div class="progress-card">
+                <div class="progress-card glass">
                     <div class="progress-value">92.5%</div>
                     <div class="progress-label">Accuracy</div>
                 </div>
-                <div class="progress-card">
+                <div class="progress-card glass">
                     <div class="progress-value">8/12</div>
                     <div class="progress-label">Completed Topics</div>
                 </div>
-                <div class="progress-card">
+                <div class="progress-card glass">
                     <div class="progress-value">14</div>
                     <div class="progress-label">Tests Taken</div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- Features Section -->
-        <section class="features-section">
+    <!-- Features Section -->
+    <section class="features-section">
+        <div class="container">
             <h2 class="section-title">Experience Learning Like Never Before</h2>
-            <p>Stay motivated, track your progress, and connect with a community—all in one platform.</p>
+            <p class="section-subtitle">Stay motivated, track your progress, and connect with a community—all in one platform.</p>
             
             <div class="features-grid">
                 <div class="feature-card">
-                    <div class="feature-icon">📚</div>
+                    <div class="feature-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
                     <h3 class="feature-title">Smart Learning</h3>
-                    <p class="feature-desc">Adaptive learning technology that identifies your weak areas and focuses on them.</p>
+                    <p class="feature-desc">Adaptive learning technology that identifies your weak areas and focuses on them with personalized content.</p>
                     <button class="btn btn-outline">Learn More</button>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">📊</div>
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
                     <h3 class="feature-title">Performance Analytics</h3>
-                    <p class="feature-desc">Detailed insights into your performance with actionable feedback for improvement.</p>
+                    <p class="feature-desc">Detailed insights into your performance with actionable feedback for improvement and growth tracking.</p>
                     <button class="btn btn-outline">Learn More</button>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">👥</div>
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
                     <h3 class="feature-title">Community Support</h3>
-                    <p class="feature-desc">Connect with fellow NEET aspirants, share knowledge, and grow together.</p>
+                    <p class="feature-desc">Connect with fellow NEET aspirants, share knowledge, ask questions, and grow together in a supportive environment.</p>
                     <button class="btn btn-outline">Learn More</button>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- Question Bank Section -->
-        <section class="question-bank">
-            <h2 class="section-title">Massive NEET Question Bank</h2>
-            <p>Access over 45,000+ questions from previous years and curated by subject matter experts.</p>
-            
-            <div class="stats-container">
-                <div class="stat-card">
-                    <div class="stat-value">45K+</div>
-                    <div class="stat-label">Practice Questions</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value">12+</div>
-                    <div class="stat-label">Years of PYQs</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value">100%</div>
-                    <div class="stat-label">Coverage of Syllabus</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value">3</div>
-                    <div class="stat-label">Difficulty Levels</div>
+    <!-- Question Bank Section -->
+    <section class="question-bank">
+        <div class="container">
+            <div class="question-bank-content">
+                <h2 class="section-title">Massive NEET Question Bank</h2>
+                <p class="section-subtitle">Access over 45,000+ questions from previous years and curated by subject matter experts.</p>
+                
+                <div class="stats-container">
+                    <div class="stat-card">
+                        <div class="stat-value">45K+</div>
+                        <div class="stat-label">Practice Questions</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">12+</div>
+                        <div class="stat-label">Years of PYQs</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">100%</div>
+                        <div class="stat-label">Syllabus Coverage</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">3</div>
+                        <div class="stat-label">Difficulty Levels</div>
+                    </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- Test Creation Section -->
-        <section class="test-creation">
-            <h2>Create Unlimited Custom Tests for NEET 2025 - Free!</h2>
-            <p>Design your own tests based on topics, difficulty levels, and time constraints. Perfect for targeted practice.</p>
-            <button class="btn btn-primary btn-large">Create Your First Test</button>
-        </section>
-    </div>
+    <!-- Test Creation Section -->
+    <section class="test-creation">
+        <div class="container">
+            <div class="test-creation-content">
+                <h2>Create Unlimited Custom Tests for NEET 2025 - Free!</h2>
+                <p>Design your own tests based on topics, difficulty levels, and time constraints. Perfect for targeted practice and revision.</p>
+                <button class="btn btn-primary btn-large create-test-btn"><i class="fas fa-plus-circle"></i> Create Your First Test</button>
+            </div>
+        </div>
+    </section>
 
     <!-- Footer -->
     <footer>
@@ -548,51 +843,140 @@
             <div class="footer-content">
                 <div class="footer-column">
                     <h3>Vidyucation</h3>
-                    <p>Your comprehensive NEET preparation platform with advanced tracking and analytics.</p>
+                    <p>Your comprehensive NEET preparation platform with advanced tracking, analytics, and personalized learning paths.</p>
                 </div>
                 <div class="footer-column">
                     <h3>Quick Links</h3>
                     <ul>
-                        <li><a href="#">Home</a></li>
-                        <li><a href="#">Practice Tests</a></li>
-                        <li><a href="#">Performance</a></li>
-                        <li><a href="#">Study Materials</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Home</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Practice Tests</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Performance</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Study Materials</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
                     <h3>Resources</h3>
                     <ul>
-                        <li><a href="#">NEET Syllabus</a></li>
-                        <li><a href="#">Previous Year Papers</a></li>
-                        <li><a href="#">Important Formulas</a></li>
-                        <li><a href="#">Study Plans</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> NEET Syllabus</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Previous Year Papers</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Important Formulas</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Study Plans</a></li>
                     </ul>
                 </div>
                 <div class="footer-column">
                     <h3>Contact Us</h3>
                     <ul>
-                        <li><a href="#">Support</a></li>
-                        <li><a href="#">Feedback</a></li>
-                        <li><a href="#">Partnership</a></li>
-                        <li><a href="#">Careers</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Support</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Feedback</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Partnership</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Careers</a></li>
                     </ul>
                 </div>
             </div>
             <div class="copyright">
-                <p>&copy; 2023 Vidyucation. All rights reserved.</p>
+                <p>&copy; 2023 Vidyucation. All rights reserved. | Designed for NEET Aspirants</p>
             </div>
         </div>
     </footer>
 
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close">&times;</span>
+                <h2>Welcome Back</h2>
+                <p>Continue your NEET preparation journey</p>
+            </div>
+            <div class="modal-body">
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-options">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="rememberMe">
+                            <span class="checkmark"></span>
+                            Remember me
+                        </label>
+                        <a href="#" class="forgot-password">Forgot Password?</a>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-full">
+                        <i class="fas fa-sign-in-alt"></i>
+                        Login to Your Account
+                    </button>
+                </form>
+                
+                <div class="divider">
+                    <span>Or continue with</span>
+                </div>
+                
+                <div class="social-login">
+                    <button class="btn-social google">
+                        <i class="fab fa-google"></i>
+                        Google
+                    </button>
+                    <button class="btn-social facebook">
+                        <i class="fab fa-facebook-f"></i>
+                        Facebook
+                    </button>
+                </div>
+                
+                <div class="signup-link">
+                    Don't have an account? <a href="#" id="showSignup">Sign up now</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // Simple JavaScript for interactive elements
+        // Modal functionality
         document.addEventListener('DOMContentLoaded', function() {
-            // Add click event to all buttons for demo purposes
-            const buttons = document.querySelectorAll('.btn');
-            buttons.forEach(button => {
+            const loginModal = document.getElementById('loginModal');
+            const closeBtn = document.querySelector('.close');
+            const loginButtons = document.querySelectorAll('.login-btn, .practice-btn, .test-btn, .signup-btn, .create-test-btn');
+            
+            // Open modal when any relevant button is clicked
+            loginButtons.forEach(button => {
                 button.addEventListener('click', function() {
-                    alert('This feature will be implemented in the full version!');
+                    loginModal.style.display = 'block';
+                    document.body.style.overflow = 'hidden';
                 });
+            });
+            
+            // Close modal
+            closeBtn.addEventListener('click', function() {
+                loginModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            });
+            
+            // Close modal when clicking outside
+            window.addEventListener('click', function(event) {
+                if (event.target === loginModal) {
+                    loginModal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }
+            });
+            
+            // Form submission
+            document.getElementById('loginForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                alert('Login functionality will be implemented in the next version!');
+                loginModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
             });
         });
     </script>
