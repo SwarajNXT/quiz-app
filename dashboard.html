@@ -1,25 +1,68 @@
-<script type="module">
-    import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
-    
-    const firebaseConfig = {
-        apiKey: "AIzaSyD7UYp7ApLTpku2y4gAw8QprAkCNGhRsLI",
-        authDomain: "quiz-app-ad5de.firebaseapp.com",
-        projectId: "quiz-app-ad5de",
-        storageBucket: "quiz-app-ad5de.firebasestorage.app",
-        messagingSenderId: "17935383217",
-        appId: "1:17935383217:web:f34559709c88a1d9670090"
-    };
-    
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    
-    window.logout = function() {
-        signOut(auth).then(() => {
-            console.log('User signed out');
-            window.location.href = 'index.html';
-        }).catch((error) => {
-            console.error('Logout error:', error);
-        });
-    };
-</script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Vidyucation</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            padding: 40px; 
+            text-align: center; 
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            color: white;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .dashboard-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+        button { 
+            padding: 12px 24px; 
+            margin: 10px; 
+            background: #6366f1;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        h1 { margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <h1>Welcome to Your Vidyucation Dashboard!</h1>
+        <p>You are successfully logged in and ready to start your NEET preparation.</p>
+        <button onclick="logout()">Logout</button>
+    </div>
+
+    <!-- Simple Firebase for Dashboard -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyD7UYp7ApLTpku2y4gAw8QprAkCNGhRsLI",
+            authDomain: "quiz-app-ad5de.firebaseapp.com",
+            projectId: "quiz-app-ad5de",
+            storageBucket: "quiz-app-ad5de.firebasestorage.app",
+            messagingSenderId: "17935383217",
+            appId: "1:17935383217:web:f34559709c88a1d9670090"
+        };
+        
+        firebase.initializeApp(firebaseConfig);
+        
+        function logout() {
+            firebase.auth().signOut().then(() => {
+                window.location.href = 'index.html';
+            });
+        }
+    </script>
+</body>
+</html>
