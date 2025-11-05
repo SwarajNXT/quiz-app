@@ -1012,12 +1012,13 @@
         </div>
     </div>
 
-    <!-- Firebase and App JavaScript -->
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
-    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+    <!-- Simple Firebase Setup -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 
+<script>
+    // Firebase configuration
     const firebaseConfig = {
         apiKey: "AIzaSyD7UYp7ApLTpku2y4gAw8QprAkCNGhRsLI",
         authDomain: "quiz-app-ad5de.firebaseapp.com",
@@ -1028,119 +1029,102 @@
         measurementId: "G-ZWVX3GZ1DX"
     };
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
 
-    // Make Firebase available globally
-    window.firebaseAuth = auth;
-    window.firebaseDb = db;
-    window.firebaseFunctions = {
-        createUserWithEmailAndPassword,
-        signInWithEmailAndPassword, 
-        signOut,
-        onAuthStateChanged,
-        doc,
-        setDoc
-    };
-</script>
-
-<script>
     // Authentication Functions
     function showMessage(message, type, elementId) {
         const messageEl = document.getElementById(elementId);
-        messageEl.textContent = message;
-        messageEl.className = `auth-message ${type}`;
-        messageEl.style.display = 'block';
-        
-        setTimeout(() => {
-            messageEl.style.display = 'none';
-        }, 5000);
+        if (messageEl) {
+            messageEl.textContent = message;
+            messageEl.className = `auth-message ${type}`;
+            messageEl.style.display = 'block';
+            
+            setTimeout(() => {
+                messageEl.style.display = 'none';
+            }, 5000);
+        }
     }
 
-    async function loginUser(email, password) {
+    function loginUser(email, password) {
         const loginBtn = document.getElementById('loginBtn');
         loginBtn.disabled = true;
         loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
         
-        try {
-            const userCredential = await window.firebaseFunctions.signInWithEmailAndPassword(
-                window.firebaseAuth, 
-                email, 
-                password
-            );
-            
-            showMessage('Login successful! Redirecting...', 'success', 'authMessage');
-            setTimeout(() => {
-                window.location.href = 'dashboard.html';
-            }, 1500);
-        } catch (error) {
-            let errorMessage = 'Login failed. Please try again.';
-            if (error.code === 'auth/user-not-found') {
-                errorMessage = 'No account found with this email.';
-            } else if (error.code === 'auth/wrong-password') {
-                errorMessage = 'Incorrect password. Please try again.';
-            } else if (error.code === 'auth/invalid-email') {
-                errorMessage = 'Please enter a valid email address.';
-            }
-            showMessage(errorMessage, 'error', 'authMessage');
-            console.error('Login error:', error);
-        } finally {
-            loginBtn.disabled = false;
-            loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login to Your Account';
-        }
+        auth.signInWithEmailAndPassword(email, password)
+            .then((userCredential) => {
+                showMessage('Login successful! Redirecting...', 'success', 'authMessage');
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1500);
+            })
+            .catch((error) => {
+                let errorMessage = 'Login failed. Please try again.';
+                if (error.code === 'auth/user-not-found') {
+                    errorMessage = 'No account found with this email.';
+                } else if (error.code === 'auth/wrong-password') {
+                    errorMessage = 'Incorrect password. Please try again.';
+                } else if (error.code === 'auth/invalid-email') {
+                    errorMessage = 'Please enter a valid email address.';
+                }
+                showMessage(errorMessage, 'error', 'authMessage');
+                console.error('Login error:', error);
+            })
+            .finally(() => {
+                loginBtn.disabled = false;
+                loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login to Your Account';
+            });
     }
 
-    async function signupUser(email, password) {
+    function signupUser(email, password) {
         const signupBtn = document.getElementById('signupBtn');
         signupBtn.disabled = true;
         signupBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating Account...';
         
-        try {
-            const userCredential = await window.firebaseFunctions.createUserWithEmailAndPassword(
-                window.firebaseAuth,
-                email,
-                password
-            );
-            
-            const user = userCredential.user;
-            
-            await window.firebaseFunctions.setDoc(
-                window.firebaseFunctions.doc(window.firebaseDb, "users", user.uid),
-                {
+        auth.createUserWithEmailAndPassword(email, password)
+            .then((userCredential) => {
+                const user = userCredential.user;
+                
+                // Save user data to Firestore
+                return db.collection('users').doc(user.uid).set({
                     email: email,
                     createdAt: new Date(),
                     lastLogin: new Date(),
                     accountType: 'student',
                     neetYear: '2025'
+                });
+            })
+            .then(() => {
+                showMessage('Account created successfully!', 'success', 'signupMessage');
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1500);
+            })
+            .catch((error) => {
+                let errorMessage = 'Signup failed. Please try again.';
+                if (error.code === 'auth/email-already-in-use') {
+                    errorMessage = 'This email is already registered. Please login instead.';
+                } else if (error.code === 'auth/weak-password') {
+                    errorMessage = 'Password should be at least 6 characters.';
+                } else if (error.code === 'auth/invalid-email') {
+                    errorMessage = 'Please enter a valid email address.';
                 }
-            );
-            
-            showMessage('Account created successfully!', 'success', 'signupMessage');
-            setTimeout(() => {
-                window.location.href = 'dashboard.html';
-            }, 1500);
-        } catch (error) {
-            let errorMessage = 'Signup failed. Please try again.';
-            if (error.code === 'auth/email-already-in-use') {
-                errorMessage = 'This email is already registered. Please login instead.';
-            } else if (error.code === 'auth/weak-password') {
-                errorMessage = 'Password should be at least 6 characters.';
-            } else if (error.code === 'auth/invalid-email') {
-                errorMessage = 'Please enter a valid email address.';
-            }
-            showMessage(errorMessage, 'error', 'signupMessage');
-            console.error('Signup error:', error);
-        } finally {
-            signupBtn.disabled = false;
-            signupBtn.innerHTML = '<i class="fas fa-user-plus"></i> Create Account';
-        }
+                showMessage(errorMessage, 'error', 'signupMessage');
+                console.error('Signup error:', error);
+            })
+            .finally(() => {
+                signupBtn.disabled = false;
+                signupBtn.innerHTML = '<i class="fas fa-user-plus"></i> Create Account';
+            });
     }
 
     // Check auth state
-    window.firebaseFunctions.onAuthStateChanged(window.firebaseAuth, (user) => {
-        if (user) {
-            document.getElementById('authButtons').innerHTML = `
+    auth.onAuthStateChanged((user) => {
+        const authButtons = document.getElementById('authButtons');
+        if (user && authButtons) {
+            authButtons.innerHTML = `
                 <div class="user-profile">
                     <div class="user-avatar">
                         <i class="fas fa-user"></i>
@@ -1152,70 +1136,58 @@
                 </div>
             `;
             
-            document.querySelector('.logout-btn').addEventListener('click', () => {
-                window.firebaseFunctions.signOut(window.firebaseAuth);
-            });
+            // Add logout functionality
+            const logoutBtn = document.querySelector('.logout-btn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', () => {
+                    auth.signOut();
+                });
+            }
         }
     });
 
-    // Modal functionality - SIMPLIFIED VERSION
+    // Simple Modal Functionality
     document.addEventListener('DOMContentLoaded', function() {
-        console.log('DOM loaded - setting up event listeners');
+        console.log('Page loaded - setting up buttons');
         
         const loginModal = document.getElementById('loginModal');
         const signupModal = document.getElementById('signupModal');
-        const closeButtons = document.querySelectorAll('.close');
         
-        // Debug: Check if elements exist
-        console.log('Login modal:', loginModal);
-        console.log('Signup modal:', signupModal);
-        console.log('Close buttons:', closeButtons.length);
-        
-        // Open login modal
-        const loginButtons = document.querySelectorAll('.login-btn, .practice-btn, .test-btn, .create-test-btn');
-        console.log('Login buttons found:', loginButtons.length);
-        
-        loginButtons.forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                console.log('Login button clicked');
-                e.preventDefault();
-                loginModal.style.display = 'block';
+        // Open Login Modal
+        document.querySelectorAll('.login-btn, .practice-btn, .test-btn, .create-test-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                console.log('Opening login modal');
+                if (loginModal) loginModal.style.display = 'block';
             });
         });
         
-        // Open signup modal
-        const signupButton = document.querySelector('.signup-btn');
-        console.log('Signup button found:', signupButton);
-        
-        if (signupButton) {
-            signupButton.addEventListener('click', function(e) {
-                console.log('Signup button clicked');
-                e.preventDefault();
-                signupModal.style.display = 'block';
-            });
-        }
+        // Open Signup Modal
+        document.querySelector('.signup-btn').addEventListener('click', function() {
+            console.log('Opening signup modal');
+            if (signupModal) signupModal.style.display = 'block';
+        });
         
         // Switch between modals
         document.getElementById('showSignup').addEventListener('click', function(e) {
             e.preventDefault();
             console.log('Switching to signup');
-            loginModal.style.display = 'none';
-            signupModal.style.display = 'block';
+            if (loginModal) loginModal.style.display = 'none';
+            if (signupModal) signupModal.style.display = 'block';
         });
         
         document.getElementById('showLogin').addEventListener('click', function(e) {
             e.preventDefault();
             console.log('Switching to login');
-            signupModal.style.display = 'none';
-            loginModal.style.display = 'block';
+            if (signupModal) signupModal.style.display = 'none';
+            if (loginModal) loginModal.style.display = 'block';
         });
         
         // Close modals
-        closeButtons.forEach(btn => {
-            btn.addEventListener('click', function() {
-                console.log('Close button clicked');
-                loginModal.style.display = 'none';
-                signupModal.style.display = 'none';
+        document.querySelectorAll('.close').forEach(closeBtn => {
+            closeBtn.addEventListener('click', function() {
+                console.log('Closing modal');
+                if (loginModal) loginModal.style.display = 'none';
+                if (signupModal) signupModal.style.display = 'none';
             });
         });
         
@@ -1225,7 +1197,6 @@
             console.log('Login form submitted');
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-            console.log('Login attempt:', email);
             loginUser(email, password);
         });
         
@@ -1234,23 +1205,20 @@
             console.log('Signup form submitted');
             const email = document.getElementById('signupEmail').value;
             const password = document.getElementById('signupPassword').value;
-            console.log('Signup attempt:', email);
             signupUser(email, password);
         });
         
         // Close modal when clicking outside
         window.addEventListener('click', function(e) {
             if (e.target === loginModal) {
-                console.log('Clicked outside login modal');
                 loginModal.style.display = 'none';
             }
             if (e.target === signupModal) {
-                console.log('Clicked outside signup modal');
                 signupModal.style.display = 'none';
             }
         });
         
-        console.log('All event listeners set up');
+        console.log('All buttons setup complete');
     });
 </script>
 </body>
