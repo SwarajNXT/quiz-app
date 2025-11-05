@@ -3,1034 +3,598 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced Todo App</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Vidyucation - NEET Exam Preparation</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         :root {
-            --primary: #6366f1;
-            --primary-dark: #4f46e5;
-            --secondary: #10b981;
-            --danger: #ef4444;
-            --warning: #f59e0b;
-            --dark: #1f2937;
-            --light: #f9fafb;
-            --gray: #6b7280;
-            --gray-light: #e5e7eb;
-            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            --radius: 12px;
-            --transition: all 0.3s ease;
+            --primary: #4a6cf7;
+            --secondary: #6a75ff;
+            --accent: #ff6b6b;
+            --light: #f8f9fa;
+            --dark: #2d3748;
+            --gray: #718096;
+            --success: #48bb78;
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
+            background-color: #f5f7ff;
             color: var(--dark);
             line-height: 1.6;
         }
 
         .container {
-            max-width: 800px;
+            max-width: 1200px;
             margin: 0 auto;
+            padding: 0 20px;
         }
 
-        .app-card {
-            background: white;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            overflow: hidden;
-        }
-
-        .app-header {
-            background: var(--primary);
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
-            padding: 25px 30px;
-            position: relative;
-            overflow: hidden;
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
-        .app-header::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 100%;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.1);
-            transform: rotate(30deg);
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .app-title {
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
             display: flex;
             align-items: center;
-            gap: 15px;
-            margin-bottom: 10px;
         }
 
-        .app-title h1 {
-            font-size: 28px;
-            font-weight: 700;
+        .logo span {
+            color: #ffeb3b;
         }
 
-        .app-title i {
-            font-size: 32px;
-            background: rgba(255, 255, 255, 0.2);
-            padding: 12px;
-            border-radius: 50%;
+        nav ul {
+            display: flex;
+            list-style: none;
         }
 
-        .app-subtitle {
-            opacity: 0.9;
-            font-size: 16px;
+        nav ul li {
+            margin-left: 25px;
         }
 
-        .app-content {
-            padding: 30px;
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
         }
 
-        .input-section {
+        nav ul li a:hover {
+            color: #ffeb3b;
+        }
+
+        .auth-buttons {
             display: flex;
             gap: 15px;
-            margin-bottom: 30px;
-        }
-
-        .todo-input {
-            flex: 1;
-            padding: 15px 20px;
-            border: 2px solid var(--gray-light);
-            border-radius: var(--radius);
-            font-size: 16px;
-            transition: var(--transition);
-            background: var(--light);
-        }
-
-        .todo-input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
         }
 
         .btn {
-            padding: 15px 25px;
-            border: none;
-            border-radius: var(--radius);
-            font-size: 16px;
+            padding: 8px 20px;
+            border-radius: 30px;
             font-weight: 600;
             cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-primary {
-            background: var(--primary);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: var(--primary-dark);
-            transform: translateY(-2px);
-        }
-
-        .btn-secondary {
-            background: var(--secondary);
-            color: white;
-        }
-
-        .btn-danger {
-            background: var(--danger);
-            color: white;
+            transition: all 0.3s ease;
+            border: none;
         }
 
         .btn-outline {
             background: transparent;
-            border: 2px solid var(--gray-light);
-            color: var(--gray);
+            border: 2px solid white;
+            color: white;
         }
 
         .btn-outline:hover {
-            border-color: var(--primary);
+            background: white;
             color: var(--primary);
         }
 
-        .filters {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 25px;
-            flex-wrap: wrap;
-        }
-
-        .filter-btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 50px;
-            background: var(--light);
-            color: var(--gray);
-            cursor: pointer;
-            transition: var(--transition);
-            font-size: 14px;
-            font-weight: 500;
-        }
-
-        .filter-btn.active {
-            background: var(--primary);
+        .btn-primary {
+            background: var(--accent);
             color: white;
         }
 
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            margin-bottom: 25px;
-        }
-
-        .stat-card {
-            background: var(--light);
-            padding: 20px;
-            border-radius: var(--radius);
-            text-align: center;
-            border-left: 4px solid var(--primary);
-        }
-
-        .stat-card.warning {
-            border-left-color: var(--warning);
-        }
-
-        .stat-card.danger {
-            border-left-color: var(--danger);
-        }
-
-        .stat-card.success {
-            border-left-color: var(--secondary);
-        }
-
-        .stat-value {
-            font-size: 28px;
-            font-weight: 700;
-            margin-bottom: 5px;
-        }
-
-        .stat-label {
-            font-size: 14px;
-            color: var(--gray);
-            font-weight: 500;
-        }
-
-        .todo-list {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            margin-bottom: 25px;
-            max-height: 400px;
-            overflow-y: auto;
-            padding-right: 10px;
-        }
-
-        .todo-list::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .todo-list::-webkit-scrollbar-track {
-            background: var(--gray-light);
-            border-radius: 10px;
-        }
-
-        .todo-list::-webkit-scrollbar-thumb {
-            background: var(--primary);
-            border-radius: 10px;
-        }
-
-        .todo-item {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding: 20px;
-            background: var(--light);
-            border-radius: var(--radius);
-            transition: var(--transition);
-            border-left: 4px solid transparent;
-        }
-
-        .todo-item:hover {
+        .btn-primary:hover {
+            background: #ff5252;
             transform: translateY(-2px);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
-        .todo-item.priority-high {
-            border-left-color: var(--danger);
+        /* Hero Section */
+        .hero {
+            padding: 60px 0;
+            background: linear-gradient(135deg, #e3f2fd, #f3e5f5);
+            text-align: center;
+            border-radius: 0 0 30px 30px;
+            margin-bottom: 40px;
         }
 
-        .todo-item.priority-medium {
-            border-left-color: var(--warning);
-        }
-
-        .todo-item.priority-low {
-            border-left-color: var(--secondary);
-        }
-
-        .todo-item.completed {
-            opacity: 0.7;
-            background: #f0f0f0;
-        }
-
-        .todo-checkbox {
-            width: 22px;
-            height: 22px;
-            border-radius: 50%;
-            border: 2px solid var(--gray);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: var(--transition);
-            flex-shrink: 0;
-        }
-
-        .todo-item.completed .todo-checkbox {
-            background: var(--secondary);
-            border-color: var(--secondary);
-        }
-
-        .todo-item.completed .todo-checkbox::after {
-            content: '✓';
-            color: white;
-            font-size: 14px;
-            font-weight: bold;
-        }
-
-        .todo-content {
-            flex: 1;
-        }
-
-        .todo-text {
-            font-size: 16px;
-            margin-bottom: 5px;
-            transition: var(--transition);
-        }
-
-        .todo-item.completed .todo-text {
-            text-decoration: line-through;
-            color: var(--gray);
-        }
-
-        .todo-meta {
-            display: flex;
-            gap: 15px;
-            font-size: 12px;
-            color: var(--gray);
-        }
-
-        .todo-priority {
-            padding: 3px 8px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 600;
-        }
-
-        .priority-high {
-            background: rgba(239, 68, 68, 0.1);
-            color: var(--danger);
-        }
-
-        .priority-medium {
-            background: rgba(245, 158, 11, 0.1);
-            color: var(--warning);
-        }
-
-        .priority-low {
-            background: rgba(16, 185, 129, 0.1);
-            color: var(--secondary);
-        }
-
-        .todo-actions {
-            display: flex;
-            gap: 10px;
-            opacity: 0;
-            transition: var(--transition);
-        }
-
-        .todo-item:hover .todo-actions {
-            opacity: 1;
-        }
-
-        .action-btn {
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: var(--gray);
-            transition: var(--transition);
-            font-size: 16px;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .action-btn:hover {
-            background: rgba(0, 0, 0, 0.05);
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
             color: var(--dark);
         }
 
-        .action-btn.delete:hover {
-            color: var(--danger);
-        }
-
-        .action-btn.edit:hover {
-            color: var(--primary);
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 40px 20px;
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
             color: var(--gray);
         }
 
-        .empty-state i {
-            font-size: 48px;
-            margin-bottom: 15px;
-            opacity: 0.5;
+        .hero-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
         }
 
-        .empty-state h3 {
-            font-size: 20px;
+        .btn-large {
+            padding: 12px 30px;
+            font-size: 1.1rem;
+        }
+
+        /* Progress Section */
+        .progress-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            color: var(--dark);
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+
+        .progress-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .progress-card {
+            background: var(--light);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .progress-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .progress-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
             margin-bottom: 10px;
         }
 
-        .app-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-top: 20px;
-            border-top: 1px solid var(--gray-light);
-        }
-
-        .bulk-actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 15px 20px;
-            background: white;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            transform: translateX(150%);
-            transition: transform 0.3s ease;
-            z-index: 1000;
-            border-left: 4px solid var(--primary);
-        }
-
-        .notification.show {
-            transform: translateX(0);
-        }
-
-        .notification i {
-            font-size: 20px;
-            color: var(--primary);
-        }
-
-        .modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 2000;
-            opacity: 0;
-            visibility: hidden;
-            transition: var(--transition);
-        }
-
-        .modal.show {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .modal-content {
-            background: white;
-            border-radius: var(--radius);
-            padding: 30px;
-            width: 90%;
-            max-width: 500px;
-            box-shadow: var(--shadow);
-            transform: translateY(20px);
-            transition: var(--transition);
-        }
-
-        .modal.show .modal-content {
-            transform: translateY(0);
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .modal-title {
-            font-size: 20px;
-            font-weight: 600;
-        }
-
-        .close-modal {
-            background: none;
-            border: none;
-            font-size: 20px;
-            cursor: pointer;
+        .progress-label {
             color: var(--gray);
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-label {
-            display: block;
-            margin-bottom: 8px;
             font-weight: 500;
         }
 
-        .form-control {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid var(--gray-light);
-            border-radius: var(--radius);
-            font-size: 16px;
-            transition: var(--transition);
+        /* Features Section */
+        .features-section {
+            margin-bottom: 40px;
         }
 
-        .form-control:focus {
-            outline: none;
-            border-color: var(--primary);
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
         }
 
-        .priority-selectors {
+        .feature-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--primary);
+            border-radius: 50%;
             display: flex;
-            gap: 10px;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            color: white;
+            font-size: 1.5rem;
         }
 
-        .priority-selector {
-            flex: 1;
+        .feature-title {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+
+        .feature-desc {
+            color: var(--gray);
+            margin-bottom: 20px;
+        }
+
+        /* Question Bank Section */
+        .question-bank {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 15px;
+            padding: 40px;
+            margin-bottom: 40px;
+        }
+
+        .question-bank .section-title {
+            color: white;
+        }
+
+        .question-bank .section-title::after {
+            background: white;
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
             text-align: center;
-            padding: 12px;
-            border: 2px solid var(--gray-light);
-            border-radius: var(--radius);
-            cursor: pointer;
-            transition: var(--transition);
+            backdrop-filter: blur(10px);
         }
 
-        .priority-selector.active {
-            border-color: var(--primary);
-            background: rgba(99, 102, 241, 0.1);
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
         }
 
-        .priority-high-selector.active {
-            border-color: var(--danger);
-            background: rgba(239, 68, 68, 0.1);
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
         }
 
-        .priority-medium-selector.active {
-            border-color: var(--warning);
-            background: rgba(245, 158, 11, 0.1);
+        /* Test Creation Section */
+        .test-creation {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 40px;
+            text-align: center;
         }
 
-        .priority-low-selector.active {
-            border-color: var(--secondary);
-            background: rgba(16, 185, 129, 0.1);
+        .test-creation h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: var(--dark);
         }
 
+        .test-creation p {
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto 30px;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 40px 0 20px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .footer-column h3 {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background: var(--primary);
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-column ul li a {
+            color: #cbd5e0;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .footer-column ul li a:hover {
+            color: white;
+            padding-left: 5px;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #4a5568;
+            color: #a0aec0;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Styles */
         @media (max-width: 768px) {
-            .input-section {
+            .header-content {
                 flex-direction: column;
+                text-align: center;
             }
-            
-            .filters {
-                justify-content: center;
-            }
-            
-            .stats {
-                grid-template-columns: 1fr 1fr;
-            }
-            
-            .app-footer {
-                flex-direction: column;
-                gap: 15px;
-                align-items: stretch;
-            }
-            
-            .bulk-actions {
-                justify-content: center;
-            }
-        }
 
-        @media (max-width: 480px) {
-            .app-content {
-                padding: 20px;
+            nav ul {
+                margin-top: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
             }
-            
-            .stats {
-                grid-template-columns: 1fr;
+
+            nav ul li {
+                margin: 5px 10px;
             }
-            
-            .todo-meta {
+
+            .auth-buttons {
+                margin-top: 15px;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .hero-buttons {
                 flex-direction: column;
-                gap: 5px;
+                align-items: center;
+            }
+
+            .btn-large {
+                width: 100%;
+                max-width: 250px;
             }
         }
     </style>
 </head>
 <body>
+    <!-- Header Section -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <span>Vidyucation</span>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">Practice</a></li>
+                        <li><a href="#">Tests</a></li>
+                        <li><a href="#">Performance</a></li>
+                        <li><a href="#">Resources</a></li>
+                    </ul>
+                </nav>
+                <div class="auth-buttons">
+                    <button class="btn btn-outline">Login</button>
+                    <button class="btn btn-primary">Sign Up</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Track Your NEET Learning Progress</h1>
+            <p>Monitor your performance, identify strengths and weaknesses, and achieve your goals with Vidyucation's comprehensive learning platform.</p>
+            <div class="hero-buttons">
+                <button class="btn btn-primary btn-large">Start Practicing Now</button>
+                <button class="btn btn-outline btn-large">Take a Diagnostic Test</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
     <div class="container">
-        <div class="app-card">
-            <div class="app-header">
-                <div class="app-title">
-                    <i class="fas fa-tasks"></i>
-                    <h1>Advanced Todo App</h1>
-                </div>
-                <p class="app-subtitle">Stay organized and boost your productivity</p>
-            </div>
+        <!-- Progress Section -->
+        <section class="progress-section">
+            <h2 class="section-title">Track Your Learning Progress</h2>
+            <p>Monitor your performance, identify strengths and weaknesses, and achieve your goals with Vidyucation's comprehensive tracking system.</p>
             
-            <div class="app-content">
-                <div class="input-section">
-                    <input type="text" class="todo-input" id="todoInput" placeholder="What needs to be done?">
-                    <button class="btn btn-primary" id="addTodoBtn">
-                        <i class="fas fa-plus"></i> Add Task
-                    </button>
+            <div class="progress-container">
+                <div class="progress-card">
+                    <div class="progress-value">4.0</div>
+                    <div class="progress-label">Overall Score</div>
                 </div>
-                
-                <div class="filters">
-                    <button class="filter-btn active" data-filter="all">All Tasks</button>
-                    <button class="filter-btn" data-filter="active">Active</button>
-                    <button class="filter-btn" data-filter="completed">Completed</button>
-                    <button class="filter-btn" data-filter="high">High Priority</button>
-                    <button class="filter-btn" data-filter="today">Due Today</button>
+                <div class="progress-card">
+                    <div class="progress-value">92.5%</div>
+                    <div class="progress-label">Accuracy</div>
                 </div>
-                
-                <div class="stats">
-                    <div class="stat-card">
-                        <div class="stat-value" id="totalTasks">0</div>
-                        <div class="stat-label">Total Tasks</div>
-                    </div>
-                    <div class="stat-card warning">
-                        <div class="stat-value" id="pendingTasks">0</div>
-                        <div class="stat-label">Pending</div>
-                    </div>
-                    <div class="stat-card success">
-                        <div class="stat-value" id="completedTasks">0</div>
-                        <div class="stat-label">Completed</div>
-                    </div>
-                    <div class="stat-card danger">
-                        <div class="stat-value" id="highPriorityTasks">0</div>
-                        <div class="stat-label">High Priority</div>
-                    </div>
+                <div class="progress-card">
+                    <div class="progress-value">8/12</div>
+                    <div class="progress-label">Completed Topics</div>
                 </div>
-                
-                <div class="todo-list" id="todoList">
-                    <!-- Todos will be rendered here -->
-                </div>
-                
-                <div class="app-footer">
-                    <div class="bulk-actions">
-                        <button class="btn btn-outline" id="clearCompletedBtn">
-                            <i class="fas fa-trash"></i> Clear Completed
-                        </button>
-                        <button class="btn btn-outline" id="markAllBtn">
-                            <i class="fas fa-check-double"></i> Mark All Complete
-                        </button>
-                    </div>
-                    <div class="export-actions">
-                        <button class="btn btn-secondary" id="exportBtn">
-                            <i class="fas fa-file-export"></i> Export
-                        </button>
-                    </div>
+                <div class="progress-card">
+                    <div class="progress-value">14</div>
+                    <div class="progress-label">Tests Taken</div>
                 </div>
             </div>
-        </div>
-    </div>
-    
-    <!-- Notification -->
-    <div class="notification" id="notification">
-        <i class="fas fa-check-circle"></i>
-        <span id="notificationText">Task added successfully!</span>
-    </div>
-    
-    <!-- Edit Todo Modal -->
-    <div class="modal" id="editModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Edit Task</h3>
-                <button class="close-modal" id="closeModalBtn">
-                    <i class="fas fa-times"></i>
-                </button>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features-section">
+            <h2 class="section-title">Experience Learning Like Never Before</h2>
+            <p>Stay motivated, track your progress, and connect with a community—all in one platform.</p>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📚</div>
+                    <h3 class="feature-title">Smart Learning</h3>
+                    <p class="feature-desc">Adaptive learning technology that identifies your weak areas and focuses on them.</p>
+                    <button class="btn btn-outline">Learn More</button>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3 class="feature-title">Performance Analytics</h3>
+                    <p class="feature-desc">Detailed insights into your performance with actionable feedback for improvement.</p>
+                    <button class="btn btn-outline">Learn More</button>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">👥</div>
+                    <h3 class="feature-title">Community Support</h3>
+                    <p class="feature-desc">Connect with fellow NEET aspirants, share knowledge, and grow together.</p>
+                    <button class="btn btn-outline">Learn More</button>
+                </div>
             </div>
-            <form id="editForm">
-                <div class="form-group">
-                    <label class="form-label" for="editTodoText">Task Description</label>
-                    <input type="text" class="form-control" id="editTodoText" required>
+        </section>
+
+        <!-- Question Bank Section -->
+        <section class="question-bank">
+            <h2 class="section-title">Massive NEET Question Bank</h2>
+            <p>Access over 45,000+ questions from previous years and curated by subject matter experts.</p>
+            
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-value">45K+</div>
+                    <div class="stat-label">Practice Questions</div>
                 </div>
-                <div class="form-group">
-                    <label class="form-label">Priority</label>
-                    <div class="priority-selectors">
-                        <div class="priority-selector priority-high-selector" data-priority="high">
-                            <div>High</div>
-                        </div>
-                        <div class="priority-selector priority-medium-selector active" data-priority="medium">
-                            <div>Medium</div>
-                        </div>
-                        <div class="priority-selector priority-low-selector" data-priority="low">
-                            <div>Low</div>
-                        </div>
-                    </div>
+                <div class="stat-card">
+                    <div class="stat-value">12+</div>
+                    <div class="stat-label">Years of PYQs</div>
                 </div>
-                <div class="form-group">
-                    <label class="form-label" for="editDueDate">Due Date (Optional)</label>
-                    <input type="date" class="form-control" id="editDueDate">
+                <div class="stat-card">
+                    <div class="stat-value">100%</div>
+                    <div class="stat-label">Coverage of Syllabus</div>
                 </div>
-                <button type="submit" class="btn btn-primary" style="width: 100%;">
-                    <i class="fas fa-save"></i> Save Changes
-                </button>
-            </form>
-        </div>
+                <div class="stat-card">
+                    <div class="stat-value">3</div>
+                    <div class="stat-label">Difficulty Levels</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Test Creation Section -->
+        <section class="test-creation">
+            <h2>Create Unlimited Custom Tests for NEET 2025 - Free!</h2>
+            <p>Design your own tests based on topics, difficulty levels, and time constraints. Perfect for targeted practice.</p>
+            <button class="btn btn-primary btn-large">Create Your First Test</button>
+        </section>
     </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Vidyucation</h3>
+                    <p>Your comprehensive NEET preparation platform with advanced tracking and analytics.</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">Practice Tests</a></li>
+                        <li><a href="#">Performance</a></li>
+                        <li><a href="#">Study Materials</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="#">NEET Syllabus</a></li>
+                        <li><a href="#">Previous Year Papers</a></li>
+                        <li><a href="#">Important Formulas</a></li>
+                        <li><a href="#">Study Plans</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact Us</h3>
+                    <ul>
+                        <li><a href="#">Support</a></li>
+                        <li><a href="#">Feedback</a></li>
+                        <li><a href="#">Partnership</a></li>
+                        <li><a href="#">Careers</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 Vidyucation. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
 
     <script>
-        // Todo App Class
-        class TodoApp {
-            constructor() {
-                this.todos = this.loadTodos();
-                this.currentFilter = 'all';
-                this.editingId = null;
-                this.init();
-            }
-            
-            init() {
-                this.bindEvents();
-                this.render();
-                this.updateStats();
-            }
-            
-            bindEvents() {
-                // Add todo
-                document.getElementById('addTodoBtn').addEventListener('click', () => this.addTodo());
-                document.getElementById('todoInput').addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter') this.addTodo();
+        // Simple JavaScript for interactive elements
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add click event to all buttons for demo purposes
+            const buttons = document.querySelectorAll('.btn');
+            buttons.forEach(button => {
+                button.addEventListener('click', function() {
+                    alert('This feature will be implemented in the full version!');
                 });
-                
-                // Filters
-                document.querySelectorAll('.filter-btn').forEach(btn => {
-                    btn.addEventListener('click', (e) => {
-                        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-                        e.target.classList.add('active');
-                        this.currentFilter = e.target.dataset.filter;
-                        this.render();
-                    });
-                });
-                
-                // Bulk actions
-                document.getElementById('clearCompletedBtn').addEventListener('click', () => this.clearCompleted());
-                document.getElementById('markAllBtn').addEventListener('click', () => this.markAllComplete());
-                document.getElementById('exportBtn').addEventListener('click', () => this.exportTodos());
-                
-                // Modal
-                document.getElementById('closeModalBtn').addEventListener('click', () => this.closeModal());
-                document.getElementById('editForm').addEventListener('submit', (e) => this.saveEdit(e));
-                
-                // Priority selectors
-                document.querySelectorAll('.priority-selector').forEach(selector => {
-                    selector.addEventListener('click', (e) => {
-                        document.querySelectorAll('.priority-selector').forEach(s => s.classList.remove('active'));
-                        e.currentTarget.classList.add('active');
-                    });
-                });
-                
-                // Close modal when clicking outside
-                document.getElementById('editModal').addEventListener('click', (e) => {
-                    if (e.target.id === 'editModal') this.closeModal();
-                });
-            }
-            
-            generateId() {
-                return Date.now().toString(36) + Math.random().toString(36).substr(2);
-            }
-            
-            addTodo() {
-                const input = document.getElementById('todoInput');
-                const text = input.value.trim();
-                
-                if (text) {
-                    const todo = {
-                        id: this.generateId(),
-                        text: text,
-                        completed: false,
-                        priority: 'medium',
-                        createdAt: new Date().toISOString(),
-                        dueDate: null
-                    };
-                    
-                    this.todos.unshift(todo);
-                    this.saveTodos();
-                    this.render();
-                    this.updateStats();
-                    this.showNotification('Task added successfully!');
-                    
-                    input.value = '';
-                    input.focus();
-                }
-            }
-            
-            toggleTodo(id) {
-                const todo = this.todos.find(t => t.id === id);
-                if (todo) {
-                    todo.completed = !todo.completed;
-                    this.saveTodos();
-                    this.render();
-                    this.updateStats();
-                    
-                    const action = todo.completed ? 'completed' : 'marked as active';
-                    this.showNotification(`Task ${action}!`);
-                }
-            }
-            
-            deleteTodo(id) {
-                this.todos = this.todos.filter(t => t.id !== id);
-                this.saveTodos();
-                this.render();
-                this.updateStats();
-                this.showNotification('Task deleted!');
-            }
-            
-            editTodo(id) {
-                const todo = this.todos.find(t => t.id === id);
-                if (todo) {
-                    this.editingId = id;
-                    document.getElementById('editTodoText').value = todo.text;
-                    document.getElementById('editDueDate').value = todo.dueDate || '';
-                    
-                    // Set priority
-                    document.querySelectorAll('.priority-selector').forEach(s => s.classList.remove('active'));
-                    document.querySelector(`.priority-selector[data-priority="${todo.priority}"]`).classList.add('active');
-                    
-                    this.openModal();
-                }
-            }
-            
-            saveEdit(e) {
-                e.preventDefault();
-                
-                const text = document.getElementById('editTodoText').value.trim();
-                const dueDate = document.getElementById('editDueDate').value;
-                const priority = document.querySelector('.priority-selector.active').dataset.priority;
-                
-                if (text && this.editingId) {
-                    const todo = this.todos.find(t => t.id === this.editingId);
-                    if (todo) {
-                        todo.text = text;
-                        todo.priority = priority;
-                        todo.dueDate = dueDate || null;
-                        
-                        this.saveTodos();
-                        this.render();
-                        this.updateStats();
-                        this.closeModal();
-                        this.showNotification('Task updated successfully!');
-                    }
-                }
-            }
-            
-            clearCompleted() {
-                this.todos = this.todos.filter(t => !t.completed);
-                this.saveTodos();
-                this.render();
-                this.updateStats();
-                this.showNotification('Completed tasks cleared!');
-            }
-            
-            markAllComplete() {
-                const hasIncomplete = this.todos.some(t => !t.completed);
-                
-                this.todos.forEach(todo => {
-                    todo.completed = hasIncomplete;
-                });
-                
-                this.saveTodos();
-                this.render();
-                this.updateStats();
-                
-                const message = hasIncomplete ? 'All tasks completed!' : 'All tasks marked as active!';
-                this.showNotification(message);
-            }
-            
-            exportTodos() {
-                const dataStr = JSON.stringify(this.todos, null, 2);
-                const dataBlob = new Blob([dataStr], {type: 'application/json'});
-                
-                // Create download link
-                const link = document.createElement('a');
-                link.href = URL.createObjectURL(dataBlob);
-                link.download = `todos-${new Date().toISOString().split('T')[0]}.json`;
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                
-                this.showNotification('Todos exported successfully!');
-            }
-            
-            openModal() {
-                document.getElementById('editModal').classList.add('show');
-            }
-            
-            closeModal() {
-                document.getElementById('editModal').classList.remove('show');
-                this.editingId = null;
-            }
-            
-            getFilteredTodos() {
-                const today = new Date().toISOString().split('T')[0];
-                
-                switch(this.currentFilter) {
-                    case 'active':
-                        return this.todos.filter(t => !t.completed);
-                    case 'completed':
-                        return this.todos.filter(t => t.completed);
-                    case 'high':
-                        return this.todos.filter(t => t.priority === 'high');
-                    case 'today':
-                        return this.todos.filter(t => t.dueDate === today);
-                    default:
-                        return this.todos;
-                }
-            }
-            
-            render() {
-                const todoList = document.getElementById('todoList');
-                const filteredTodos = this.getFilteredTodos();
-                
-                if (filteredTodos.length === 0) {
-                    let message = '';
-                    switch(this.currentFilter) {
-                        case 'active':
-                            message = 'No active tasks. Enjoy your free time!';
-                            break;
-                        case 'completed':
-                            message = 'No completed tasks yet. Keep working!';
-                            break;
-                        case 'high':
-                            message = 'No high priority tasks. Great job!';
-                            break;
-                        case 'today':
-                            message = 'No tasks due today. You\'re all caught up!';
-                            break;
-                        default:
-                            message = 'No tasks yet. Add a task to get started!';
-                    }
-                    
-                    todoList.innerHTML = `
-                        <div class="empty-state">
-                            <i class="fas fa-clipboard-list"></i>
-                            <h3>${message}</h3>
-                            <p>Click the "Add Task" button to create your first todo</p>
-                        </div>
-                    `;
-                    return;
-                }
-                
-                todoList.innerHTML = filteredTodos.map(todo => `
-                    <div class="todo-item ${todo.completed ? 'completed' : ''} priority-${todo.priority}">
-                        <div class="todo-checkbox" onclick="app.toggleTodo('${todo.id}')"></div>
-                        <div class="todo-content">
-                            <div class="todo-text">${this.escapeHtml(todo.text)}</div>
-                            <div class="todo-meta">
-                                <span class="todo-priority priority-${todo.priority}">
-                                    <i class="fas fa-flag"></i> ${todo.priority.charAt(0).toUpperCase() + todo.priority.slice(1)} Priority
-                                </span>
-                                ${todo.dueDate ? `
-                                    <span><i class="far fa-calendar"></i> Due: ${new Date(todo.dueDate).toLocaleDateString()}</span>
-                                ` : ''}
-                                <span><i class="far fa-clock"></i> Created: ${new Date(todo.createdAt).toLocaleDateString()}</span>
-                            </div>
-                        </div>
-                        <div class="todo-actions">
-                            <button class="action-btn edit" onclick="app.editTodo('${todo.id}')">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <button class="action-btn delete" onclick="app.deleteTodo('${todo.id}')">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
-                    </div>
-                `).join('');
-            }
-            
-            updateStats() {
-                document.getElementById('totalTasks').textContent = this.todos.length;
-                document.getElementById('pendingTasks').textContent = this.todos.filter(t => !t.completed).length;
-                document.getElementById('completedTasks').textContent = this.todos.filter(t => t.completed).length;
-                document.getElementById('highPriorityTasks').textContent = this.todos.filter(t => t.priority === 'high').length;
-            }
-            
-            showNotification(message) {
-                const notification = document.getElementById('notification');
-                const notificationText = document.getElementById('notificationText');
-                
-                notificationText.textContent = message;
-                notification.classList.add('show');
-                
-                setTimeout(() => {
-                    notification.classList.remove('show');
-                }, 3000);
-            }
-            
-            escapeHtml(unsafe) {
-                return unsafe
-                    .replace(/&/g, "&amp;")
-                    .replace(/</g, "&lt;")
-                    .replace(/>/g, "&gt;")
-                    .replace(/"/g, "&quot;")
-                    .replace(/'/g, "&#039;");
-            }
-            
-            loadTodos() {
-                try {
-                    const stored = localStorage.getItem('advanced-todos');
-                    return stored ? JSON.parse(stored) : [];
-                } catch (e) {
-                    console.error('Error loading todos:', e);
-                    return [];
-                }
-            }
-            
-            saveTodos() {
-                try {
-                    localStorage.setItem('advanced-todos', JSON.stringify(this.todos));
-                } catch (e) {
-                    console.error('Error saving todos:', e);
-                }
-            }
-        }
-
-        // Initialize the app
-        const app = new TodoApp();
+            });
+        });
     </script>
 </body>
 </html>
