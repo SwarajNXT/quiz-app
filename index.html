@@ -1151,7 +1151,7 @@
         </div>
     </div>
 
-    <!-- Firebase and App JavaScript -->
+    <!-- Firebase Setup -->
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
     import { 
@@ -1175,18 +1175,19 @@
         measurementId: "G-ZWVX3GZ1DX"
     };
 
+    // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
     const googleProvider = new GoogleAuthProvider();
 
-    // Make Firebase available globally
-    window.firebaseAuth = auth;
-    window.firebaseDb = db;
+    // Store globally for easy access
+    window.auth = auth;
+    window.db = db;
     window.googleProvider = googleProvider;
-    window.firebaseApp = {
+    window.firebase = {
         createUserWithEmailAndPassword,
-        signInWithEmailAndPassword, 
+        signInWithEmailAndPassword,
         signOut,
         onAuthStateChanged,
         signInWithPopup,
@@ -1194,112 +1195,195 @@
         setDoc,
         getDoc
     };
+
+    console.log('Firebase initialized successfully');
 </script>
 
 <script>
-    // Authentication Functions
-    function showMessage(message, type, elementId) {
-        const messageEl = document.getElementById(elementId);
-        if (messageEl) {
-            messageEl.textContent = message;
-            messageEl.className = `auth-message ${type}`;
-            messageEl.style.display = 'block';
-            
-            setTimeout(() => {
-                messageEl.style.display = 'none';
-            }, 5000);
+// Simple modal controller
+class ModalController {
+    constructor() {
+        this.modals = {};
+        this.init();
+    }
+
+    init() {
+        // Get all modals
+        this.modals.login = document.getElementById('loginModal');
+        this.modals.signup = document.getElementById('signupModal');
+        this.modals.onboarding = document.getElementById('onboardingModal');
+
+        // Setup close buttons
+        document.querySelectorAll('.close').forEach(closeBtn => {
+            closeBtn.addEventListener('click', () => this.closeAll());
+        });
+
+        // Setup modal background clicks
+        Object.values(this.modals).forEach(modal => {
+            if (modal) {
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) this.closeAll();
+                });
+            }
+        });
+
+        console.log('Modal controller initialized');
+    }
+
+    show(modalName) {
+        this.closeAll();
+        if (this.modals[modalName]) {
+            this.modals[modalName].style.display = 'block';
         }
     }
 
-    // Check if user profile is complete
-    async function isProfileComplete(userId) {
-        try {
-            const userDoc = await window.firebaseApp.getDoc(
-                window.firebaseApp.doc(window.firebaseDb, "users", userId)
-            );
-            
-            if (userDoc.exists()) {
-                const userData = userDoc.data();
-                return userData.profileCompleted === true;
+    closeAll() {
+        Object.values(this.modals).forEach(modal => {
+            if (modal) modal.style.display = 'none';
+        });
+    }
+}
+
+// Auth controller
+class AuthController {
+    constructor() {
+        this.modalController = new ModalController();
+        this.init();
+    }
+
+    init() {
+        this.bindEvents();
+        this.setupAuthListener();
+        console.log('Auth controller initialized');
+    }
+
+    bindEvents() {
+        // Header buttons
+        document.querySelector('.login-btn')?.addEventListener('click', () => this.modalController.show('login'));
+        document.querySelector('.signup-btn')?.addEventListener('click', () => this.modalController.show('signup'));
+
+        // Hero buttons
+        document.querySelector('.practice-btn')?.addEventListener('click', () => this.modalController.show('login'));
+        document.querySelector('.test-btn')?.addEventListener('click', () => this.modalController.show('login'));
+        document.querySelector('.create-test-btn')?.addEventListener('click', () => this.modalController.show('signup'));
+
+        // Modal links
+        document.getElementById('showSignup')?.addEventListener('click', (e) => {
+            e.preventDefault();
+            this.modalController.show('signup');
+        });
+
+        document.getElementById('showLogin')?.addEventListener('click', (e) => {
+            e.preventDefault();
+            this.modalController.show('login');
+        });
+
+        // Google sign in
+        document.getElementById('googleSignupBtn')?.addEventListener('click', () => this.signInWithGoogle());
+
+        // Forms
+        document.getElementById('loginForm')?.addEventListener('submit', (e) => this.handleLogin(e));
+        document.getElementById('signupForm')?.addEventListener('submit', (e) => this.handleSignup(e));
+        document.getElementById('onboardingForm')?.addEventListener('submit', (e) => this.handleOnboarding(e));
+    }
+
+    setupAuthListener() {
+        window.firebase.onAuthStateChanged(window.auth, async (user) => {
+            if (user) {
+                const profileComplete = await this.isProfileComplete(user.uid);
+                if (profileComplete) {
+                    this.updateUI(user);
+                }
             }
-            return false;
+        });
+    }
+
+    async isProfileComplete(userId) {
+        try {
+            const userDoc = await window.firebase.getDoc(window.firebase.doc(window.db, "users", userId));
+            return userDoc.exists() && userDoc.data().profileCompleted === true;
         } catch (error) {
             console.error('Error checking profile:', error);
             return false;
         }
     }
 
-    // Complete user profile
-    async function completeUserProfile(userId, userData) {
-        try {
-            await window.firebaseApp.setDoc(
-                window.firebaseApp.doc(window.firebaseDb, "users", userId),
-                {
-                    ...userData,
-                    profileCompleted: true,
-                    updatedAt: new Date()
-                },
-                { merge: true }
-            );
-            return true;
-        } catch (error) {
-            console.error('Error completing profile:', error);
-            return false;
-        }
-    }
-
-    // Redirect to dashboard
-    function redirectToDashboard() {
-        setTimeout(() => {
-            window.location.href = 'dashboard.html';
-        }, 1000);
-    }
-
-    // Show onboarding modal
-    function showOnboardingModal(user) {
-        const onboardingModal = document.getElementById('onboardingModal');
-        const signupModal = document.getElementById('signupModal');
-        const loginModal = document.getElementById('loginModal');
-        
-        // Close other modals
-        if (signupModal) signupModal.style.display = 'none';
-        if (loginModal) loginModal.style.display = 'none';
-        
-        // Show onboarding modal
-        if (onboardingModal) onboardingModal.style.display = 'block';
-        
-        // Pre-fill name if available from Google
-        if (user.displayName && document.getElementById('userName')) {
-            document.getElementById('userName').value = user.displayName;
-        }
-    }
-
-    // Google Sign In
-    async function signInWithGoogle() {
-        const googleBtn = document.getElementById('googleSignupBtn');
-        if (googleBtn) {
-            googleBtn.disabled = true;
-            googleBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connecting...';
-        }
-        
-        try {
-            const result = await window.firebaseApp.signInWithPopup(
-                window.firebaseAuth, 
-                window.googleProvider
-            );
+    updateUI(user) {
+        const authButtons = document.getElementById('authButtons');
+        if (authButtons) {
+            authButtons.innerHTML = `
+                <div class="user-profile">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <span>Welcome, ${user.displayName || user.email.split('@')[0]}</span>
+                    <button class="btn btn-outline logout-btn">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            `;
             
+            document.querySelector('.logout-btn')?.addEventListener('click', () => {
+                window.firebase.signOut(window.auth);
+            });
+        }
+    }
+
+    showMessage(message, type, elementId) {
+        const messageEl = document.getElementById(elementId);
+        if (messageEl) {
+            messageEl.textContent = message;
+            messageEl.className = `auth-message ${type}`;
+            messageEl.style.display = 'block';
+            setTimeout(() => {
+                messageEl.style.display = 'none';
+            }, 5000);
+        }
+    }
+
+    setButtonLoading(buttonId, loading) {
+        const button = document.getElementById(buttonId);
+        if (button) {
+            if (loading) {
+                button.disabled = true;
+                if (buttonId === 'googleSignupBtn') {
+                    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connecting...';
+                } else {
+                    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
+                }
+            } else {
+                button.disabled = false;
+                if (buttonId === 'googleSignupBtn') {
+                    button.innerHTML = `
+                        <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google">
+                        Continue with Google
+                    `;
+                } else if (buttonId === 'loginBtn') {
+                    button.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login to Your Account';
+                } else if (buttonId === 'signupBtn') {
+                    button.innerHTML = '<i class="fas fa-user-plus"></i> Create Account';
+                } else if (buttonId === 'completeProfileBtn') {
+                    button.innerHTML = '<i class="fas fa-check-circle"></i> Complete Profile & Continue';
+                }
+            }
+        }
+    }
+
+    async signInWithGoogle() {
+        this.setButtonLoading('googleSignupBtn', true);
+        
+        try {
+            const result = await window.firebase.signInWithPopup(window.auth, window.googleProvider);
             const user = result.user;
             
-            // Check if user already has a complete profile
-            const profileComplete = await isProfileComplete(user.uid);
+            const profileComplete = await this.isProfileComplete(user.uid);
             
             if (profileComplete) {
-                showMessage('Login successful!', 'success', 'signupMessage');
-                redirectToDashboard();
+                this.showMessage('Login successful!', 'success', 'signupMessage');
+                setTimeout(() => window.location.href = 'dashboard.html', 1000);
             } else {
-                // Create initial user record if doesn't exist
-                await window.firebaseApp.setDoc(
-                    window.firebaseApp.doc(window.firebaseDb, "users", user.uid),
+                await window.firebase.setDoc(
+                    window.firebase.doc(window.db, "users", user.uid),
                     {
                         email: user.email,
                         displayName: user.displayName || '',
@@ -1313,8 +1397,10 @@
                     { merge: true }
                 );
                 
-                // Show onboarding
-                showOnboardingModal(user);
+                this.modalController.show('onboarding');
+                if (user.displayName) {
+                    document.getElementById('userName').value = user.displayName;
+                }
             }
             
         } catch (error) {
@@ -1323,43 +1409,60 @@
                 errorMessage = 'Sign-in was cancelled.';
             } else if (error.code === 'auth/popup-blocked') {
                 errorMessage = 'Sign-in popup was blocked. Please allow popups for this site.';
-            } else if (error.code === 'auth/configuration-not-found') {
-                errorMessage = 'Google Sign-In is not configured. Please use email signup for now.';
             }
-            showMessage(errorMessage, 'error', 'signupMessage');
+            this.showMessage(errorMessage, 'error', 'signupMessage');
             console.error('Google sign-in error:', error);
         } finally {
-            const googleBtn = document.getElementById('googleSignupBtn');
-            if (googleBtn) {
-                googleBtn.disabled = false;
-                googleBtn.innerHTML = `
-                    <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google">
-                    Continue with Google
-                `;
-            }
+            this.setButtonLoading('googleSignupBtn', false);
         }
     }
 
-    // Email Sign Up
-    async function signupUser(email, password) {
-        const signupBtn = document.getElementById('signupBtn');
-        if (signupBtn) {
-            signupBtn.disabled = true;
-            signupBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating Account...';
-        }
+    async handleLogin(e) {
+        e.preventDefault();
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        
+        this.setButtonLoading('loginBtn', true);
         
         try {
-            const userCredential = await window.firebaseApp.createUserWithEmailAndPassword(
-                window.firebaseAuth,
-                email,
-                password
-            );
-            
+            const userCredential = await window.firebase.signInWithEmailAndPassword(window.auth, email, password);
             const user = userCredential.user;
             
-            // Create user record with incomplete profile
-            await window.firebaseApp.setDoc(
-                window.firebaseApp.doc(window.firebaseDb, "users", user.uid),
+            const profileComplete = await this.isProfileComplete(user.uid);
+            
+            if (profileComplete) {
+                this.showMessage('Login successful!', 'success', 'authMessage');
+                setTimeout(() => window.location.href = 'dashboard.html', 1000);
+            } else {
+                this.modalController.show('onboarding');
+            }
+            
+        } catch (error) {
+            let errorMessage = 'Login failed. Please try again.';
+            if (error.code === 'auth/user-not-found') {
+                errorMessage = 'No account found with this email.';
+            } else if (error.code === 'auth/wrong-password') {
+                errorMessage = 'Incorrect password. Please try again.';
+            }
+            this.showMessage(errorMessage, 'error', 'authMessage');
+        } finally {
+            this.setButtonLoading('loginBtn', false);
+        }
+    }
+
+    async handleSignup(e) {
+        e.preventDefault();
+        const email = document.getElementById('signupEmail').value;
+        const password = document.getElementById('signupPassword').value;
+        
+        this.setButtonLoading('signupBtn', true);
+        
+        try {
+            const userCredential = await window.firebase.createUserWithEmailAndPassword(window.auth, email, password);
+            const user = userCredential.user;
+            
+            await window.firebase.setDoc(
+                window.firebase.doc(window.db, "users", user.uid),
                 {
                     email: email,
                     createdAt: new Date(),
@@ -1370,8 +1473,7 @@
                 }
             );
             
-            // Show onboarding modal
-            showOnboardingModal(user);
+            this.modalController.show('onboarding');
             
         } catch (error) {
             let errorMessage = 'Signup failed. Please try again.';
@@ -1379,289 +1481,52 @@
                 errorMessage = 'This email is already registered. Please login instead.';
             } else if (error.code === 'auth/weak-password') {
                 errorMessage = 'Password should be at least 6 characters.';
-            } else if (error.code === 'auth/invalid-email') {
-                errorMessage = 'Please enter a valid email address.';
             }
-            showMessage(errorMessage, 'error', 'signupMessage');
-            console.error('Signup error:', error);
+            this.showMessage(errorMessage, 'error', 'signupMessage');
         } finally {
-            const signupBtn = document.getElementById('signupBtn');
-            if (signupBtn) {
-                signupBtn.disabled = false;
-                signupBtn.innerHTML = '<i class="fas fa-user-plus"></i> Create Account';
-            }
+            this.setButtonLoading('signupBtn', false);
         }
     }
 
-    // Email Login
-    async function loginUser(email, password) {
-        const loginBtn = document.getElementById('loginBtn');
-        if (loginBtn) {
-            loginBtn.disabled = true;
-            loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
-        }
+    async handleOnboarding(e) {
+        e.preventDefault();
+        const userData = {
+            displayName: document.getElementById('userName').value,
+            mobileNumber: document.getElementById('mobileNumber').value,
+            preparationYear: document.getElementById('preparationYear').value
+        };
+        
+        this.setButtonLoading('completeProfileBtn', true);
         
         try {
-            const userCredential = await window.firebaseApp.signInWithEmailAndPassword(
-                window.firebaseAuth, 
-                email, 
-                password
-            );
-            
-            const user = userCredential.user;
-            
-            // Check if profile is complete
-            const profileComplete = await isProfileComplete(user.uid);
-            
-            if (profileComplete) {
-                showMessage('Login successful! Redirecting...', 'success', 'authMessage');
-                redirectToDashboard();
-            } else {
-                // Show onboarding for existing users without complete profile
-                showOnboardingModal(user);
-            }
-            
-        } catch (error) {
-            let errorMessage = 'Login failed. Please try again.';
-            if (error.code === 'auth/user-not-found') {
-                errorMessage = 'No account found with this email.';
-            } else if (error.code === 'auth/wrong-password') {
-                errorMessage = 'Incorrect password. Please try again.';
-            } else if (error.code === 'auth/invalid-email') {
-                errorMessage = 'Please enter a valid email address.';
-            }
-            showMessage(errorMessage, 'error', 'authMessage');
-            console.error('Login error:', error);
-        } finally {
-            const loginBtn = document.getElementById('loginBtn');
-            if (loginBtn) {
-                loginBtn.disabled = false;
-                loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login to Your Account';
-            }
-        }
-    }
-
-    // Complete onboarding
-    async function completeOnboarding(userData) {
-        const completeBtn = document.getElementById('completeProfileBtn');
-        if (completeBtn) {
-            completeBtn.disabled = true;
-            completeBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
-        }
-        
-        try {
-            const user = window.firebaseAuth.currentUser;
-            
+            const user = window.auth.currentUser;
             if (user) {
-                const success = await completeUserProfile(user.uid, userData);
+                await window.firebase.setDoc(
+                    window.firebase.doc(window.db, "users", user.uid),
+                    {
+                        ...userData,
+                        profileCompleted: true,
+                        updatedAt: new Date()
+                    },
+                    { merge: true }
+                );
                 
-                if (success) {
-                    showMessage('Profile completed successfully!', 'success', 'signupMessage');
-                    redirectToDashboard();
-                } else {
-                    showMessage('Failed to save profile. Please try again.', 'error', 'signupMessage');
-                }
+                this.showMessage('Profile completed successfully!', 'success', 'signupMessage');
+                setTimeout(() => window.location.href = 'dashboard.html', 1000);
             }
         } catch (error) {
-            showMessage('Error completing profile. Please try again.', 'error', 'signupMessage');
-            console.error('Onboarding error:', error);
+            this.showMessage('Error completing profile. Please try again.', 'error', 'signupMessage');
         } finally {
-            const completeBtn = document.getElementById('completeProfileBtn');
-            if (completeBtn) {
-                completeBtn.disabled = false;
-                completeBtn.innerHTML = '<i class="fas fa-check-circle"></i> Complete Profile & Continue';
-            }
+            this.setButtonLoading('completeProfileBtn', false);
         }
     }
+}
 
-    // Check auth state and profile completion
-    window.firebaseApp.onAuthStateChanged(window.firebaseAuth, async (user) => {
-        if (user) {
-            const profileComplete = await isProfileComplete(user.uid);
-            
-            if (profileComplete) {
-                const authButtons = document.getElementById('authButtons');
-                if (authButtons) {
-                    authButtons.innerHTML = `
-                        <div class="user-profile">
-                            <div class="user-avatar">
-                                <i class="fas fa-user"></i>
-                            </div>
-                            <span>Welcome, ${user.displayName || user.email.split('@')[0]}</span>
-                            <button class="btn btn-outline logout-btn">
-                                <i class="fas fa-sign-out-alt"></i> Logout
-                            </button>
-                        </div>
-                    `;
-                    
-                    // Add logout functionality
-                    const logoutBtn = document.querySelector('.logout-btn');
-                    if (logoutBtn) {
-                        logoutBtn.addEventListener('click', () => {
-                            window.firebaseApp.signOut(window.firebaseAuth);
-                        });
-                    }
-                }
-            }
-        }
-    });
-
-    // Initialize the application
-    document.addEventListener('DOMContentLoaded', function() {
-        console.log('DOM loaded - initializing Vidyucation');
-        
-        // Get modal elements
-        const loginModal = document.getElementById('loginModal');
-        const signupModal = document.getElementById('signupModal');
-        const onboardingModal = document.getElementById('onboardingModal');
-        
-        // Get buttons
-        const loginButtons = document.querySelectorAll('.login-btn');
-        const signupButton = document.querySelector('.signup-btn');
-        const practiceButton = document.querySelector('.practice-btn');
-        const testButton = document.querySelector('.test-btn');
-        const createTestButton = document.querySelector('.create-test-btn');
-        const googleSignupBtn = document.getElementById('googleSignupBtn');
-        
-        // Debug: Check if elements exist
-        console.log('Login modal:', loginModal);
-        console.log('Signup modal:', signupModal);
-        console.log('Onboarding modal:', onboardingModal);
-        console.log('Login buttons:', loginButtons.length);
-        console.log('Signup button:', signupButton);
-        console.log('Google button:', googleSignupBtn);
-
-        // Open login modal
-        if (loginButtons.length > 0) {
-            loginButtons.forEach(btn => {
-                btn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    console.log('Login button clicked');
-                    if (loginModal) loginModal.style.display = 'block';
-                });
-            });
-        }
-
-        // Open login modal for practice, test, create-test buttons
-        [practiceButton, testButton, createTestButton].forEach(btn => {
-            if (btn) {
-                btn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    console.log('Practice/Test button clicked');
-                    if (loginModal) loginModal.style.display = 'block';
-                });
-            }
-        });
-
-        // Open signup modal
-        if (signupButton) {
-            signupButton.addEventListener('click', function(e) {
-                e.preventDefault();
-                console.log('Signup button clicked');
-                if (signupModal) signupModal.style.display = 'block';
-            });
-        }
-
-        // Google Sign In
-        if (googleSignupBtn) {
-            googleSignupBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                console.log('Google button clicked');
-                signInWithGoogle();
-            });
-        }
-
-        // Switch between modals
-        const showSignupLink = document.getElementById('showSignup');
-        if (showSignupLink) {
-            showSignupLink.addEventListener('click', function(e) {
-                e.preventDefault();
-                console.log('Switching to signup');
-                if (loginModal) loginModal.style.display = 'none';
-                if (signupModal) signupModal.style.display = 'block';
-            });
-        }
-
-        const showLoginLink = document.getElementById('showLogin');
-        if (showLoginLink) {
-            showLoginLink.addEventListener('click', function(e) {
-                e.preventDefault();
-                console.log('Switching to login');
-                if (signupModal) signupModal.style.display = 'none';
-                if (loginModal) loginModal.style.display = 'block';
-            });
-        }
-
-        // Close modals
-        const closeButtons = document.querySelectorAll('.close');
-        if (closeButtons.length > 0) {
-            closeButtons.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    console.log('Close button clicked');
-                    if (loginModal) loginModal.style.display = 'none';
-                    if (signupModal) signupModal.style.display = 'none';
-                    if (onboardingModal) onboardingModal.style.display = 'none';
-                });
-            });
-        }
-
-        // Form submissions
-        const loginForm = document.getElementById('loginForm');
-        if (loginForm) {
-            loginForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                console.log('Login form submitted');
-                const email = document.getElementById('email').value;
-                const password = document.getElementById('password').value;
-                console.log('Login attempt:', email);
-                loginUser(email, password);
-            });
-        }
-
-        const signupForm = document.getElementById('signupForm');
-        if (signupForm) {
-            signupForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                console.log('Signup form submitted');
-                const email = document.getElementById('signupEmail').value;
-                const password = document.getElementById('signupPassword').value;
-                console.log('Signup attempt:', email);
-                signupUser(email, password);
-            });
-        }
-
-        const onboardingForm = document.getElementById('onboardingForm');
-        if (onboardingForm) {
-            onboardingForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                console.log('Onboarding form submitted');
-                const userData = {
-                    displayName: document.getElementById('userName').value,
-                    mobileNumber: document.getElementById('mobileNumber').value,
-                    preparationYear: document.getElementById('preparationYear').value
-                };
-                completeOnboarding(userData);
-            });
-        }
-
-        // Close modal when clicking outside
-        window.addEventListener('click', function(e) {
-            if (e.target === loginModal) {
-                console.log('Clicked outside login modal');
-                loginModal.style.display = 'none';
-            }
-            if (e.target === signupModal) {
-                console.log('Clicked outside signup modal');
-                signupModal.style.display = 'none';
-            }
-            if (e.target === onboardingModal) {
-                console.log('Clicked outside onboarding modal');
-                onboardingModal.style.display = 'none';
-            }
-        });
-
-        console.log('Vidyucation initialized successfully');
-    });
+// Initialize everything when DOM is ready
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM loaded - initializing Vidyucation');
+    window.authController = new AuthController();
+});
 </script>
 </body>
 </html>
