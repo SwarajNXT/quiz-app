@@ -636,7 +636,7 @@
             color: var(--gray);
         }
 
-        .input-with-icon input {
+        .input-with-icon input, .form-group select {
             width: 100%;
             padding: 12px 15px 12px 45px;
             border: 2px solid rgba(255, 255, 255, 0.1);
@@ -647,7 +647,7 @@
             transition: all 0.3s ease;
         }
 
-        .input-with-icon input:focus {
+        .input-with-icon input:focus, .form-group select:focus {
             outline: none;
             border-color: var(--primary);
             background: rgba(255, 255, 255, 0.08);
@@ -700,6 +700,88 @@
 
         .signup-link a:hover, .login-link a:hover {
             text-decoration: underline;
+        }
+
+        /* Google Sign In Button */
+        .google-signin-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            width: 100%;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .google-signin-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .google-signin-btn img {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Divider */
+        .divider {
+            text-align: center;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .divider:before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .divider span {
+            background: rgba(30, 41, 59, 0.95);
+            padding: 0 15px;
+            color: #cbd5e1;
+            font-size: 14px;
+        }
+
+        /* Select Styling */
+        select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--light);
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        select option {
+            background: #1e293b;
+            color: white;
+        }
+
+        /* Small text */
+        small {
+            display: block;
+            margin-top: 5px;
+            color: #cbd5e1;
+            font-size: 12px;
         }
 
         /* Responsive */
@@ -973,128 +1055,151 @@
     </div>
 
     <!-- Signup Modal -->
-<div id="signupModal" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <span class="close">&times;</span>
-            <h2>Join Vidyucation</h2>
-            <p>Start your NEET preparation journey</p>
-        </div>
-        <div class="modal-body">
-            <div id="signupMessage" class="auth-message"></div>
-            
-            <!-- Google Sign In Button -->
-            <button class="btn btn-outline btn-full google-signin-btn" id="googleSignupBtn">
-                <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google" style="width: 20px; height: 20px;">
-                Continue with Google
-            </button>
-            
-            <div class="divider">
-                <span>or continue with email</span>
+    <div id="signupModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close">&times;</span>
+                <h2>Join Vidyucation</h2>
+                <p>Start your NEET preparation journey</p>
             </div>
-            
-            <form id="signupForm">
-                <div class="form-group">
-                    <label for="signupEmail">Email Address</label>
-                    <div class="input-with-icon">
-                        <i class="fas fa-envelope"></i>
-                        <input type="email" id="signupEmail" name="email" placeholder="Enter your email" required>
-                    </div>
-                </div>
+            <div class="modal-body">
+                <div id="signupMessage" class="auth-message"></div>
                 
-                <div class="form-group">
-                    <label for="signupPassword">Password</label>
-                    <div class="input-with-icon">
-                        <i class="fas fa-lock"></i>
-                        <input type="password" id="signupPassword" name="password" placeholder="Create a password (min. 6 characters)" required>
-                    </div>
-                </div>
-                
-                <button type="submit" class="btn btn-primary btn-full" id="signupBtn">
-                    <i class="fas fa-user-plus"></i>
-                    Create Account
+                <!-- Google Sign In Button -->
+                <button class="google-signin-btn" id="googleSignupBtn">
+                    <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google">
+                    Continue with Google
                 </button>
-            </form>
-            
-            <div class="login-link">
-                Already have an account? <a href="#" id="showLogin">Login here</a>
+                
+                <div class="divider">
+                    <span>or continue with email</span>
+                </div>
+                
+                <form id="signupForm">
+                    <div class="form-group">
+                        <label for="signupEmail">Email Address</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" id="signupEmail" name="email" placeholder="Enter your email" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="signupPassword">Password</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="signupPassword" name="password" placeholder="Create a password (min. 6 characters)" required>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-full" id="signupBtn">
+                        <i class="fas fa-user-plus"></i>
+                        Create Account
+                    </button>
+                </form>
+                
+                <div class="login-link">
+                    Already have an account? <a href="#" id="showLogin">Login here</a>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- Onboarding Modal -->
-<div id="onboardingModal" class="modal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h2>Welcome to Vidyucation! 🎉</h2>
-            <p>Let's set up your profile</p>
-        </div>
-        <div class="modal-body">
-            <form id="onboardingForm">
-                <div class="form-group">
-                    <label for="userName">What should we call you?</label>
-                    <div class="input-with-icon">
-                        <i class="fas fa-user"></i>
-                        <input type="text" id="userName" name="userName" placeholder="Enter your full name" required>
+    <!-- Onboarding Modal -->
+    <div id="onboardingModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Welcome to Vidyucation! 🎉</h2>
+                <p>Let's set up your profile</p>
+            </div>
+            <div class="modal-body">
+                <form id="onboardingForm">
+                    <div class="form-group">
+                        <label for="userName">What should we call you?</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="userName" name="userName" placeholder="Enter your full name" required>
+                        </div>
                     </div>
-                </div>
-                
-                <div class="form-group">
-                    <label for="mobileNumber">Mobile Number</label>
-                    <div class="input-with-icon">
-                        <i class="fas fa-phone"></i>
-                        <input type="tel" id="mobileNumber" name="mobileNumber" placeholder="Enter your 10-digit mobile number" pattern="[0-9]{10}" required>
+                    
+                    <div class="form-group">
+                        <label for="mobileNumber">Mobile Number</label>
+                        <div class="input-with-icon">
+                            <i class="fas fa-phone"></i>
+                            <input type="tel" id="mobileNumber" name="mobileNumber" placeholder="Enter your 10-digit mobile number" pattern="[0-9]{10}" required>
+                        </div>
+                        <small>Enter without +91 or country code</small>
                     </div>
-                    <small style="color: #cbd5e1; font-size: 12px;">Enter without +91 or country code</small>
-                </div>
-                
-                <div class="form-group">
-                    <label for="preparationYear">Target NEET Preparation Year</label>
-                    <select id="preparationYear" name="preparationYear" required>
-                        <option value="">Select your target year</option>
-                        <option value="2024">NEET 2024</option>
-                        <option value="2025" selected>NEET 2025</option>
-                        <option value="2026">NEET 2026</option>
-                        <option value="2027">NEET 2027</option>
-                    </select>
-                </div>
-                
-                <button type="submit" class="btn btn-primary btn-full" id="completeProfileBtn">
-                    <i class="fas fa-check-circle"></i>
-                    Complete Profile & Continue
-                </button>
-            </form>
+                    
+                    <div class="form-group">
+                        <label for="preparationYear">Target NEET Preparation Year</label>
+                        <select id="preparationYear" name="preparationYear" required>
+                            <option value="">Select your target year</option>
+                            <option value="2024">NEET 2024</option>
+                            <option value="2025" selected>NEET 2025</option>
+                            <option value="2026">NEET 2026</option>
+                            <option value="2027">NEET 2027</option>
+                        </select>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-full" id="completeProfileBtn">
+                        <i class="fas fa-check-circle"></i>
+                        Complete Profile & Continue
+                    </button>
+                </form>
+            </div>
         </div>
     </div>
-</div>
 
-    <!-- Simple Firebase Setup -->
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <!-- Firebase and App JavaScript -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
+        import { 
+            getAuth, 
+            createUserWithEmailAndPassword, 
+            signInWithEmailAndPassword, 
+            signOut, 
+            onAuthStateChanged,
+            GoogleAuthProvider,
+            signInWithPopup
+        } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
 
-<script>
-    // Firebase configuration
-    const firebaseConfig = {
-        apiKey: "AIzaSyD7UYp7ApLTpku2y4gAw8QprAkCNGhRsLI",
-        authDomain: "quiz-app-ad5de.firebaseapp.com",
-        projectId: "quiz-app-ad5de",
-        storageBucket: "quiz-app-ad5de.firebasestorage.app",
-        messagingSenderId: "17935383217",
-        appId: "1:17935383217:web:f34559709c88a1d9670090",
-        measurementId: "G-ZWVX3GZ1DX"
-    };
+        const firebaseConfig = {
+            apiKey: "AIzaSyD7UYp7ApLTpku2y4gAw8QprAkCNGhRsLI",
+            authDomain: "quiz-app-ad5de.firebaseapp.com",
+            projectId: "quiz-app-ad5de",
+            storageBucket: "quiz-app-ad5de.firebasestorage.app",
+            messagingSenderId: "17935383217",
+            appId: "1:17935383217:web:f34559709c88a1d9670090",
+            measurementId: "G-ZWVX3GZ1DX"
+        };
 
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const db = firebase.firestore();
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const googleProvider = new GoogleAuthProvider();
 
-    // Authentication Functions
-    function showMessage(message, type, elementId) {
-        const messageEl = document.getElementById(elementId);
-        if (messageEl) {
+        // Make Firebase available globally
+        window.firebaseAuth = auth;
+        window.firebaseDb = db;
+        window.firebaseFunctions = {
+            createUserWithEmailAndPassword,
+            signInWithEmailAndPassword, 
+            signOut,
+            onAuthStateChanged,
+            signInWithPopup,
+            doc,
+            setDoc,
+            getDoc
+        };
+        window.googleProvider = googleProvider;
+    </script>
+
+    <script>
+        // Authentication Functions
+        function showMessage(message, type, elementId) {
+            const messageEl = document.getElementById(elementId);
             messageEl.textContent = message;
             messageEl.className = `auth-message ${type}`;
             messageEl.style.display = 'block';
@@ -1103,63 +1208,163 @@
                 messageEl.style.display = 'none';
             }, 5000);
         }
-    }
 
-    function loginUser(email, password) {
-        const loginBtn = document.getElementById('loginBtn');
-        loginBtn.disabled = true;
-        loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
-        
-        auth.signInWithEmailAndPassword(email, password)
-            .then((userCredential) => {
-                showMessage('Login successful! Redirecting...', 'success', 'authMessage');
-                setTimeout(() => {
-                    window.location.href = 'dashboard.html';
-                }, 1500);
-            })
-            .catch((error) => {
-                let errorMessage = 'Login failed. Please try again.';
-                if (error.code === 'auth/user-not-found') {
-                    errorMessage = 'No account found with this email.';
-                } else if (error.code === 'auth/wrong-password') {
-                    errorMessage = 'Incorrect password. Please try again.';
-                } else if (error.code === 'auth/invalid-email') {
-                    errorMessage = 'Please enter a valid email address.';
+        // Check if user profile is complete
+        async function isProfileComplete(userId) {
+            try {
+                const userDoc = await window.firebaseFunctions.getDoc(
+                    window.firebaseFunctions.doc(window.firebaseDb, "users", userId)
+                );
+                
+                if (userDoc.exists()) {
+                    const userData = userDoc.data();
+                    return userData.profileCompleted === true;
                 }
-                showMessage(errorMessage, 'error', 'authMessage');
-                console.error('Login error:', error);
-            })
-            .finally(() => {
-                loginBtn.disabled = false;
-                loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login to Your Account';
-            });
-    }
+                return false;
+            } catch (error) {
+                console.error('Error checking profile:', error);
+                return false;
+            }
+        }
 
-    function signupUser(email, password) {
-        const signupBtn = document.getElementById('signupBtn');
-        signupBtn.disabled = true;
-        signupBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating Account...';
-        
-        auth.createUserWithEmailAndPassword(email, password)
-            .then((userCredential) => {
+        // Complete user profile
+        async function completeUserProfile(userId, userData) {
+            try {
+                await window.firebaseFunctions.setDoc(
+                    window.firebaseFunctions.doc(window.firebaseDb, "users", userId),
+                    {
+                        ...userData,
+                        profileCompleted: true,
+                        updatedAt: new Date()
+                    },
+                    { merge: true }
+                );
+                return true;
+            } catch (error) {
+                console.error('Error completing profile:', error);
+                return false;
+            }
+        }
+
+        // Redirect to dashboard
+        function redirectToDashboard() {
+            setTimeout(() => {
+                window.location.href = 'dashboard.html';
+            }, 1000);
+        }
+
+        // Show onboarding modal
+        function showOnboardingModal(user) {
+            const onboardingModal = document.getElementById('onboardingModal');
+            const signupModal = document.getElementById('signupModal');
+            const loginModal = document.getElementById('loginModal');
+            
+            // Close other modals
+            signupModal.style.display = 'none';
+            loginModal.style.display = 'none';
+            
+            // Show onboarding modal
+            onboardingModal.style.display = 'block';
+            
+            // Pre-fill name if available from Google
+            if (user.displayName) {
+                document.getElementById('userName').value = user.displayName;
+            }
+        }
+
+        // Google Sign In
+        async function signInWithGoogle() {
+            const googleBtn = document.getElementById('googleSignupBtn');
+            googleBtn.disabled = true;
+            googleBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connecting...';
+            
+            try {
+                const result = await window.firebaseFunctions.signInWithPopup(
+                    window.firebaseAuth, 
+                    window.googleProvider
+                );
+                
+                const user = result.user;
+                
+                // Check if user already has a complete profile
+                const profileComplete = await isProfileComplete(user.uid);
+                
+                if (profileComplete) {
+                    showMessage('Login successful!', 'success', 'signupMessage');
+                    redirectToDashboard();
+                } else {
+                    // Create initial user record if doesn't exist
+                    await window.firebaseFunctions.setDoc(
+                        window.firebaseFunctions.doc(window.firebaseDb, "users", user.uid),
+                        {
+                            email: user.email,
+                            displayName: user.displayName || '',
+                            photoURL: user.photoURL || '',
+                            createdAt: new Date(),
+                            lastLogin: new Date(),
+                            accountType: 'student',
+                            authProvider: 'google',
+                            profileCompleted: false
+                        },
+                        { merge: true }
+                    );
+                    
+                    // Show onboarding
+                    showOnboardingModal(user);
+                }
+                
+            } catch (error) {
+                let errorMessage = 'Google sign-in failed. Please try again.';
+                if (error.code === 'auth/popup-closed-by-user') {
+                    errorMessage = 'Sign-in was cancelled.';
+                } else if (error.code === 'auth/popup-blocked') {
+                    errorMessage = 'Sign-in popup was blocked. Please allow popups for this site.';
+                } else if (error.code === 'auth/configuration-not-found') {
+                    errorMessage = 'Google Sign-In is not configured. Please use email signup for now.';
+                }
+                showMessage(errorMessage, 'error', 'signupMessage');
+                console.error('Google sign-in error:', error);
+            } finally {
+                googleBtn.disabled = false;
+                googleBtn.innerHTML = `
+                    <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google">
+                    Continue with Google
+                `;
+            }
+        }
+
+        // Email Sign Up
+        async function signupUser(email, password) {
+            const signupBtn = document.getElementById('signupBtn');
+            signupBtn.disabled = true;
+            signupBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating Account...';
+            
+            try {
+                const userCredential = await window.firebaseFunctions.createUserWithEmailAndPassword(
+                    window.firebaseAuth,
+                    email,
+                    password
+                );
+                
                 const user = userCredential.user;
                 
-                // Save user data to Firestore
-                return db.collection('users').doc(user.uid).set({
-                    email: email,
-                    createdAt: new Date(),
-                    lastLogin: new Date(),
-                    accountType: 'student',
-                    neetYear: '2025'
-                });
-            })
-            .then(() => {
-                showMessage('Account created successfully!', 'success', 'signupMessage');
-                setTimeout(() => {
-                    window.location.href = 'dashboard.html';
-                }, 1500);
-            })
-            .catch((error) => {
+                // Create user record with incomplete profile
+                await window.firebaseFunctions.setDoc(
+                    window.firebaseFunctions.doc(window.firebaseDb, "users", user.uid),
+                    {
+                        email: email,
+                        createdAt: new Date(),
+                        lastLogin: new Date(),
+                        accountType: 'student',
+                        authProvider: 'email',
+                        profileCompleted: false
+                    }
+                );
+                
+                // Show onboarding modal
+                showOnboardingModal(user);
+                
+            } catch (error) {
                 let errorMessage = 'Signup failed. Please try again.';
                 if (error.code === 'auth/email-already-in-use') {
                     errorMessage = 'This email is already registered. Please login instead.';
@@ -1170,113 +1375,179 @@
                 }
                 showMessage(errorMessage, 'error', 'signupMessage');
                 console.error('Signup error:', error);
-            })
-            .finally(() => {
+            } finally {
                 signupBtn.disabled = false;
                 signupBtn.innerHTML = '<i class="fas fa-user-plus"></i> Create Account';
-            });
-    }
-
-    // Check auth state
-    auth.onAuthStateChanged((user) => {
-        const authButtons = document.getElementById('authButtons');
-        if (user && authButtons) {
-            authButtons.innerHTML = `
-                <div class="user-profile">
-                    <div class="user-avatar">
-                        <i class="fas fa-user"></i>
-                    </div>
-                    <span>Welcome, ${user.email.split('@')[0]}</span>
-                    <button class="btn btn-outline logout-btn">
-                        <i class="fas fa-sign-out-alt"></i> Logout
-                    </button>
-                </div>
-            `;
-            
-            // Add logout functionality
-            const logoutBtn = document.querySelector('.logout-btn');
-            if (logoutBtn) {
-                logoutBtn.addEventListener('click', () => {
-                    auth.signOut();
-                });
             }
         }
-    });
 
-    // Simple Modal Functionality
-    document.addEventListener('DOMContentLoaded', function() {
-        console.log('Page loaded - setting up buttons');
-        
-        const loginModal = document.getElementById('loginModal');
-        const signupModal = document.getElementById('signupModal');
-        
-        // Open Login Modal
-        document.querySelectorAll('.login-btn, .practice-btn, .test-btn, .create-test-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                console.log('Opening login modal');
-                if (loginModal) loginModal.style.display = 'block';
+        // Email Login
+        async function loginUser(email, password) {
+            const loginBtn = document.getElementById('loginBtn');
+            loginBtn.disabled = true;
+            loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
+            
+            try {
+                const userCredential = await window.firebaseFunctions.signInWithEmailAndPassword(
+                    window.firebaseAuth, 
+                    email, 
+                    password
+                );
+                
+                const user = userCredential.user;
+                
+                // Check if profile is complete
+                const profileComplete = await isProfileComplete(user.uid);
+                
+                if (profileComplete) {
+                    showMessage('Login successful! Redirecting...', 'success', 'authMessage');
+                    redirectToDashboard();
+                } else {
+                    // Show onboarding for existing users without complete profile
+                    showOnboardingModal(user);
+                }
+                
+            } catch (error) {
+                let errorMessage = 'Login failed. Please try again.';
+                if (error.code === 'auth/user-not-found') {
+                    errorMessage = 'No account found with this email.';
+                } else if (error.code === 'auth/wrong-password') {
+                    errorMessage = 'Incorrect password. Please try again.';
+                } else if (error.code === 'auth/invalid-email') {
+                    errorMessage = 'Please enter a valid email address.';
+                }
+                showMessage(errorMessage, 'error', 'authMessage');
+                console.error('Login error:', error);
+            } finally {
+                loginBtn.disabled = false;
+                loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login to Your Account';
+            }
+        }
+
+        // Complete onboarding
+        async function completeOnboarding(userData) {
+            const completeBtn = document.getElementById('completeProfileBtn');
+            completeBtn.disabled = true;
+            completeBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+            
+            try {
+                const user = window.firebaseAuth.currentUser;
+                
+                if (user) {
+                    const success = await completeUserProfile(user.uid, userData);
+                    
+                    if (success) {
+                        showMessage('Profile completed successfully!', 'success', 'signupMessage');
+                        redirectToDashboard();
+                    } else {
+                        showMessage('Failed to save profile. Please try again.', 'error', 'signupMessage');
+                    }
+                }
+            } catch (error) {
+                showMessage('Error completing profile. Please try again.', 'error', 'signupMessage');
+                console.error('Onboarding error:', error);
+            } finally {
+                completeBtn.disabled = false;
+                completeBtn.innerHTML = '<i class="fas fa-check-circle"></i> Complete Profile & Continue';
+            }
+        }
+
+        // Check auth state and profile completion
+        window.firebaseFunctions.onAuthStateChanged(window.firebaseAuth, async (user) => {
+            if (user) {
+                const profileComplete = await isProfileComplete(user.uid);
+                
+                if (profileComplete) {
+                    document.getElementById('authButtons').innerHTML = `
+                        <div class="user-profile">
+                            <div class="user-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <span>Welcome, ${user.displayName || user.email.split('@')[0]}</span>
+                            <button class="btn btn-outline logout-btn">
+                                <i class="fas fa-sign-out-alt"></i> Logout
+                            </button>
+                        </div>
+                    `;
+                    
+                    document.querySelector('.logout-btn').addEventListener('click', () => {
+                        window.firebaseFunctions.signOut(window.firebaseAuth);
+                    });
+                }
+            }
+        });
+
+        // Modal functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginModal = document.getElementById('loginModal');
+            const signupModal = document.getElementById('signupModal');
+            const onboardingModal = document.getElementById('onboardingModal');
+            const closeButtons = document.querySelectorAll('.close');
+            
+            // Open modals
+            document.querySelectorAll('.login-btn, .practice-btn, .test-btn, .create-test-btn').forEach(btn => {
+                btn.addEventListener('click', () => loginModal.style.display = 'block');
             });
-        });
-        
-        // Open Signup Modal
-        document.querySelector('.signup-btn').addEventListener('click', function() {
-            console.log('Opening signup modal');
-            if (signupModal) signupModal.style.display = 'block';
-        });
-        
-        // Switch between modals
-        document.getElementById('showSignup').addEventListener('click', function(e) {
-            e.preventDefault();
-            console.log('Switching to signup');
-            if (loginModal) loginModal.style.display = 'none';
-            if (signupModal) signupModal.style.display = 'block';
-        });
-        
-        document.getElementById('showLogin').addEventListener('click', function(e) {
-            e.preventDefault();
-            console.log('Switching to login');
-            if (signupModal) signupModal.style.display = 'none';
-            if (loginModal) loginModal.style.display = 'block';
-        });
-        
-        // Close modals
-        document.querySelectorAll('.close').forEach(closeBtn => {
-            closeBtn.addEventListener('click', function() {
-                console.log('Closing modal');
-                if (loginModal) loginModal.style.display = 'none';
-                if (signupModal) signupModal.style.display = 'none';
-            });
-        });
-        
-        // Form submissions
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            console.log('Login form submitted');
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            loginUser(email, password);
-        });
-        
-        document.getElementById('signupForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            console.log('Signup form submitted');
-            const email = document.getElementById('signupEmail').value;
-            const password = document.getElementById('signupPassword').value;
-            signupUser(email, password);
-        });
-        
-        // Close modal when clicking outside
-        window.addEventListener('click', function(e) {
-            if (e.target === loginModal) {
+            
+            document.querySelector('.signup-btn').addEventListener('click', () => signupModal.style.display = 'block');
+            
+            // Google Sign In
+            document.getElementById('googleSignupBtn').addEventListener('click', signInWithGoogle);
+            
+            // Switch between modals
+            document.getElementById('showSignup').addEventListener('click', (e) => {
+                e.preventDefault();
                 loginModal.style.display = 'none';
-            }
-            if (e.target === signupModal) {
+                signupModal.style.display = 'block';
+            });
+            
+            document.getElementById('showLogin').addEventListener('click', (e) => {
+                e.preventDefault();
                 signupModal.style.display = 'none';
-            }
+                loginModal.style.display = 'block';
+            });
+            
+            // Close modals
+            closeButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    loginModal.style.display = 'none';
+                    signupModal.style.display = 'none';
+                    onboardingModal.style.display = 'none';
+                });
+            });
+            
+            // Form submissions
+            document.getElementById('loginForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+                loginUser(email, password);
+            });
+            
+            document.getElementById('signupForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const email = document.getElementById('signupEmail').value;
+                const password = document.getElementById('signupPassword').value;
+                signupUser(email, password);
+            });
+            
+            document.getElementById('onboardingForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const userData = {
+                    displayName: document.getElementById('userName').value,
+                    mobileNumber: document.getElementById('mobileNumber').value,
+                    preparationYear: document.getElementById('preparationYear').value
+                };
+                completeOnboarding(userData);
+            });
+            
+            // Close modal when clicking outside
+            window.addEventListener('click', (e) => {
+                if (e.target === loginModal) loginModal.style.display = 'none';
+                if (e.target === signupModal) signupModal.style.display = 'none';
+                if (e.target === onboardingModal) onboardingModal.style.display = 'none';
+            });
         });
-        
-        console.log('All buttons setup complete');
-    });
-</script>
+    </script>
 </body>
 </html>
