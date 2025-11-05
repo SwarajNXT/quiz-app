@@ -1402,88 +1402,124 @@ class AuthManager {
     }
 
     // Google Sign In
-    async handleGoogleSignIn() {
-        console.log('🔐 Starting Google Sign In...');
+async handleGoogleSignIn() {
+    console.log('🔐 Starting Google Sign In...');
+    
+    if (!window.fbFunctions || !window.fbAuth || !window.fbGoogleProvider) {
+        this.showMessage('Authentication service not available. Please refresh the page.', 'error', 'signupMessage');
+        return;
+    }
+
+    this.setButtonLoading('googleSignupBtn', true, 'Opening Google...');
+
+    try {
+        // Add a small delay to ensure everything is ready
+        await new Promise(resolve => setTimeout(resolve, 500));
         
-        if (!window.fbFunctions || !window.fbAuth || !window.fbGoogleProvider) {
-            this.showMessage('Authentication service not available. Please refresh the page.', 'error', 'signupMessage');
-            return;
-        }
+        console.log('Opening Google popup...');
+        
+        // Store reference to check if popup opens
+        let popupOpened = false;
+        const popupCheck = setTimeout(() => {
+            if (!popupOpened) {
+                console.log('Popup might be blocked');
+                this.showMessage('Popup may be blocked. Please allow popups for this site.', 'error', 'signupMessage');
+                this.setButtonLoading('googleSignupBtn', false);
+            }
+        }, 3000);
 
-        this.setButtonLoading('googleSignupBtn', true, 'Connecting to Google...');
-
-        try {
-            const result = await window.fbFunctions.signInWithPopup(
-                window.fbAuth, 
-                window.fbGoogleProvider
+        const result = await window.fbFunctions.signInWithPopup(
+            window.fbAuth, 
+            window.fbGoogleProvider
+        );
+        
+        clearTimeout(popupCheck);
+        popupOpened = true;
+        
+        const user = result.user;
+        console.log('✅ Google Sign In successful:', user.email);
+        
+        this.setButtonLoading('googleSignupBtn', true, 'Setting up your account...');
+        
+        const profileComplete = await this.checkProfileComplete(user.uid);
+        
+        if (profileComplete) {
+            this.showMessage('Welcome back! Redirecting...', 'success', 'signupMessage');
+            setTimeout(() => {
+                window.location.href = 'dashboard.html';
+            }, 1000);
+        } else {
+            // Create/update user profile
+            await window.fbFunctions.setDoc(
+                window.fbFunctions.doc(window.fbDb, "users", user.uid),
+                {
+                    email: user.email,
+                    displayName: user.displayName || '',
+                    photoURL: user.photoURL || '',
+                    createdAt: new Date(),
+                    lastLogin: new Date(),
+                    accountType: 'student',
+                    authProvider: 'google',
+                    profileCompleted: false
+                },
+                { merge: true }
             );
             
-            const user = result.user;
-            console.log('✅ Google Sign In successful:', user.email);
+            this.hideModal('signupModal');
+            this.showModal('onboardingModal');
             
-            const profileComplete = await this.checkProfileComplete(user.uid);
-            
-            if (profileComplete) {
-                this.showMessage('Welcome back! Redirecting...', 'success', 'signupMessage');
-                setTimeout(() => {
-                    window.location.href = 'dashboard.html';
-                }, 1000);
-            } else {
-                // Create/update user profile
-                await window.fbFunctions.setDoc(
-                    window.fbFunctions.doc(window.fbDb, "users", user.uid),
-                    {
-                        email: user.email,
-                        displayName: user.displayName || '',
-                        photoURL: user.photoURL || '',
-                        createdAt: new Date(),
-                        lastLogin: new Date(),
-                        accountType: 'student',
-                        authProvider: 'google',
-                        profileCompleted: false
-                    },
-                    { merge: true }
-                );
-                
-                this.hideModal('signupModal');
-                this.showModal('onboardingModal');
-                
-                // Pre-fill name from Google
-                if (user.displayName) {
-                    const nameInput = document.getElementById('userName');
-                    if (nameInput) nameInput.value = user.displayName;
-                }
-                
-                this.showMessage('Google sign-in successful! Please complete your profile.', 'success', 'signupMessage');
+            // Pre-fill name from Google
+            if (user.displayName) {
+                const nameInput = document.getElementById('userName');
+                if (nameInput) nameInput.value = user.displayName;
             }
             
-        } catch (error) {
-            console.error('❌ Google Sign In error:', error);
-            
-            let errorMessage = 'Google sign-in failed. ';
-            
-            switch (error.code) {
-                case 'auth/popup-closed-by-user':
-                    errorMessage = 'Sign-in was cancelled.';
-                    break;
-                case 'auth/popup-blocked':
-                    errorMessage = 'Popup was blocked. Please allow popups and try again.';
-                    break;
-                case 'auth/unauthorized-domain':
-                    errorMessage = 'This domain is not authorized for sign-in.';
-                    break;
-                case 'auth/operation-not-allowed':
-                    errorMessage = 'Google sign-in is not enabled. Please contact support.';
-                    break;
-                default:
-                    errorMessage += error.message;
-            }
-            
-            this.showMessage(errorMessage, 'error', 'signupMessage');
-        } finally {
-            this.setButtonLoading('googleSignupBtn', false);
+            this.showMessage('Google sign-in successful! Please complete your profile.', 'success', 'signupMessage');
         }
+        
+    } catch (error) {
+        console.error('❌ Google Sign In error:', error);
+        console.error('Error code:', error.code);
+        console.error('Error message:', error.message);
+        
+        let errorMessage = 'Google sign-in failed. ';
+        
+        switch (error.code) {
+            case 'auth/popup-closed-by-user':
+                errorMessage = 'Sign-in popup was closed. Please try again and complete the sign-in process.';
+                break;
+            case 'auth/popup-blocked':
+                errorMessage = 'Popup was blocked by your browser. Please allow popups for swarajnxt.github.io and try again.';
+                break;
+            case 'auth/cancelled-popup-request':
+                errorMessage = 'Sign-in was cancelled. Please try again.';
+                break;
+            case 'auth/unauthorized-domain':
+                errorMessage = 'Domain authorization issue. Please refresh the page.';
+                break;
+            case 'auth/network-request-failed':
+                errorMessage = 'Network error. Please check your internet connection.';
+                break;
+            default:
+                errorMessage += 'Please try again or use email signup.';
+        }
+        
+        this.showMessage(errorMessage, 'error', 'signupMessage');
+        
+        // Provide specific instructions for popup issues
+        if (error.code === 'auth/popup-blocked') {
+            setTimeout(() => {
+                this.showMessage(
+                    'To allow popups: Click the popup blocker icon in your address bar and allow popups for this site.',
+                    'error',
+                    'signupMessage'
+                );
+            }, 2000);
+        }
+    } finally {
+        this.setButtonLoading('googleSignupBtn', false);
     }
+}
 
     // Email Login
     async handleEmailLogin(e) {
