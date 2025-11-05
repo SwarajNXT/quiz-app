@@ -1,34 +1,25 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Dashboard - Vidyucation</title>
-    <style>
-        body { font-family: Arial, sans-serif; padding: 40px; text-align: center; }
-        button { padding: 10px 20px; margin: 10px; }
-    </style>
-</head>
-<body>
-    <h1>Welcome to Your Vidyucation Dashboard!</h1>
-    <p>You are successfully logged in.</p>
-    <button onclick="logout()">Logout</button>
+<script type="module">
+    import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
     
-    <script type="module">
-        import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
-        
-        const firebaseConfig = {
-            apiKey: "AIzaSyD7UYp7ApLTpku2y4gAw8QprAkCNGhRsLI",
-            authDomain: "quiz-app-ad5de.firebaseapp.com",
-            projectId: "quiz-app-ad5de",
-            storageBucket: "quiz-app-ad5de.firebasestorage.app",
-            messagingSenderId: "17935383217",
-            appId: "1:17935383217:web:f34559709c88a1d9670090"
-        };
-        
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        
-        window.logout = () => signOut(auth).then(() => window.location.href = 'index.html');
-    </script>
-</body>
-</html>
+    const firebaseConfig = {
+        apiKey: "AIzaSyD7UYp7ApLTpku2y4gAw8QprAkCNGhRsLI",
+        authDomain: "quiz-app-ad5de.firebaseapp.com",
+        projectId: "quiz-app-ad5de",
+        storageBucket: "quiz-app-ad5de.firebasestorage.app",
+        messagingSenderId: "17935383217",
+        appId: "1:17935383217:web:f34559709c88a1d9670090"
+    };
+    
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    
+    window.logout = function() {
+        signOut(auth).then(() => {
+            console.log('User signed out');
+            window.location.href = 'index.html';
+        }).catch((error) => {
+            console.error('Logout error:', error);
+        });
+    };
+</script>
