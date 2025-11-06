@@ -4,50 +4,47 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vidyucation</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <style>
-        /* ... [All your existing CSS styles are unchanged] ... */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
-        }
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
+    <style>
+        /* Custom CSS for elements Tailwind doesn't easily control.
+          - Background gradient circles
+          - Custom scrollbar (webkit)
+          - Google Fonts 'Inter'
+        */
         :root {
             --primary: #6366f1;
-            --primary-dark: #4f46e5;
             --secondary: #8b5cf6;
             --accent: #f59e0b;
             --accent-light: #fbbf24;
             --light: #f8fafc;
-            --dark: #1e293b;
-            --dark-light: #334155;
-            --gray: #64748b;
-            --success: #10b981;
-            --error: #ef4444;
-            --glass: rgba(255, 255, 255, 0.1);
-            --border: rgba(255, 255, 255, 0.2);
-            --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
         }
 
         body {
-            background: linear-gradient(135deg, #0f172a, #1e293b, #334155);
-            color: var(--light);
-            line-height: 1.6;
-            min-height: 100vh;
-            overflow-x: hidden;
+            font-family: 'Inter', sans-serif;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #4f46e5;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6366f1;
         }
 
-        /* Background Elements */
+        /* Background Animated Circles */
         .bg-elements {
             position: fixed;
             top: 0;
@@ -57,605 +54,52 @@
             z-index: -1;
             overflow: hidden;
         }
-
         .bg-circle {
             position: absolute;
             border-radius: 50%;
-            filter: blur(60px);
+            filter: blur(80px); /* Increased blur */
             opacity: 0.15;
+            animation: float 15s infinite ease-in-out alternate;
         }
-
         .circle-1 {
             width: 400px;
             height: 400px;
             background: var(--primary);
             top: -100px;
             left: -100px;
+            animation-duration: 20s;
         }
-
         .circle-2 {
             width: 300px;
             height: 300px;
             background: var(--secondary);
             bottom: -50px;
             right: 10%;
+            animation-duration: 25s;
+            animation-delay: -5s;
         }
-
         .circle-3 {
-            width: 200px;
-            height: 200px;
+            width: 250px;
+            height: 250px;
             background: var(--accent);
             top: 40%;
             left: 60%;
+            animation-duration: 30s;
+            animation-delay: -10s;
         }
 
-        /* Header Styles */
-        header {
-            padding: 20px 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 25px;
-            border-radius: 20px;
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: var(--shadow);
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .logo-icon {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
-        }
-
-        .logo-text {
-            font-size: 24px;
-            font-weight: 700;
-            background: linear-gradient(135deg, var(--light), #cbd5e1);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        nav ul {
-            display: flex;
-            list-style: none;
-            gap: 30px;
-        }
-
-        nav ul li a {
-            color: var(--light);
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 16px;
-            border-radius: 12px;
-        }
-
-        nav ul li a:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--accent-light);
-        }
-
-        .auth-buttons {
-            display: flex;
-            gap: 15px;
-        }
-
-        .btn {
-            padding: 12px 24px;
-            border-radius: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 14px;
-        }
-
-        .btn-outline {
-            background: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: var(--light);
-        }
-
-        .btn-outline:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.3);
-            transform: translateY(-2px);
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
-        }
-
-        /* User Profile styles */
-        .user-profile {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            overflow: hidden; /* To contain the image */
+        @keyframes float {
+            0% {
+                transform: translateY(0px) translateX(0px) rotate(0deg);
+            }
+            100% {
+                transform: translateY(-40px) translateX(20px) rotate(20deg);
+            }
         }
         
-        .user-avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .user-name {
-            font-weight: 600;
-            color: var(--light);
-        }
-        
-        /* Utility class */
-        .hidden {
-            display: none !important;
-        }
-
-        /* Hero Section */
-        .hero {
-            padding: 100px 0;
-            text-align: center;
-            position: relative;
-        }
-
-        .hero-content {
-            max-width: 800px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 2;
-        }
-
-        .hero-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(245, 158, 11, 0.1);
-            border: 1px solid rgba(245, 158, 11, 0.3);
-            color: var(--accent-light);
-            padding: 8px 16px;
-            border-radius: 50px;
-            font-size: 14px;
-            font-weight: 500;
-            margin-bottom: 20px;
-            backdrop-filter: blur(10px);
-        }
-
-        .hero h1 {
-            font-size: 3.5rem;
-            font-weight: 700;
-            margin-bottom: 20px;
-            background: linear-gradient(135deg, var(--light), #cbd5e1);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            line-height: 1.2;
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            color: #cbd5e1;
-            margin-bottom: 40px;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .hero-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 30px;
-        }
-
-        .btn-large {
-            padding: 16px 32px;
-            font-size: 16px;
-            border-radius: 14px;
-        }
-
-        /* Progress Section */
-        .progress-section {
-            padding: 60px 0;
-        }
-
-        .section-title {
-            font-size: 2.2rem;
-            margin-bottom: 15px;
-            font-weight: 700;
-            text-align: center;
-        }
-
-        .section-subtitle {
-            text-align: center;
-            color: #cbd5e1;
-            max-width: 600px;
-            margin: 0 auto 50px;
-            font-size: 1.1rem;
-        }
-
-        .progress-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 25px;
-        }
-
-        .progress-card {
-            padding: 30px;
-            border-radius: 20px;
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: var(--shadow);
-            transition: all 0.3s ease;
-            text-align: center;
-        }
-
-        .progress-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
-            border-color: rgba(255, 255, 255, 0.2);
-        }
-
-        .progress-value {
-            font-size: 3rem;
-            font-weight: 700;
-            margin-bottom: 10px;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .progress-label {
-            color: #cbd5e1;
-            font-weight: 500;
-        }
-
-        /* Features Section */
-        .features-section {
-            padding: 80px 0;
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-        }
-
-        .feature-card {
-            padding: 35px 30px;
-            border-radius: 20px;
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: var(--shadow);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .feature-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-        }
-
-        .feature-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
-            border-color: rgba(255, 255, 255, 0.2);
-        }
-
-        .feature-icon {
-            width: 70px;
-            height: 70px;
-            border-radius: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 25px;
-            background: rgba(99, 102, 241, 0.1);
-            border: 1px solid rgba(99, 102, 241, 0.2);
-            font-size: 28px;
-            color: var(--primary);
-        }
-
-        .feature-title {
-            font-size: 1.4rem;
-            margin-bottom: 15px;
-            font-weight: 600;
-        }
-
-        .feature-desc {
-            color: #cbd5e1;
-            margin-bottom: 20px;
-        }
-
-        /* Question Bank Section */
-        .question-bank {
-            padding: 80px 0;
-        }
-
-        .question-bank-content {
-            border-radius: 25px;
-            padding: 60px 40px;
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: var(--shadow);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .stats-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 25px;
-            margin-top: 40px;
-        }
-
-        .stat-card {
-            padding: 25px;
-            border-radius: 18px;
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-            background: rgba(255, 255, 255, 0.08);
-        }
-
-        .stat-value {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 8px;
-            background: linear-gradient(135deg, var(--accent-light), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .stat-label {
-            color: #cbd5e1;
-            font-size: 0.95rem;
-        }
-
-        /* Test Creation Section */
-        .test-creation {
-            padding: 80px 0;
-            text-align: center;
-        }
-
-        .test-creation-content {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 60px 40px;
-            border-radius: 25px;
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: var(--shadow);
-        }
-
-        .test-creation h2 {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-            font-weight: 700;
-        }
-
-        .test-creation p {
-            color: #cbd5e1;
-            max-width: 600px;
-            margin: 0 auto 30px;
-            font-size: 1.1rem;
-        }
-
-        /* Footer */
-        footer {
-            background: rgba(15, 23, 42, 0.8);
-            backdrop-filter: blur(15px);
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            padding: 60px 0 20px;
-            margin-top: 60px;
-        }
-
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 40px;
-            margin-bottom: 40px;
-        }
-
-        .footer-column h3 {
-            font-size: 1.2rem;
-            margin-bottom: 20px;
-            position: relative;
-            padding-bottom: 10px;
-            font-weight: 600;
-        }
-
-        .footer-column h3::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 40px;
-            height: 3px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-        }
-
-        .footer-column ul {
-            list-style: none;
-        }
-
-        .footer-column ul li {
-            margin-bottom: 12px;
-        }
-
-        .footer-column ul li a {
-            color: #cbd5e1;
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-        .footer-column ul li a:hover {
-            color: var(--accent-light);
-            padding-left: 5px;
-        }
-
-        .copyright {
-            text-align: center;
-            padding-top: 30px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            color: #94a3b8;
-            font-size: 0.9rem;
-        }
-
-        /* Modal Styles */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(5px);
-            animation: fadeIn 0.3s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .modal-content {
-            background: rgba(30, 41, 59, 0.95);
-            backdrop-filter: blur(20px);
-            margin: 5% auto;
-            border-radius: 25px;
-            width: 90%;
-            max-width: 450px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-            overflow: hidden;
-            animation: slideIn 0.3s ease;
-        }
-
-        @keyframes slideIn {
-            from { transform: translateY(-50px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        .modal-header {
-            background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(139, 92, 246, 0.2));
-            padding: 25px;
-            text-align: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .modal-header h2 {
-            font-size: 1.8rem;
-            margin: 0;
-            font-weight: 600;
-        }
-
-        .modal-header p {
-            color: #cbd5e1;
-            margin-top: 8px;
-        }
-
-        .close {
-            position: absolute;
-            top: 20px;
-            right: 25px;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-            color: #cbd5e1;
-            transition: color 0.3s ease;
-        }
-
-        .close:hover {
-            color: var(--accent-light);
-        }
-
-        .modal-body {
-            padding: 30px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: var(--light);
-        }
-
-        .input-with-icon {
-            position: relative;
-        }
-
-        .input-with-icon i {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--gray);
-        }
-
-        .input-with-icon input, .form-group select {
+        /* Custom styles for form inputs */
+        .input-with-icon input,
+        .form-group select {
             width: 100%;
             padding: 12px 15px 12px 45px;
             border: 2px solid rgba(255, 255, 255, 0.1);
@@ -665,187 +109,71 @@
             font-size: 16px;
             transition: all 0.3s ease;
         }
-
-        .input-with-icon input:focus, .form-group select:focus {
+        .input-with-icon input:focus,
+        .form-group select:focus {
             outline: none;
             border-color: var(--primary);
             background: rgba(255, 255, 255, 0.08);
-        }
-
-        .btn-full {
-            width: 100%;
-            justify-content: center;
-            padding: 14px;
-            margin: 20px 0;
-        }
-
-        .auth-message {
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            text-align: center;
-            font-weight: 500;
-            display: none;
-        }
-
-        .auth-message.success {
-            background: rgba(16, 185, 129, 0.1);
-            border: 1px solid rgba(16, 185, 129, 0.3);
-            color: #10b981;
-        }
-
-        .auth-message.error {
-            background: rgba(239, 68, 68, 0.1);
-            border: 1px solid rgba(239, 68, 68, 0.3);
-            color: #ef4444;
-        }
-
-        .btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none !important;
-        }
-
-        .signup-link, .login-link {
-            text-align: center;
-            color: #cbd5e1;
-        }
-
-        .signup-link a, .login-link a {
-            color: var(--primary);
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        .signup-link a:hover, .login-link a:hover {
-            text-decoration: underline;
-        }
-
-        /* Google Sign In Button */
-        .google-signin-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            padding: 12px;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            background: rgba(255, 255, 255, 0.05);
-            color: white;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            width: 100%;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            cursor: pointer;
-        }
-
-        .google-signin-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.3);
         }
         
-        /* Make sure Google button margin is correct in both modals */
-        #loginModal .google-signin-btn {
-            margin-top: 20px;
-            margin-bottom: 0;
-        }
-
-        .google-signin-btn img {
-            width: 18px;
-            height: 18px;
-        }
-
-        /* Divider */
-        .divider {
-            text-align: center;
-            margin: 20px 0;
-            position: relative;
-        }
-
-        .divider:before {
-            content: "";
-            position: absolute;
-            top: 50%;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: rgba(255, 255, 255, 0.2);
-        }
-
-        .divider span {
-            background: rgba(30, 41, 59, 0.95);
-            padding: 0 15px;
-            color: #cbd5e1;
-            font-size: 14px;
-        }
-
-        /* Select Styling */
+        /* Custom select for webkit */
         select {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--light);
-            font-size: 16px;
-            transition: all 0.3s ease;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%2394a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>');
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1.2em;
+            padding-right: 2.5rem; /* Make space for arrow */
         }
-
-        select:focus {
-            outline: none;
-            border-color: var(--primary);
-            background: rgba(255, 255, 255, 0.08);
-        }
-
+        
         select option {
             background: #1e293b;
             color: white;
         }
-
-        /* Small text */
-        small {
-            display: block;
-            margin-top: 5px;
-            color: #cbd5e1;
-            font-size: 12px;
+        
+        /* Modal transitions */
+        .modal {
+            transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
         }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .header-content {
-                flex-direction: column;
-                gap: 20px;
-            }
-
-            nav ul {
-                flex-wrap: wrap;
-                justify-content: center;
-                gap: 10px;
-            }
-
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-
-            .hero-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .btn-large {
-                width: 100%;
-                max-width: 300px;
-            }
-
-            .section-title {
-                font-size: 1.8rem;
-            }
+        .modal-content {
+            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+        }
+        
+        /* Hide/Show utility */
+        .hidden {
+            display: none !important;
         }
     </style>
+    
+    <script>
+        // Configure Tailwind CSS
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#6366f1',
+                        'primary-dark': '#4f46e5',
+                        secondary: '#8b5cf6',
+                        accent: '#f59e0b',
+                        'accent-light': '#fbbf24',
+                        light: '#f8fafc',
+                        dark: '#1e293b',
+                        'dark-light': '#334155',
+                        gray: '#64748b',
+                    }
+                }
+            }
+        }
+    </script>
 </head>
-<body>
-    <!-- ... [Background Elements and Header are unchanged] ... -->
-        <!-- Background Elements -->
+<body class="bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#334155] text-light font-inter min-h-screen overflow-x-hidden">
+
+    <!-- Background Elements -->
     <div class="bg-elements">
         <div class="bg-circle circle-1"></div>
         <div class="bg-circle circle-2"></div>
@@ -853,352 +181,458 @@
     </div>
 
     <!-- Header Section -->
-    <header>
-        <div class="container">
-            <div class="header-content">
-                <div class="logo">
-                    <div class="logo-icon">
-                        <i class="fas fa-graduation-cap"></i>
+    <header class="sticky top-0 z-50 p-4">
+        <div class="max-w-6xl mx-auto">
+            <!-- Glassmorphism header content -->
+            <div class="flex flex-wrap justify-between items-center p-4 md:p-5 rounded-2xl bg-white/5 backdrop-blur-lg border border-white/10 shadow-lg">
+                
+                <!-- Logo -->
+                <div class="logo flex items-center gap-3">
+                    <div class="logo-icon w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center shadow-md text-white text-xl">
+                        <!-- Replaced Font Awesome with SVG -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
                     </div>
-                    <div class="logo-text">Vidyucation</div>
+                    <div class="logo-text text-2xl font-bold bg-gradient-to-r from-light to-slate-300 bg-clip-text text-transparent">Vidyucation</div>
                 </div>
-                <nav>
-                    <ul>
-                        <li><a href="#"><i class="fas fa-home"></i> Home</a></li>
-                        <li><a href="#"><i class="fas fa-book-open"></i> Practice</a></li>
-                        <li><a href="#"><i class="fas fa-chart-bar"></i> Tests</a></li>
-                        <li><a href="#"><i class="fas fa-analytics"></i> Performance</a></li>
-                        <li><a href="#"><i class="fas fa-file-alt"></i> Resources</a></li>
-                    </ul>
-                </nav>
-                <div class="auth-buttons" id="authContainer">
-                    <!-- Logged-out state -->
-                    <div id="loggedOutButtons">
-                        <button class="btn btn-outline login-btn"><i class="fas fa-sign-in-alt"></i> Login</button>
-                        <button class="btn btn-primary signup-btn"><i class="fas fa-user-plus"></i> Sign Up</button>
-                    </div>
-                    
-                    <!-- Logged-in state -->
-                    <div id="loggedInProfile" class="user-profile hidden">
-                        <div class="user-avatar" id="userAvatar">
-                            <!-- Avatar content (initial or image) goes here -->
+
+                <!-- Mobile Menu Button (Hamburger) -->
+                <button id="mobileMenuBtn" class="md:hidden p-2 rounded-lg text-slate-200 hover:bg-white/10 transition-colors">
+                    <svg id="menuIconOpen" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="block">
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                    <svg id="menuIconClose" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+
+                <!-- Navigation & Auth (Wrapper for mobile) -->
+                <div id="mobileMenu" class="hidden md:flex flex-col md:flex-row md:items-center gap-6 md:gap-4 w-full md:w-auto mt-4 md:mt-0">
+                    <!-- Navigation -->
+                    <nav>
+                        <ul class="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-4">
+                            <li><a href="#" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-200 hover:bg-white/10 hover:text-accent-light transition-all">
+                                <!-- SVG Icon -->
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                                Home
+                            </a></li>
+                            <li><a href="#" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-200 hover:bg-white/10 hover:text-accent-light transition-all">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+                                Practice
+                            </a></li>
+                            <li><a href="#" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-200 hover:bg-white/10 hover:text-accent-light transition-all">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>
+                                Tests
+                            </a></li>
+                            <!-- Removed other links for brevity, add them back as needed -->
+                        </ul>
+                    </nav>
+
+                    <!-- Auth Buttons -->
+                    <div class="auth-buttons flex flex-col md:flex-row gap-3 mt-4 md:mt-0 md:ml-4" id="authContainer">
+                        <!-- Logged-out state -->
+                        <div id="loggedOutButtons" class="flex flex-col md:flex-row gap-3 w-full md:w-auto">
+                            <button class="btn btn-outline login-btn w-full md:w-auto flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg font-medium bg-transparent border border-white/20 text-white hover:bg-white/10 transition-all duration-300">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" y1="12" x2="3" y2="12"></line></svg>
+                                Login
+                            </button>
+                            <button class="btn btn-primary signup-btn w-full md:w-auto flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg font-medium bg-gradient-to-r from-primary to-secondary text-white shadow-lg hover:shadow-primary/50 transition-all duration-300 transform hover:-translate-y-px">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
+                                Sign Up
+                            </button>
                         </div>
-                        <span class="user-name" id="userNameDisplay"></span>
-                        <button class="btn btn-outline" id="signOutBtn"><i class="fas fa-sign-out-alt"></i> Sign Out</button>
+                        
+                        <!-- Logged-in state -->
+                        <div id="loggedInProfile" class="user-profile hidden flex-col md:flex-row items-start md:items-center gap-3">
+                            <div class="flex items-center gap-3">
+                                <div class="user-avatar w-10 h-10 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center font-semibold overflow-hidden" id="userAvatar">
+                                    <!-- Avatar content (initial or image) goes here -->
+                                </div>
+                                <span class="user-name font-semibold text-light" id="userNameDisplay"></span>
+                            </div>
+                            <button class="btn btn-outline w-full md:w-auto flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg font-medium bg-transparent border border-white/20 text-white hover:bg-white/10 transition-all duration-300" id="signOutBtn">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                                Sign Out
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- ... [Hero, Progress, Features, QB, Test Creation, Footer are unchanged] ... -->
+    <!-- Main Content -->
+    <main>
         <!-- Hero Section -->
-    <section class="hero">
-        <div class="container">
-            <div class="hero-content">
-                <div class="hero-badge">
-                    <i class="fas fa-rocket"></i>
-                    <span>NEET 2026 Preparation Started</span>
-                </div>
-                <h1>Track Your NEET Learning Progress</h1>
-                <p>Monitor your performance, identify strengths and weaknesses, and achieve your goals with Vidyucation's learning platform.</p>
-                <div class="hero-buttons">
-                    <button class="btn btn-primary btn-large practice-btn"><i class="fas fa-play-circle"></i> Start Practicing Now</button>
+        <section class="hero py-20 md:py-32 text-center relative overflow-hidden">
+            <div class="container max-w-6xl mx-auto px-6">
+                <div class="hero-content max-w-3xl mx-auto relative z-10">
+                    <div class="hero-badge inline-flex items-center gap-2 bg-yellow-500/10 border border-yellow-500/30 text-yellow-300 px-4 py-1.5 rounded-full text-sm font-medium mb-6 backdrop-blur-sm">
+                        <!-- Rocket Icon -->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                        <span>NEET 2026 Preparation Started</span>
+                    </div>
+                    <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent leading-tight">Track Your NEET Learning Progress</h1>
+                    <p class="text-lg md:text-xl text-slate-300 mb-10 max-w-xl mx-auto">Monitor your performance, identify strengths and weaknesses, and achieve your goals with Vidyucation's learning platform.</p>
+                    <div class="hero-buttons flex flex-col sm:flex-row justify-center items-center gap-4">
+                        <button class="btn btn-primary btn-large practice-btn w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-3.5 text-base font-semibold rounded-lg bg-gradient-to-r from-primary to-secondary text-white shadow-lg hover:shadow-primary/50 transition-all duration-300 transform hover:-translate-y-px">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polygon points="10 8 16 12 10 16 10 8"></polygon></svg>
+                            Start Practicing Now
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Progress Section -->
-    <section class="progress-section">
-        <div class="container">
-            <h2 class="section-title">Track Your Learning Progress</h2>
-            <p class="section-subtitle">Monitor your performance, identify strengths and weaknesses, and achieve your goals with Vidyucation's comprehensive tracking system.</p>
-            
-            <div class="progress-container">
-                <div class="progress-card">
-                    <div class="progress-value">4.0</div>
-                    <div class="progress-label">Overall Score</div>
-                </div>
-                <div class="progress-card">
-                    <div class="progress-value">92.5%</div>
-                    <div class="progress-label">Accuracy</div>
-                </div>
-                <div class="progress-card">
-                    <div class="progress-value">8/12</div>
-                    <div class="progress-label">Completed Topics</div>
-                </div>
-                <div class="progress-card">
-                    <div class="progress-value">14</div>
-                    <div class="progress-label">Tests Taken</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Features Section -->
-    <section class="features-section">
-        <div class="container">
-            <h2 class="section-title">Experience Learning Like Never Before</h2>
-            <p class="section-subtitle">Stay motivated, track your progress, and connect with a community—all in one platform.</p>
-            
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-brain"></i>
-                    </div>
-                    <h3 class="feature-title">Smart Learning</h3>
-                    <p class="feature-desc">Adaptive learning technology that identifies your weak areas and focuses on them with personalized content.</p>
-                    <button class="btn btn-outline">Learn More</button>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <h3 class="feature-title">Performance Analytics</h3>
-                    <p class="feature-desc">Detailed insights into your performance with actionable feedback for improvement and growth tracking.</p>
-                    <button class="btn btn-outline">Learn More</button>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">
-                        <i class="fas fa-users"></i>
-                    </div>
-                    <h3 class="feature-title">Community Support</h3>
-                    <p class="feature-desc">Connect with fellow NEET aspirants, share knowledge, ask questions, and grow together in a supportive environment.</p>
-                    <button class="btn btn-outline">Learn More</button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Question Bank Section -->
-    <section class="question-bank">
-        <div class="container">
-            <div class="question-bank-content">
-                <h2 class="section-title">Massive NEET Question Bank</h2>
-                <p class="section-subtitle">Access over 45,000+ questions from previous years and curated by subject matter experts.</p>
+        <!-- Progress Section -->
+        <section class="progress-section py-16 md:py-24">
+            <div class="container max-w-6xl mx-auto px-6">
+                <h2 class="section-title text-3xl md:text-4xl font-bold text-center mb-4">Track Your Learning Progress</h2>
+                <p class="section-subtitle text-base md:text-lg text-slate-300 max-w-2xl mx-auto text-center mb-12">Monitor your performance, identify strengths and weaknesses, and achieve your goals with Vidyucation's comprehensive tracking system.</p>
                 
-                <div class="stats-container">
-                    <div class="stat-card">
-                        <div class="stat-value">45K+</div>
-                        <div class="stat-label">Practice Questions</div>
+                <div class="progress-container grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Progress Card 1 -->
+                    <div class="progress-card p-8 rounded-2xl bg-white/5 backdrop-blur-lg border border-white/10 shadow-xl text-center transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
+                        <div class="progress-value text-5xl font-bold mb-2 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">4.0</div>
+                        <div class="progress-label text-slate-300 font-medium">Overall Score</div>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-value">12+</div>
-                        <div class="stat-label">Years of PYQs</div>
+                    <!-- Progress Card 2 -->
+                    <div class="progress-card p-8 rounded-2xl bg-white/5 backdrop-blur-lg border border-white/10 shadow-xl text-center transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
+                        <div class="progress-value text-5xl font-bold mb-2 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">92.5%</div>
+                        <div class="progress-label text-slate-300 font-medium">Accuracy</div>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-value">100%</div>
-                        <div class="stat-label">Syllabus Coverage</div>
+                    <!-- Progress Card 3 -->
+                    <div class="progress-card p-8 rounded-2xl bg-white/5 backdrop-blur-lg border border-white/10 shadow-xl text-center transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
+                        <div class="progress-value text-5xl font-bold mb-2 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">8/12</div>
+                        <div class="progress-label text-slate-300 font-medium">Completed Topics</div>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-value">3</div>
-                        <div class="stat-label">Difficulty Levels</div>
+                    <!-- Progress Card 4 -->
+                    <div class="progress-card p-8 rounded-2xl bg-white/5 backdrop-blur-lg border border-white/10 shadow-xl text-center transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
+                        <div class="progress-value text-5xl font-bold mb-2 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">14</div>
+                        <div class="progress-label text-slate-300 font-medium">Tests Taken</div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Test Creation Section -->
-    <section class="test-creation">
-        <div class="container">
-            <div class="test-creation-content">
-                <h2>Create Unlimited Custom Tests for NEET - Free!</h2>
-                <p>Design your own tests based on topics, difficulty levels, and time constraints. Perfect for targeted practice and revision.</p>
-                <button class="btn btn-primary btn-large create-test-btn"><i class="fas fa-plus-circle"></i> Create Your First Test</button>
+        <!-- Features Section -->
+        <section class="features-section py-16 md:py-24">
+            <div class="container max-w-6xl mx-auto px-6">
+                <h2 class="section-title text-3xl md:text-4xl font-bold text-center mb-4">Experience Learning Like Never Before</h2>
+                <p class="section-subtitle text-base md:text-lg text-slate-300 max-w-2xl mx-auto text-center mb-12">Stay motivated, track your progress, and connect with a community—all in one platform.</p>
+                
+                <div class="features-grid grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Feature Card 1 -->
+                    <div class="feature-card p-8 rounded-2xl bg-white/5 backdrop-blur-lg border border-white/10 shadow-xl transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl relative overflow-hidden">
+                        <div class="absolute top-0 left-0 h-1 w-full bg-gradient-to-r from-primary to-secondary"></div>
+                        <div class="feature-icon w-16 h-16 rounded-xl flex items-center justify-center mb-6 bg-primary/10 border border-primary/20 text-primary text-3xl">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V5"></path><path d="M10 2h4"></path><path d="M12 22v-3"></path><path d="M22 12h-3"></path><path d="M5 12H2"></path><path d="M17.61 6.39l-2.12-2.12"></path><path d="M8.51 15.49l-2.12-2.12"></path><path d="M17.61 17.61l-2.12 2.12"></path><path d="M8.51 8.51l-2.12 2.12"></path><circle cx="12" cy="12" r="2"></circle></svg>
+                        </div>
+                        <h3 class="feature-title text-xl font-semibold mb-3">Smart Learning</h3>
+                        <p class="feature-desc text-slate-300 mb-6">Adaptive learning technology that identifies your weak areas and focuses on them with personalized content.</p>
+                        <button class="btn btn-outline px-5 py-2.5 rounded-lg font-medium bg-transparent border border-white/20 text-white hover:bg-white/10 transition-all duration-300">Learn More</button>
+                    </div>
+                    <!-- Feature Card 2 -->
+                    <div class="feature-card p-8 rounded-2xl bg-white/5 backdrop-blur-lg border border-white/10 shadow-xl transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl relative overflow-hidden">
+                        <div class="absolute top-0 left-0 h-1 w-full bg-gradient-to-r from-primary to-secondary"></div>
+                        <div class="feature-icon w-16 h-16 rounded-xl flex items-center justify-center mb-6 bg-primary/10 border border-primary/20 text-primary text-3xl">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V10"></path><path d="M18 20V4"></path><path d="M6 20V16"></path></svg>
+                        </div>
+                        <h3 class="feature-title text-xl font-semibold mb-3">Performance Analytics</h3>
+                        <p class="feature-desc text-slate-300 mb-6">Detailed insights into your performance with actionable feedback for improvement and growth tracking.</p>
+                        <button class="btn btn-outline px-5 py-2.5 rounded-lg font-medium bg-transparent border border-white/20 text-white hover:bg-white/10 transition-all duration-300">Learn More</button>
+                    </div>
+                    <!-- Feature Card 3 -->
+                    <div class="feature-card p-8 rounded-2xl bg-white/5 backdrop-blur-lg border border-white/10 shadow-xl transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl relative overflow-hidden">
+                        <div class="absolute top-0 left-0 h-1 w-full bg-gradient-to-r from-primary to-secondary"></div>
+                        <div class="feature-icon w-16 h-16 rounded-xl flex items-center justify-center mb-6 bg-primary/10 border border-primary/20 text-primary text-3xl">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                        </div>
+                        <h3 class="feature-title text-xl font-semibold mb-3">Community Support</h3>
+                        <p class="feature-desc text-slate-300 mb-6">Connect with fellow NEET aspirants, share knowledge, ask questions, and grow together.</p>
+                        <button class="btn btn-outline px-5 py-2.5 rounded-lg font-medium bg-transparent border border-white/20 text-white hover:bg-white/10 transition-all duration-300">Learn More</button>
+                    </div>
+                </div>
             </div>
-        </div>
-    </section>
+        </section>
+
+        <!-- Question Bank Section -->
+        <section class="question-bank py-16 md:py-24">
+            <div class="container max-w-6xl mx-auto px-6">
+                <div class="question-bank-content rounded-3xl p-8 md:p-16 bg-gradient-to-br from-primary/10 to-secondary/10 backdrop-blur-lg border border-white/10 shadow-2xl">
+                    <h2 class="section-title text-3xl md:text-4xl font-bold text-center mb-4">Massive NEET Question Bank</h2>
+                    <p class="section-subtitle text-base md:text-lg text-slate-300 max-w-2xl mx-auto text-center mb-12">Access over 45,000+ questions from previous years and curated by subject matter experts.</p>
+                    
+                    <div class="stats-container grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div class="stat-card p-6 rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 text-center transition-all duration-300 hover:-translate-y-1.5 hover:bg-white/10">
+                            <div class="stat-value text-4xl font-bold mb-1.5 bg-gradient-to-r from-accent-light to-accent bg-clip-text text-transparent">45K+</div>
+                            <div class="stat-label text-slate-300 text-sm">Practice Questions</div>
+                        </div>
+                        <div class="stat-card p-6 rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 text-center transition-all duration-300 hover:-translate-y-1.5 hover:bg-white/10">
+                            <div class="stat-value text-4xl font-bold mb-1.5 bg-gradient-to-r from-accent-light to-accent bg-clip-text text-transparent">12+</div>
+                            <div class="stat-label text-slate-300 text-sm">Years of PYQs</div>
+                        </div>
+                        <div class="stat-card p-6 rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 text-center transition-all duration-300 hover:-translate-y-1.5 hover:bg-white/10">
+                            <div class="stat-value text-4xl font-bold mb-1.5 bg-gradient-to-r from-accent-light to-accent bg-clip-text text-transparent">100%</div>
+                            <div class="stat-label text-slate-300 text-sm">Syllabus Coverage</div>
+                        </div>
+                        <div class="stat-card p-6 rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 text-center transition-all duration-300 hover:-translate-y-1.5 hover:bg-white/10">
+                            <div class="stat-value text-4xl font-bold mb-1.5 bg-gradient-to-r from-accent-light to-accent bg-clip-text text-transparent">3</div>
+                            <div class="stat-label text-slate-300 text-sm">Difficulty Levels</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Test Creation Section -->
+        <section class="test-creation py-16 md:py-24 text-center">
+            <div class="container max-w-6xl mx-auto px-6">
+                <div class="test-creation-content max-w-3xl mx-auto p-8 md:p-12 rounded-3xl bg-white/5 backdrop-blur-lg border border-white/10 shadow-2xl">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-5">Create Unlimited Custom Tests for NEET - Free!</h2>
+                    <p class="text-base md:text-lg text-slate-300 mb-8">Design your own tests based on topics, difficulty levels, and time constraints. Perfect for targeted practice and revision.</p>
+                    <button class="btn btn-primary btn-large create-test-btn flex items-center justify-center gap-2 px-8 py-3.5 text-base font-semibold rounded-lg bg-gradient-to-r from-primary to-secondary text-white shadow-lg hover:shadow-primary/50 transition-all duration-300 transform hover:-translate-y-px mx-auto">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                        Create Your First Test
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
 
     <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-column">
-                    <h3>Vidyucation</h3>
-                    <p>Your comprehensive NEET preparation platform with advanced tracking, analytics, and personalized learning paths.</p>
+    <footer class="bg-slate-900/80 backdrop-blur-lg border-t border-white/10 pt-16 pb-8 mt-24">
+        <div class="container max-w-6xl mx-auto px-6">
+            <div class="footer-content grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 mb-12">
+                <!-- Column 1 -->
+                <div class="footer-column sm:col-span-2 md:col-span-1">
+                    <h3 class="text-lg font-semibold mb-5 relative pb-2">Vidyucation</h3>
+                    <div class="absolute bottom-0 left-0 w-10 h-0.5 bg-gradient-to-r from-primary to-secondary"></div>
+                    <p class="text-slate-300 text-sm leading-relaxed">Your comprehensive NEET preparation platform with advanced tracking, analytics, and personalized learning paths.</p>
                 </div>
+                <!-- Column 2 -->
                 <div class="footer-column">
-                    <h3>Quick Links</h3>
-                    <ul>
-                        <li><a href="#"><i class="fas fa-chevron-right"></i> Home</a></li>
-                        <li><a href="#"><i class="fas fa-chevron-right"></i> Practice Tests</a></li>
-                        <li><a href="#"><i class="fas fa-chevron-right"></i> Performance</a></li>
-                        <li><a href="#"><i class="fas fa-chevron-right"></i> Study Materials</a></li>
+                    <h3 class="text-lg font-semibold mb-5 relative pb-2">Quick Links</h3>
+                    <div class="absolute bottom-0 left-0 w-10 h-0.5 bg-gradient-to-r from-primary to-secondary"></div>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-slate-300 text-sm hover:text-accent-light hover:pl-1.5 transition-all flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                            Home
+                        </a></li>
+                        <li><a href="#" class="text-slate-300 text-sm hover:text-accent-light hover:pl-1.5 transition-all flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                            Practice Tests
+                        </a></li>
+                        <li><a href="#" class="text-slate-300 text-sm hover:text-accent-light hover:pl-1.5 transition-all flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                            Performance
+                        </a></li>
                     </ul>
                 </div>
+                <!-- Column 3 -->
                 <div class="footer-column">
-                    <h3>Resources</h3>
-                    <ul>
-                        <li><a href="#"><i class="fas fa-chevron-right"></i> NEET Syllabus</a></li>
-                        <li><a href="#"><i class="fas fa-chevron-right"></i> Previous Year Papers</a></li>
-                        <li><a href="#"><i class="fas fa-chevron-right"></i> Important Formulas</a></li>
-                        <li><a href="#"><i class="fas fa-chevron-right"></i> Study Plans</a></li>
+                    <h3 class="text-lg font-semibold mb-5 relative pb-2">Resources</h3>
+                    <div class="absolute bottom-0 left-0 w-10 h-0.5 bg-gradient-to-r from-primary to-secondary"></div>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-slate-300 text-sm hover:text-accent-light hover:pl-1.5 transition-all flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                            NEET Syllabus
+                        </a></li>
+                        <li><a href="#" class="text-slate-300 text-sm hover:text-accent-light hover:pl-1.5 transition-all flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                            Previous Year Papers
+                        </a></li>
                     </ul>
                 </div>
+                <!-- Column 4 -->
                 <div class="footer-column">
-                    <h3>Contact Us</h3>
-                    <ul>
-                        <li><a href="#"><i class="fas fa-chevron-right"></i> Support</a></li>
-                        <li><a href="#"><i class="fas fa-chevron-right"></i> Feedback</a></li>
-                        <li><a href="#"><i class="fas fa-chevron-right"></i> Partnership</a></li>
-                        <li><a href="#"><i class="fas fa-chevron-right"></i> Careers</a></li>
+                    <h3 class="text-lg font-semibold mb-5 relative pb-2">Contact Us</h3>
+                    <div class="absolute bottom-0 left-0 w-10 h-0.5 bg-gradient-to-r from-primary to-secondary"></div>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-slate-300 text-sm hover:text-accent-light hover:pl-1.5 transition-all flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                            Support
+                        </a></li>
+                        <li><a href="#" class="text-slate-300 text-sm hover:text-accent-light hover:pl-1.5 transition-all flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                            Feedback
+                        </a></li>
                     </ul>
                 </div>
             </div>
-            <div class="copyright">
+            <div class="copyright text-center pt-8 border-t border-white/10 text-slate-400 text-sm">
                 <p>&copy; 2025 Vidyucation. All rights reserved. | Designed with ❤️ for NEET</p>
             </div>
         </div>
     </footer>
 
+    <!-- 
+    ========================================
+    MODALS
+    ========================================
+    -->
+
     <!-- Login Modal -->
-    <div id="loginModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <span class="close">&times;</span>
-                <h2>Welcome Back</h2>
-                <p>Continue your NEET preparation journey</p>
+    <div id="loginModal" class="modal fixed inset-0 z-[1000] flex items-center justify-center bg-black/70 backdrop-blur-sm p-4 opacity-0 pointer-events-none invisible">
+        <div class="modal-content bg-slate-800/95 backdrop-blur-xl border border-white/10 rounded-3xl w-full max-w-md shadow-2xl overflow-hidden transform scale-95 opacity-0">
+            <!-- Modal Header -->
+            <div class="modal-header p-6 text-center border-b border-white/10 bg-gradient-to-br from-primary/10 to-secondary/10 relative">
+                <span class="close absolute top-4 right-5 text-slate-400 hover:text-accent-light text-2xl cursor-pointer transition-colors">&times;</span>
+                <h2 class="text-2xl font-semibold">Welcome Back</h2>
+                <p class="text-slate-300 text-sm mt-1">Continue your NEET preparation journey</p>
             </div>
-            <div class="modal-body">
-                <div id="authMessage" class="auth-message"></div>
+            
+            <!-- Modal Body -->
+            <div class="modal-body p-6 md:p-8">
+                <div id="authMessage" class="auth-message hidden"></div>
+                
                 <form id="loginForm">
-                    <div class="form-group">
-                        <label for="email">Email Address</label>
-                        <div class="input-with-icon">
-                            <i class="fas fa-envelope"></i>
+                    <div class="form-group mb-5">
+                        <label for="email" class="block mb-2 text-sm font-medium text-slate-200">Email Address</label>
+                        <div class="input-with-icon relative">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22 6 -10 13 2 6"></polyline></svg>
                             <input type="email" id="email" name="email" placeholder="Enter your email" required>
                         </div>
                     </div>
                     
-                    <div class="form-group">
-                        <label for="password">Password</label>
-                        <div class="input-with-icon">
-                            <i class="fas fa-lock"></i>
+                    <div class="form-group mb-5">
+                        <label for="password" class="block mb-2 text-sm font-medium text-slate-200">Password</label>
+                        <div class="input-with-icon relative">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
                             <input type="password" id="password" name="password" placeholder="Enter your password" required>
                         </div>
                     </div>
                     
-                    <button type="submit" class="btn btn-primary btn-full" id="loginBtn">
-                        <i class="fas fa-sign-in-alt"></i>
+                    <button type="submit" class="btn btn-primary w-full flex items-center justify-center gap-2 px-5 py-3 rounded-lg font-semibold bg-gradient-to-r from-primary to-secondary text-white shadow-lg hover:shadow-primary/50 transition-all duration-300 transform hover:-translate-y-px mt-2 mb-4" id="loginBtn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" y1="12" x2="3" y2="12"></line></svg>
                         Login to Your Account
                     </button>
                 </form>
 
-                <div class="divider">
-                    <span>or</span>
+                <div class="divider text-center my-6 relative">
+                    <span class="absolute left-0 right-0 top-1/2 h-px bg-white/20"></span>
+                    <span class="relative bg-slate-800 px-3 text-slate-400 text-sm z-10">or</span>
                 </div>
 
-                <button class="google-signin-btn" id="googleLoginBtn">
-                    <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google">
-                    Continue with Google
+                <button class="google-signin-btn w-full flex items-center justify-center gap-3 px-4 py-2.5 rounded-lg border-2 border-white/20 bg-white/5 hover:bg-white/10 transition-colors cursor-pointer" id="googleLoginBtn">
+                    <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google" class="w-5 h-5">
+                    <span class="font-medium text-slate-200">Continue with Google</span>
                 </button>
                 
-                <div class="signup-link">
-                    Don't have an account? <a href="#" id="showSignup">Sign up now</a>
+                <div class="signup-link text-center mt-6 text-slate-300">
+                    Don't have an account? <a href="#" id="showSignup" class="font-semibold text-primary hover:underline">Sign up now</a>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Signup Modal -->
-    <div id="signupModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <span class="close">&times;</span>
-                <h2>Join Vidyucation</h2>
-                <p>Start your NEET preparation journey</p>
+    <div id="signupModal" class="modal fixed inset-0 z-[1000] flex items-center justify-center bg-black/70 backdrop-blur-sm p-4 opacity-0 pointer-events-none invisible">
+        <div class="modal-content bg-slate-800/95 backdrop-blur-xl border border-white/10 rounded-3xl w-full max-w-md shadow-2xl overflow-hidden transform scale-95 opacity-0">
+            <!-- Modal Header -->
+            <div class="modal-header p-6 text-center border-b border-white/10 bg-gradient-to-br from-primary/10 to-secondary/10 relative">
+                <span class="close absolute top-4 right-5 text-slate-400 hover:text-accent-light text-2xl cursor-pointer transition-colors">&times;</span>
+                <h2 class="text-2xl font-semibold">Join Vidyucation</h2>
+                <p class="text-slate-300 text-sm mt-1">Start your NEET preparation journey</p>
             </div>
-            <div class="modal-body">
-                <div id="signupMessage" class="auth-message"></div>
+            
+            <!-- Modal Body -->
+            <div class="modal-body p-6 md:p-8">
+                <div id="signupMessage" class="auth-message hidden"></div>
                 
-                <!-- Google Sign In Button -->
-                <button class="google-signin-btn" id="googleSignupBtn">
-                    <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google">
-                    Continue with Google
+                <button class="google-signin-btn w-full flex items-center justify-center gap-3 px-4 py-2.5 rounded-lg border-2 border-white/20 bg-white/5 hover:bg-white/10 transition-colors cursor-pointer mb-5" id="googleSignupBtn">
+                    <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google" class="w-5 h-5">
+                    <span class="font-medium text-slate-200">Continue with Google</span>
                 </button>
                 
-                <div class="divider">
-                    <span>or continue with email</span>
+                <div class="divider text-center my-6 relative">
+                    <span class="absolute left-0 right-0 top-1/2 h-px bg-white/20"></span>
+                    <span class="relative bg-slate-800 px-3 text-slate-400 text-sm z-10">or continue with email</span>
                 </div>
                 
                 <form id="signupForm">
-                    <div class="form-group">
-                        <label for="signupEmail">Email Address</label>
-                        <div class="input-with-icon">
-                            <i class="fas fa-envelope"></i>
+                    <div class="form-group mb-5">
+                        <label for="signupEmail" class="block mb-2 text-sm font-medium text-slate-200">Email Address</label>
+                        <div class="input-with-icon relative">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22 6 -10 13 2 6"></polyline></svg>
                             <input type="email" id="signupEmail" name="email" placeholder="Enter your email" required>
                         </div>
                     </div>
                     
-                    <div class="form-group">
-                        <label for="signupPassword">Password</label>
-                        <div class="input-with-icon">
-                            <i class="fas fa-lock"></i>
+                    <div class="form-group mb-5">
+                        <label for="signupPassword" class="block mb-2 text-sm font-medium text-slate-200">Password</label>
+                        <div class="input-with-icon relative">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
                             <input type="password" id="signupPassword" name="password" placeholder="Create a password (min. 6 characters)" required>
                         </div>
                     </div>
                     
-                    <button type="submit" class="btn btn-primary btn-full" id="signupBtn">
-                        <i class="fas fa-user-plus"></i>
+                    <button type="submit" class="btn btn-primary w-full flex items-center justify-center gap-2 px-5 py-3 rounded-lg font-semibold bg-gradient-to-r from-primary to-secondary text-white shadow-lg hover:shadow-primary/50 transition-all duration-300 transform hover:-translate-y-px mt-2 mb-4" id="signupBtn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
                         Create Account
                     </button>
                 </form>
                 
-                <div class="login-link">
-                    Already have an account? <a href="#" id="showLogin">Login here</a>
+                <div class="login-link text-center mt-6 text-slate-300">
+                    Already have an account? <a href="#" id="showLogin" class="font-semibold text-primary hover:underline">Login here</a>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Onboarding Modal -->
-    <div id="onboardingModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Welcome to Vidyucation! 🎉</h2>
-                <p>Let's set up your profile</p>
+    <div id="onboardingModal" class="modal fixed inset-0 z-[1000] flex items-center justify-center bg-black/70 backdrop-blur-sm p-4 opacity-0 pointer-events-none invisible">
+        <div class="modal-content bg-slate-800/95 backdrop-blur-xl border border-white/10 rounded-3xl w-full max-w-md shadow-2xl overflow-hidden transform scale-95 opacity-0">
+            <!-- Modal Header -->
+            <div class="modal-header p-6 text-center border-b border-white/10 bg-gradient-to-br from-primary/10 to-secondary/10">
+                <h2 class="text-2xl font-semibold">Welcome to Vidyucation! 🎉</h2>
+                <p class="text-slate-300 text-sm mt-1">Let's set up your profile</p>
             </div>
-            <div class="modal-body">
-                <!-- Message area for onboarding -->
-                <div id="onboardingMessage" class="auth-message"></div>
+            
+            <!-- Modal Body -->
+            <div class="modal-body p-6 md:p-8">
+                <div id="onboardingMessage" class="auth-message hidden"></div>
                 
                 <form id="onboardingForm">
-                    <div class="form-group">
-                        <label for="userName">What should we call you?</label>
-                        <div class="input-with-icon">
-                            <i class="fas fa-user"></i>
+                    <div class="form-group mb-5">
+                        <label for="userName" class="block mb-2 text-sm font-medium text-slate-200">What should we call you?</label>
+                        <div class="input-with-icon relative">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
                             <input type="text" id="userName" name="userName" placeholder="Enter your full name" required>
                         </div>
                     </div>
                     
-                    <div class="form-group">
-                        <label for="mobileNumber">Mobile Number</label>
-                        <div class="input-with-icon">
-                            <i class="fas fa-phone"></i>
+                    <div class="form-group mb-5">
+                        <label for="mobileNumber" class="block mb-2 text-sm font-medium text-slate-200">Mobile Number</label>
+                        <div class="input-with-icon relative">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
                             <input type="tel" id="mobileNumber" name="mobileNumber" placeholder="Enter your 10-digit mobile number" pattern="[0-9]{10}" required>
                         </div>
-                        <small>Enter without +91 or country code</small>
+                        <small class="block mt-1.5 text-xs text-slate-400">Enter without +91 or country code</small>
                     </div>
                     
-                    <div class="form-group">
-                        <label for="preparationYear">Target NEET Preparation Year</label>
-                        <select id="preparationYear" name="preparationYear" required>
-                            <option value="">Select your target year</option>
-                            <option value="2026" selected>NEET 2026</option>
-                            <option value="2027">NEET 2027</option>
-                        </select>
+                    <div class="form-group mb-5">
+                        <label for="preparationYear" class="block mb-2 text-sm font-medium text-slate-200">Target NEET Preparation Year</label>
+                        <div class="relative">
+                            <select id="preparationYear" name="preparationYear" class="form-group" required>
+                                <option value="">Select your target year</option>
+                                <option value="2026" selected>NEET 2026</option>
+                                <option value="2027">NEET 2027</option>
+                            </select>
+                        </div>
                     </div>
                     
-                    <button type="submit" class="btn btn-primary btn-full" id="completeProfileBtn">
-                        <i class="fas fa-check-circle"></i>
+                    <button type="submit" class="btn btn-primary w-full flex items-center justify-center gap-2 px-5 py-3 rounded-lg font-semibold bg-gradient-to-r from-primary to-secondary text-white shadow-lg hover:shadow-primary/50 transition-all duration-300 transform hover:-translate-y-px mt-2" id="completeProfileBtn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
                         Complete Profile & Continue
                     </button>
                 </form>
             </div>
         </div>
     </div>
+
 
     <!-- 
       START: FIREBASE INTEGRATION 
@@ -1247,8 +681,14 @@
                     userNameDisplay: document.getElementById('userNameDisplay'),
                     signOutBtn: document.getElementById('signOutBtn'),
                     practiceBtn: document.querySelector('.practice-btn'),
-                    testBtn: document.querySelector('.test-btn'),
-                    createTestBtn: document.querySelector('.create-test-btn')
+                    // testBtn: document.querySelector('.test-btn'), // This class wasn't in the HTML, so I'm commenting it out.
+                    createTestBtn: document.querySelector('.create-test-btn'),
+                    
+                    // Mobile Menu
+                    mobileMenuBtn: document.getElementById('mobileMenuBtn'),
+                    mobileMenu: document.getElementById('mobileMenu'),
+                    menuIconOpen: document.getElementById('menuIconOpen'),
+                    menuIconClose: document.getElementById('menuIconClose'),
                 };
                 
                 this.init();
@@ -1262,9 +702,18 @@
             }
 
             setupModals() {
-                this.modals.login = document.getElementById('loginModal');
-                this.modals.signup = document.getElementById('signupModal');
-                this.modals.onboarding = document.getElementById('onboardingModal');
+                this.modals.login = {
+                    el: document.getElementById('loginModal'),
+                    content: document.getElementById('loginModal').querySelector('.modal-content')
+                };
+                this.modals.signup = {
+                    el: document.getElementById('signupModal'),
+                    content: document.getElementById('signupModal').querySelector('.modal-content')
+                };
+                this.modals.onboarding = {
+                    el: document.getElementById('onboardingModal'),
+                    content: document.getElementById('onboardingModal').querySelector('.modal-content')
+                };
                 console.log('✅ Modals initialized');
             }
 
@@ -1273,6 +722,9 @@
                 document.querySelector('.login-btn').addEventListener('click', () => this.showModal('login'));
                 document.querySelector('.signup-btn').addEventListener('click', () => this.showModal('signup'));
                 this.ui.signOutBtn.addEventListener('click', () => this.handleSignOut());
+                
+                // Mobile Menu Toggle
+                this.ui.mobileMenuBtn.addEventListener('click', () => this.toggleMobileMenu());
 
                 // Hero buttons (will be updated by auth listener)
                 this.bindHeroButtons(false); // Bind to show modal initially
@@ -1280,7 +732,7 @@
                 // Test creation button (will be updated by auth listener)
                 this.ui.createTestBtn.addEventListener('click', () => {
                     if (!this.currentUser) this.showModal('signup');
-                    else window.location.href = 'dashboard.html'; // Or test creation page
+                    else window.location.href = '#'; // Or test creation page
                 });
 
 
@@ -1311,49 +763,96 @@
 
                 // Modal background clicks
                 Object.values(this.modals).forEach(modal => {
-                    modal.addEventListener('click', (e) => {
-                        if (e.target === modal) this.closeAllModals();
+                    modal.el.addEventListener('click', (e) => {
+                        if (e.target === modal.el) this.closeAllModals();
                     });
                 });
 
                 console.log('✅ All events bound successfully');
             }
             
+            // NEW: Toggle Mobile Menu
+            toggleMobileMenu() {
+                const isHidden = this.ui.mobileMenu.classList.contains('hidden');
+                if (isHidden) {
+                    this.ui.mobileMenu.classList.remove('hidden');
+                    this.ui.mobileMenu.classList.add('flex');
+                    this.ui.menuIconOpen.classList.add('hidden');
+                    this.ui.menuIconClose.classList.remove('hidden');
+                } else {
+                    this.ui.mobileMenu.classList.add('hidden');
+                    this.ui.mobileMenu.classList.remove('flex');
+                    this.ui.menuIconOpen.classList.remove('hidden');
+                    this.ui.menuIconClose.classList.add('hidden');
+                }
+            }
+            
             // Helper to bind hero buttons based on auth state
             bindHeroButtons(isLoggedIn) {
                 const action = () => {
                     if (isLoggedIn) {
-                        window.location.href = 'dashboard.html'; // Go to dashboard
+                        window.location.href = '#'; // Go to dashboard
                     } else {
                         this.showModal('login'); // Show login modal
                     }
                 };
                 this.ui.practiceBtn.onclick = action; // Use onclick to easily overwrite
-                this.ui.testBtn.onclick = action;
+                // this.ui.testBtn.onclick = action; // testBtn is not in the HTML
             }
 
+            // UPDATED: showModal to use Tailwind classes for transitions
             showModal(modalName) {
                 this.closeAllModals();
                 if (this.modals[modalName]) {
-                    this.modals[modalName].style.display = 'block';
+                    const modal = this.modals[modalName];
+                    modal.el.classList.remove('opacity-0', 'pointer-events-none', 'invisible');
+                    modal.el.classList.add('opacity-100', 'visible');
+                    
+                    modal.content.classList.remove('scale-95', 'opacity-0');
+                    modal.content.classList.add('scale-100', 'opacity-100');
+                    
                     console.log(`📱 Opened ${modalName} modal`);
                 }
             }
 
+            // UPDATED: closeAllModals to use Tailwind classes for transitions
             closeAllModals() {
                 Object.values(this.modals).forEach(modal => {
-                    modal.style.display = 'none';
+                    modal.el.classList.add('opacity-0', 'invisible');
+                    modal.el.classList.remove('opacity-100', 'visible');
+                    // Give it time to fade out before disabling pointer events
+                    setTimeout(() => {
+                        if(modal.el.classList.contains('opacity-0')) {
+                             modal.el.classList.add('pointer-events-none');
+                        }
+                    }, 300);
+                    
+                    modal.content.classList.add('scale-95', 'opacity-0');
+                    modal.content.classList.remove('scale-100', 'opacity-100');
                 });
             }
 
+            // UPDATED: showMessage to use Tailwind classes
             showMessage(message, type, elementId) {
                 const messageEl = document.getElementById(elementId);
                 if (messageEl) {
                     messageEl.textContent = message;
-                    messageEl.className = `auth-message ${type}`;
-                    messageEl.style.display = 'block';
+                    // Reset classes
+                    messageEl.className = 'auth-message';
+                    messageEl.classList.add('p-3', 'rounded-lg', 'mb-4', 'text-center', 'font-medium', 'border');
+                    
+                    if (type === 'success') {
+                        messageEl.classList.add('bg-green-500/10', 'border-green-500/30', 'text-green-400');
+                    } else if (type === 'error') {
+                        messageEl.classList.add('bg-red-500/10', 'border-red-500/30', 'text-red-400');
+                    } else {
+                         messageEl.classList.add('bg-blue-500/10', 'border-blue-500/30', 'text-blue-400');
+                    }
+                    
+                    messageEl.classList.remove('hidden'); // Show it
+                    
                     setTimeout(() => {
-                        messageEl.style.display = 'none';
+                        messageEl.classList.add('hidden');
                     }, 5000);
                 }
             }
@@ -1364,16 +863,21 @@
 
                 if (loading) {
                     button.disabled = true;
+                    button.classList.add('opacity-60', 'cursor-not-allowed');
                     const originalText = button.innerHTML;
                     button.setAttribute('data-original-text', originalText);
                     
-                    if (buttonId.startsWith('google')) { // Handle both google buttons
-                        button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connecting...';
+                    // SVG Spinner
+                    const spinnerIcon = '<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>';
+                    
+                    if (buttonId.startsWith('google')) {
+                        button.innerHTML = `${spinnerIcon} <span>Connecting...</span>`;
                     } else {
-                        button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
+                        button.innerHTML = `${spinnerIcon} <span>Loading...</span>`;
                     }
                 } else {
                     button.disabled = false;
+                    button.classList.remove('opacity-60', 'cursor-not-allowed');
                     const originalText = button.getAttribute('data-original-text');
                     if (originalText) {
                         button.innerHTML = originalText;
@@ -1382,10 +886,6 @@
                 }
             }
 
-            /**
-             * START: NEW HELPER FUNCTION
-             * Translates Firebase error codes into friendly messages
-             */
             getFriendlyAuthError(error) {
                 switch (error.code) {
                     case 'auth/user-not-found':
@@ -1401,15 +901,7 @@
                         return error.message;
                 }
             }
-            /**
-             * END: NEW HELPER FUNCTION
-             */
 
-
-            /**
-             * START: UPDATED FUNCTION
-             * Implements real email/password login
-             */
             async handleLogin(e) {
                 e.preventDefault();
                 this.setButtonLoading('loginBtn', true);
@@ -1417,12 +909,9 @@
                 const password = document.getElementById('password').value;
 
                 try {
-                    // REAL FIREBASE LOGIN
                     await this.auth.signInWithEmailAndPassword(email, password);
-                    // On success, the onAuthStateChanged listener will automatically
-                    // close the modal and update the UI.
                     console.log('User logged in successfully.');
-                    
+                    // onAuthStateChanged will handle UI and modal closing
                 } catch (error) {
                     console.error('Login error:', error.code, error.message);
                     this.showMessage(this.getFriendlyAuthError(error), 'error', 'authMessage');
@@ -1430,14 +919,7 @@
                     this.setButtonLoading('loginBtn', false);
                 }
             }
-            /**
-             * END: UPDATED FUNCTION
-             */
 
-            /**
-             * START: UPDATED FUNCTION
-             * Implements real email/password signup
-             */
             async handleSignup(e) {
                 e.preventDefault();
                 this.setButtonLoading('signupBtn', true);
@@ -1445,14 +927,10 @@
                 const password = document.getElementById('signupPassword').value;
 
                 try {
-                    // REAL FIREBASE SIGNUP
                     await this.auth.createUserWithEmailAndPassword(email, password);
                     
-                    // On success, the onAuthStateChanged listener will fire and log the user in.
-                    // We now manually show the onboarding modal for the new user.
                     this.showMessage('Account created! Please complete your profile.', 'success', 'signupMessage');
                     
-                    // Manually clear form
                     document.getElementById('signupEmail').value = '';
                     document.getElementById('signupPassword').value = '';
 
@@ -1466,19 +944,14 @@
                     this.setButtonLoading('signupBtn', false);
                 }
             }
-            /**
-             * END: UPDATED FUNCTION
-             */
 
             async handleGoogleSignIn() {
-                // Show loading on both buttons, just in case
                 this.setButtonLoading('googleSignupBtn', true);
                 this.setButtonLoading('googleLoginBtn', true);
-                this.showMessage('Opening Google Sign-In...', 'success', 'signupMessage');
-                this.showMessage('Opening Google Sign-In...', 'success', 'authMessage');
+                this.showMessage('Opening Google Sign-In...', 'info', 'signupMessage');
+                this.showMessage('Opening Google Sign-In...', 'info', 'authMessage');
 
                 try {
-                    // This is the REAL Firebase Google Sign-In
                     const result = await this.auth.signInWithPopup(this.googleProvider);
                     const user = result.user;
                     const isNewUser = result.additionalUserInfo.isNewUser;
@@ -1487,13 +960,10 @@
                     this.showMessage('Sign-in successful!', 'success', 'signupMessage');
 
                     if (isNewUser) {
-                        // New user, show onboarding
                         console.log('New user detected, showing onboarding.');
                         document.getElementById('userName').value = user.displayName || '';
                         this.showModal('onboarding');
                     } else {
-                        // Existing user, just close modals.
-                        // The auth listener will handle the UI update.
                         console.log('Existing user, closing modals.');
                         this.closeAllModals();
                     }
@@ -1518,10 +988,6 @@
                 }
             }
 
-            /**
-             * START: UPDATED FUNCTION
-             * Now also updates the user's Auth profile display name
-             */
             async handleOnboarding(e) {
                 e.preventDefault();
                 const userName = document.getElementById('userName').value;
@@ -1530,14 +996,12 @@
 
                 this.setButtonLoading('completeProfileBtn', true);
 
-                // Check if a user is logged in
                 if (!this.currentUser) {
                     this.showMessage('No user is logged in. Please sign in again.', 'error', 'onboardingMessage');
                     this.setButtonLoading('completeProfileBtn', false);
                     return;
                 }
                 
-                // Check for empty fields
                 if (!userName || !mobileNumber || !preparationYear) {
                     this.showMessage('Please fill in all fields.', 'error', 'onboardingMessage');
                     this.setButtonLoading('completeProfileBtn', false);
@@ -1545,37 +1009,28 @@
                 }
 
                 try {
-                    // START: NEW - Update Auth Profile
-                    // This adds the name to the user's main auth profile
                     await this.currentUser.updateProfile({
                         displayName: userName
                     });
                     console.log('Firebase Auth profile display name updated.');
-                    // END: NEW
                     
-                    // ---
-                    
-                    // START: EXISTING - Save to Firestore
                     const userDocRef = this.db.collection('users').doc(this.currentUser.uid);
                     
                     const profileData = {
                         name: userName,
                         mobile: mobileNumber,
                         targetYear: preparationYear,
-                        email: this.currentUser.email, // Save email for reference
-                        createdAt: firebase.firestore.FieldValue.serverTimestamp() // Good practice
+                        email: this.currentUser.email,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
                     };
                     
-                    await userDocRef.set(profileData, { merge: true }); // Use merge:true
+                    await userDocRef.set(profileData, { merge: true }); 
                     
                     console.log('Onboarding data saved to Firestore:', profileData);
-                    // END: EXISTING
                     
                     this.showMessage('Profile completed successfully! Redirecting...', 'success', 'onboardingMessage');
                     setTimeout(() => {
-                        // The auth listener will see the updated displayName 
-                        // and the UI will update *before* redirecting.
-                        window.location.href = 'dashboard.html'; // Redirect to dashboard
+                        window.location.href = '#'; // Redirect to dashboard
                     }, 1500);
 
                 } catch (error) {
@@ -1584,20 +1039,14 @@
                     this.setButtonLoading('completeProfileBtn', false);
                 }
             }
-            /**
-             * END: UPDATED FUNCTION
-             */
 
             setupAuthListener() {
-                // This is the REAL Firebase Auth Listener
                 this.auth.onAuthStateChanged((user) => {
                     if (user) {
-                        // User is signed in
                         console.log('Auth state changed: User is LOGGED IN', user);
                         this.currentUser = user;
                         this.updateUIForLoggedInUser(user);
                     } else {
-                        // User is signed out
                         console.log('Auth state changed: User is LOGGED OUT');
                         this.currentUser = null;
                         this.updateUIForLoggedOutUser();
@@ -1606,44 +1055,43 @@
             }
             
             updateUIForLoggedInUser(user) {
-                // Hide logged-out buttons
                 this.ui.loggedOutButtons.classList.add('hidden');
-                
-                // Show logged-in profile
                 this.ui.loggedInProfile.classList.remove('hidden');
                 
-                // --- UPDATED to handle new email signups with no name yet
                 this.ui.userNameDisplay.textContent = user.displayName || 'NEET Aspirant';
                 
-                // Set avatar
                 if (user.photoURL) {
-                    this.ui.userAvatar.innerHTML = `<img src="${user.photoURL}" alt="${user.displayName}">`;
+                    this.ui.userAvatar.innerHTML = `<img src="${user.photoURL}" alt="${user.displayName}" class="w-full h-full object-cover">`;
                 } else {
-                    // Use initial from display name, or email, or default 'N'
                     const initial = (user.displayName || user.email || 'N')[0].toUpperCase();
-                    this.ui.userAvatar.innerHTML = `<span style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">${initial}</span>`;
+                    this.ui.userAvatar.innerHTML = `<span class="w-full h-full flex items-center justify-center text-lg">${initial}</span>`;
                 }
                 
-                // Update hero buttons to go to dashboard
                 this.bindHeroButtons(true);
                 
                 // Close any open modals *except* onboarding
-                if(this.modals.onboarding.style.display !== 'block') {
+                if(this.modals.onboarding.el.classList.contains('opacity-0')) {
                     this.closeAllModals();
+                }
+                
+                // If mobile menu is open, close it
+                if (!this.ui.mobileMenu.classList.contains('hidden')) {
+                    this.toggleMobileMenu();
                 }
             }
             
             updateUIForLoggedOutUser() {
-                // Show logged-out buttons
                 this.ui.loggedOutButtons.classList.remove('hidden');
-                
-                // Hide logged-in profile
                 this.ui.loggedInProfile.classList.add('hidden');
                 this.ui.userNameDisplay.textContent = '';
                 this.ui.userAvatar.innerHTML = '';
                 
-                // Update hero buttons to open login modal
                 this.bindHeroButtons(false);
+                
+                // If mobile menu is open, close it
+                if (!this.ui.mobileMenu.classList.contains('hidden')) {
+                    this.toggleMobileMenu();
+                }
             }
         }
 
@@ -1654,5 +1102,4 @@
     </script>
 </body>
 </html>
-
 
