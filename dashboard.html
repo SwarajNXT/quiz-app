@@ -3,61 +3,153 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Vidyucation</title>
+    <title>Your Dashboard - Vidyucation</title>
+    <!-- Using Tailwind for quick styling of the loader and page -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
-        body { 
-            font-family: Arial, sans-serif; 
-            padding: 40px; 
-            text-align: center; 
-            background: linear-gradient(135deg, #0f172a, #1e293b);
-            color: white;
-            min-height: 100vh;
+        /* Simple loader animation */
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
-        .dashboard-container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 40px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            backdrop-filter: blur(10px);
+        .loader {
+            border: 4px solid rgba(255, 255, 255, 0.2);
+            border-left-color: #6366f1; /* --primary color */
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
         }
-        button { 
-            padding: 12px 24px; 
-            margin: 10px; 
-            background: #6366f1;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
+        
+        /* Hide dashboard content by default */
+        #dashboard-content {
+            display: none;
         }
-        h1 { margin-bottom: 20px; }
     </style>
 </head>
-<body>
-    <div class="dashboard-container">
-        <h1>Welcome to Your Vidyucation Dashboard!</h1>
-        <p>You are successfully logged in and ready to start your NEET preparation.</p>
-        <button onclick="logout()">Logout</button>
+<body class="bg-gray-900 text-white min-h-screen font-sans">
+
+    <!-- 
+      LOADER: This shows while Firebase checks authentication.
+    -->
+    <div id="loader" class="flex items-center justify-center min-h-screen flex-col">
+        <div class="loader"></div>
+        <p class="mt-4 text-gray-400">Loading your profile...</p>
     </div>
 
-    <script type="module">
-        import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
-        
+    <!-- 
+      DASHBOARD CONTENT: This is hidden until the user is verified.
+    -->
+    <div id="dashboard-content">
+        <!-- Header -->
+        <header class="bg-gray-800 shadow-lg">
+            <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+                <div class="text-2xl font-bold text-white">Vidyucation Dashboard</div>
+                <div class="flex items-center gap-4">
+                    <span id="user-greeting" class="text-gray-300">Welcome!</span>
+                    <button id="signOutBtn" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition duration-300">
+                        <i class="fas fa-sign-out-alt mr-2"></i>Sign Out
+                    </button>
+                </div>
+            </nav>
+        </header>
+
+        <!-- Main Content -->
+        <main class="container mx-auto px-6 py-12">
+            <h1 class="text-4xl font-bold mb-6">Your Progress</h1>
+            
+            <!-- 
+              **********************************************
+              *** ***
+              *** PUT YOUR DASHBOARD HTML CONTENT HERE   ***
+              *** (e.g., your charts, stats, tables)   ***
+              *** ***
+              **********************************************
+            -->
+            
+            <div class="bg-gray-800 p-8 rounded-2xl shadow-xl">
+                <p class="text-lg">This is your secure dashboard content.</p>
+                <p class="text-gray-400 mt-2">Only logged-in users can see this page.</p>
+            </div>
+
+        </main>
+    </div>
+    
+    
+    <!-- 
+      START: FIREBASE & AUTH GUARD SCRIPT
+    -->
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
+    
+    <script>
+        // Your Firebase configuration (must be the same as index.html)
         const firebaseConfig = {
             apiKey: "AIzaSyD7UYp7ApLTpku2y4gAw8QprAkCNGhRsLI",
             authDomain: "quiz-app-ad5de.firebaseapp.com",
             projectId: "quiz-app-ad5de",
             storageBucket: "quiz-app-ad5de.firebasestorage.app",
             messagingSenderId: "17935383217",
-            appId: "1:17935383217:web:f34559709c88a1d9670090"
+            appId: "1:17935383217:web:f34559709c88a1d9670090",
+            measurementId: "G-ZWVX3GZ1DX"
         };
         
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        const auth = firebase.auth();
+
+        // Get DOM elements
+        const loader = document.getElementById('loader');
+        const dashboardContent = document.getElementById('dashboard-content');
+        const userGreeting = document.getElementById('user-greeting');
+        const signOutBtn = document.getElementById('signOutBtn');
+
+        /**
+         * This is the AUTH GUARD.
+         * It listens for the authentication state to change.
+         * It runs automatically when the page loads.
+         */
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                // --- USER IS LOGGED IN ---
+                console.log('Auth Guard: User is logged in.', user);
+                
+                // Show the dashboard content
+                loader.style.display = 'none';
+                dashboardContent.style.display = 'block';
+                
+                // Personalize the page
+                userGreeting.textContent = `Welcome, ${user.displayName || user.email}!`;
+
+            } else {
+                // --- USER IS NOT LOGGED IN ---
+                console.log('Auth Guard: No user found. Redirecting to login page.');
+                
+                // Immediately redirect them back to the login page
+                window.location.href = 'index.html';
+            }
+        });
         
-        window.logout = () => signOut(auth).then(() => window.location.href = 'index.html');
+        // Handle Sign Out
+        signOutBtn.addEventListener('click', () => {
+            auth.signOut()
+                .then(() => {
+                    console.log('User signed out.');
+                    // The onAuthStateChanged listener above will automatically
+                    // detect the sign-out and redirect to index.html
+                })
+                .catch((error) => {
+                    console.error('Sign out error:', error);
+                });
+        });
+
     </script>
+    <!-- 
+      END: FIREBASE & AUTH GUARD SCRIPT
+    -->
+    
 </body>
 </html>
+
