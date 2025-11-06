@@ -8,6 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
+        /* ... [All your existing CSS styles are unchanged] ... */
         * {
             margin: 0;
             padding: 0;
@@ -742,6 +743,12 @@
             background: rgba(255, 255, 255, 0.1);
             border-color: rgba(255, 255, 255, 0.3);
         }
+        
+        /* Make sure Google button margin is correct in both modals */
+        #loginModal .google-signin-btn {
+            margin-top: 20px;
+            margin-bottom: 0;
+        }
 
         .google-signin-btn img {
             width: 18px;
@@ -837,7 +844,8 @@
     </style>
 </head>
 <body>
-    <!-- Background Elements -->
+    <!-- ... [Background Elements and Header are unchanged] ... -->
+        <!-- Background Elements -->
     <div class="bg-elements">
         <div class="bg-circle circle-1"></div>
         <div class="bg-circle circle-2"></div>
@@ -883,30 +891,30 @@
         </div>
     </header>
 
-    <!-- Hero Section -->
+    <!-- ... [Hero, Progress, Features, QB, Test Creation, Footer are unchanged] ... -->
+        <!-- Hero Section -->
     <section class="hero">
         <div class="container">
             <div class="hero-content">
                 <div class="hero-badge">
                     <i class="fas fa-rocket"></i>
-                    <span>NEET 2026 Preparation Started</span>
+                    <span>NEET 2025 Preparation Started</span>
                 </div>
                 <h1>Track Your NEET Learning Progress</h1>
-                <p>Monitor your performance, identify strengths and weaknesses, and achieve your goals with Vidyucation's learning platform.</p>
+                <p>Monitor your performance, identify strengths and weaknesses, and achieve your goals with Vidyucation's comprehensive learning platform.</p>
                 <div class="hero-buttons">
                     <button class="btn btn-primary btn-large practice-btn"><i class="fas fa-play-circle"></i> Start Practicing Now</button>
+                    <button class="btn btn-outline btn-large test-btn"><i class="fas fa-clipboard-list"></i> Take a Diagnostic Test</button>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ... [Rest of your sections: Progress, Features, Question Bank, Test Creation] ... -->
-    <!-- (No changes needed in these sections) -->
-        <!-- Progress Section -->
+    <!-- Progress Section -->
     <section class="progress-section">
         <div class="container">
             <h2 class="section-title">Track Your Learning Progress</h2>
-            <p class="section-subtitle">Monitor your performance, identify strengths and weaknesses, and achieve your goals with Vidyucation's tracking system.</p>
+            <p class="section-subtitle">Monitor your performance, identify strengths and weaknesses, and achieve your goals with Vidyucation's comprehensive tracking system.</p>
             
             <div class="progress-container">
                 <div class="progress-card">
@@ -914,11 +922,11 @@
                     <div class="progress-label">Overall Score</div>
                 </div>
                 <div class="progress-card">
-                    <div class="progress-value">97.4%</div>
+                    <div class="progress-value">92.5%</div>
                     <div class="progress-label">Accuracy</div>
                 </div>
                 <div class="progress-card">
-                    <div class="progress-value">9/12</div>
+                    <div class="progress-value">8/12</div>
                     <div class="progress-label">Completed Topics</div>
                 </div>
                 <div class="progress-card">
@@ -957,7 +965,7 @@
                         <i class="fas fa-users"></i>
                     </div>
                     <h3 class="feature-title">Community Support</h3>
-                    <p class="feature-desc">Connect with fellow NEET aspirants, teachers, ask questions, and grow together.</p>
+                    <p class="feature-desc">Connect with fellow NEET aspirants, share knowledge, ask questions, and grow together in a supportive environment.</p>
                     <button class="btn btn-outline">Learn More</button>
                 </div>
             </div>
@@ -997,7 +1005,7 @@
     <section class="test-creation">
         <div class="container">
             <div class="test-creation-content">
-                <h2>Create Unlimited Custom Tests for NEET 2026 - Free!</h2>
+                <h2>Create Unlimited Custom Tests for NEET 2025 - Free!</h2>
                 <p>Design your own tests based on topics, difficulty levels, and time constraints. Perfect for targeted practice and revision.</p>
                 <button class="btn btn-primary btn-large create-test-btn"><i class="fas fa-plus-circle"></i> Create Your First Test</button>
             </div>
@@ -1016,7 +1024,7 @@
                     <h3>Quick Links</h3>
                     <ul>
                         <li><a href="#"><i class="fas fa-chevron-right"></i> Home</a></li>
-                        <li><a href="#"><i class="fas fa-chevron-right"></i> Practice</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Practice Tests</a></li>
                         <li><a href="#"><i class="fas fa-chevron-right"></i> Performance</a></li>
                         <li><a href="#"><i class="fas fa-chevron-right"></i> Study Materials</a></li>
                     </ul>
@@ -1035,11 +1043,13 @@
                     <ul>
                         <li><a href="#"><i class="fas fa-chevron-right"></i> Support</a></li>
                         <li><a href="#"><i class="fas fa-chevron-right"></i> Feedback</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Partnership</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Careers</a></li>
                     </ul>
                 </div>
             </div>
             <div class="copyright">
-                <p>&copy; 2025 Vidyucation. All rights reserved. | Designed with ❤️ for NEET</p>
+                <p>&copy; 2023 Vidyucation. All rights reserved. | Designed for NEET Aspirants</p>
             </div>
         </div>
     </footer>
@@ -1076,6 +1086,17 @@
                         Login to Your Account
                     </button>
                 </form>
+
+                <!-- START: ADDED GOOGLE BTN TO LOGIN -->
+                <div class="divider">
+                    <span>or</span>
+                </div>
+
+                <button class="google-signin-btn" id="googleLoginBtn">
+                    <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google">
+                    Continue with Google
+                </button>
+                <!-- END: ADDED GOOGLE BTN TO LOGIN -->
                 
                 <div class="signup-link">
                     Don't have an account? <a href="#" id="showSignup">Sign up now</a>
@@ -1143,6 +1164,9 @@
                 <p>Let's set up your profile</p>
             </div>
             <div class="modal-body">
+                <!-- Message area for onboarding -->
+                <div id="onboardingMessage" class="auth-message"></div>
+                
                 <form id="onboardingForm">
                     <div class="form-group">
                         <label for="userName">What should we call you?</label>
@@ -1165,9 +1189,10 @@
                         <label for="preparationYear">Target NEET Preparation Year</label>
                         <select id="preparationYear" name="preparationYear" required>
                             <option value="">Select your target year</option>
-                            <option value="2026" selected>NEET 2026</option>
+                            <option value="2024">NEET 2024</option>
+                            <option value="2025" selected>NEET 2025</option>
+                            <option value="2026">NEET 2026</option>
                             <option value="2027">NEET 2027</option>
-                            <option value="2028">NEET 2028</option>
                         </select>
                     </div>
                     
@@ -1186,6 +1211,8 @@
     -->
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
+    <!-- ADDED: Firestore SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
     <!-- 
       END: FIREBASE INTEGRATION 
     -->
@@ -1214,6 +1241,7 @@
                 
                 // Firebase services
                 this.auth = firebase.auth();
+                this.db = firebase.firestore(); // Initialize Firestore
                 this.googleProvider = new firebase.auth.GoogleAuthProvider();
                 
                 this.currentUser = null;
@@ -1234,7 +1262,7 @@
             }
 
             init() {
-                console.log('🚀 Starting Vidyucation App...');
+                console.log('🚀 Starting Vidyucation App with Firestore...');
                 this.setupModals();
                 this.bindEvents();
                 this.setupAuthListener(); // This is now a REAL listener
@@ -1284,8 +1312,9 @@
                 document.getElementById('signupForm').addEventListener('submit', (e) => this.handleSignup(e));
                 document.getElementById('onboardingForm').addEventListener('submit', (e) => this.handleOnboarding(e));
 
-                // Google Sign In
+                // Google Sign In (both buttons call the same function)
                 document.getElementById('googleSignupBtn').addEventListener('click', () => this.handleGoogleSignIn());
+                document.getElementById('googleLoginBtn').addEventListener('click', () => this.handleGoogleSignIn()); // ADDED
 
                 // Modal background clicks
                 Object.values(this.modals).forEach(modal => {
@@ -1345,7 +1374,7 @@
                     const originalText = button.innerHTML;
                     button.setAttribute('data-original-text', originalText);
                     
-                    if (buttonId === 'googleSignupBtn') {
+                    if (buttonId.startsWith('google')) { // Handle both google buttons
                         button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connecting...';
                     } else {
                         button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
@@ -1381,8 +1410,11 @@
             }
 
             async handleGoogleSignIn() {
+                // Show loading on both buttons, just in case
                 this.setButtonLoading('googleSignupBtn', true);
+                this.setButtonLoading('googleLoginBtn', true);
                 this.showMessage('Opening Google Sign-In...', 'success', 'signupMessage');
+                this.showMessage('Opening Google Sign-In...', 'success', 'authMessage');
 
                 try {
                     // This is the REAL Firebase Google Sign-In
@@ -1407,9 +1439,11 @@
 
                 } catch (error) {
                     this.showMessage(`Google sign-in failed: ${error.message}`, 'error', 'signupMessage');
+                    this.showMessage(`Google sign-in failed: ${error.message}`, 'error', 'authMessage');
                     console.error('Google sign-in error:', error);
                 } finally {
                     this.setButtonLoading('googleSignupBtn', false);
+                    this.setButtonLoading('googleLoginBtn', false);
                 }
             }
             
@@ -1431,30 +1465,48 @@
 
                 this.setButtonLoading('completeProfileBtn', true);
 
+                // Check if a user is logged in
+                if (!this.currentUser) {
+                    this.showMessage('No user is logged in. Please sign in again.', 'error', 'onboardingMessage');
+                    this.setButtonLoading('completeProfileBtn', false);
+                    return;
+                }
+                
+                // Check for empty fields
+                if (!userName || !mobileNumber || !preparationYear) {
+                    this.showMessage('Please fill in all fields.', 'error', 'onboardingMessage');
+                    this.setButtonLoading('completeProfileBtn', false);
+                    return;
+                }
+
                 try {
-                    // TODO: Save this data to Firestore or Realtime Database
-                    // associated with this.currentUser.uid
+                    // START: UPDATED TO SAVE TO FIRESTORE
+                    // Create a reference to the user's document in the 'users' collection
+                    const userDocRef = this.db.collection('users').doc(this.currentUser.uid);
                     
-                    console.log('Onboarding data to save:', {
-                        uid: this.currentUser.uid,
+                    const profileData = {
                         name: userName,
                         mobile: mobileNumber,
-                        year: preparationYear
-                    });
+                        targetYear: preparationYear,
+                        email: this.currentUser.email, // Save email for reference
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp() // Good practice
+                    };
                     
-                    // Simulate save & redirect
-                    if (userName && mobileNumber && preparationYear) {
-                        this.showMessage('Profile completed successfully!', 'success', 'signupMessage');
-                        setTimeout(() => {
-                            window.location.href = 'dashboard.html';
-                        }, 1500);
-                    } else {
-                        this.showMessage('Please fill in all fields', 'error', 'signupMessage');
-                        this.setButtonLoading('completeProfileBtn', false);
-                    }
+                    // Set the data. This will create the document if it doesn't exist
+                    // or overwrite it if it does.
+                    await userDocRef.set(profileData);
+                    
+                    console.log('Onboarding data saved to Firestore:', profileData);
+                    // END: UPDATED TO SAVE TO FIRESTORE
+                    
+                    this.showMessage('Profile completed successfully! Redirecting...', 'success', 'onboardingMessage');
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html'; // Redirect to dashboard
+                    }, 1500);
+
                 } catch (error) {
-                    this.showMessage('Error saving profile. Please try again.', 'error', 'signupMessage');
-                    console.error('Onboarding error:', error);
+                    this.showMessage(`Error saving profile: ${error.message}`, 'error', 'onboardingMessage');
+                    console.error('Onboarding Firestore error:', error);
                     this.setButtonLoading('completeProfileBtn', false);
                 }
             }
@@ -1520,4 +1572,5 @@
     </script>
 </body>
 </html>
+
 
