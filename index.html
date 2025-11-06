@@ -1087,7 +1087,6 @@
                     </button>
                 </form>
 
-                <!-- START: ADDED GOOGLE BTN TO LOGIN -->
                 <div class="divider">
                     <span>or</span>
                 </div>
@@ -1096,7 +1095,6 @@
                     <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google">
                     Continue with Google
                 </button>
-                <!-- END: ADDED GOOGLE BTN TO LOGIN -->
                 
                 <div class="signup-link">
                     Don't have an account? <a href="#" id="showSignup">Sign up now</a>
@@ -1207,11 +1205,9 @@
 
     <!-- 
       START: FIREBASE INTEGRATION 
-      Load the Firebase SDKs before your main app script
     -->
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
-    <!-- ADDED: Firestore SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
     <!-- 
       END: FIREBASE INTEGRATION 
@@ -1314,7 +1310,7 @@
 
                 // Google Sign In (both buttons call the same function)
                 document.getElementById('googleSignupBtn').addEventListener('click', () => this.handleGoogleSignIn());
-                document.getElementById('googleLoginBtn').addEventListener('click', () => this.handleGoogleSignIn()); // ADDED
+                document.getElementById('googleLoginBtn').addEventListener('click', () => this.handleGoogleSignIn()); 
 
                 // Modal background clicks
                 Object.values(this.modals).forEach(modal => {
@@ -1365,211 +1361,245 @@
                 }
             }
 
-            setButtonLoading(buttonId, loading) {
-                const button = document.getElementById(buttonId);
-                if (!button) return;
+<blockquote>
+<p>setButtonLoading(buttonId, loading) {
+const button = document.getElementById(buttonId);
+if (!button) return;</p>
+<p>if (loading) {
+button.disabled = true;
+const originalText = button.innerHTML;
+button.setAttribute('data-original-text', originalText);</p>
+<pre><code>if (buttonId.startsWith('google')) { // Handle both google buttons
+    button.innerHTML = '&lt;i class="fas fa-spinner fa-spin"&gt;&lt;/i&gt; Connecting...';
+} else {
+    button.innerHTML = '&lt;i class="fas fa-spinner fa-spin"&gt;&lt;/i&gt; Loading...';
+}
+</code></pre>
+<p>} else {
+button.disabled = false;
+const originalText = button.getAttribute('data-original-text');
+if (originalText) {
+button.innerHTML = originalText;
+button.removeAttribute('data-original-text');
+}
+}
+}</p>
+</blockquote>
+<p>async handleLogin(e) {
+e.preventDefault();
+this.setButtonLoading('loginBtn', true);
+const email = document.getElementById('email').value;
+const password = document.getElementById('password').value;</p>
+<pre><code>if (!email || !password) {
+    this.showMessage('Please fill in all fields', 'error', 'authMessage');
+    this.setButtonLoading('loginBtn', false);
+    return;
+}
 
-                if (loading) {
-                    button.disabled = true;
-                    const originalText = button.innerHTML;
-                    button.setAttribute('data-original-text', originalText);
-                    
-                    if (buttonId.startsWith('google')) { // Handle both google buttons
-                        button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connecting...';
-                    } else {
-                        button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
-                    }
-                } else {
-                    button.disabled = false;
-                    const originalText = button.getAttribute('data-original-text');
-                    if (originalText) {
-                        button.innerHTML = originalText;
-                        button.removeAttribute('data-original-text');
-                    }
-                }
-            }
+try {
+    // START: REAL FIREBASE LOGIN
+    await this.auth.signInWithEmailAndPassword(email, password);
+    // END: REAL FIREBASE LOGIN
 
-            async handleLogin(e) {
-                e.preventDefault();
-                // NOTE: This is still a simulation.
-                // TODO: Implement email/password login with this.auth.signInWithEmailAndPassword(...)
-                this.setButtonLoading('loginBtn', true);
-                this.showMessage('Email/Password login is not yet implemented.', 'error', 'authMessage');
-                console.warn('handleLogin is still a simulation.');
-                this.setButtonLoading('loginBtn', false);
-            }
+    this.showMessage('Login successful! Redirecting...', 'success', 'authMessage');
+    console.log('Email login successful, redirecting to dashboard.');
+    
+    // Auto-redirect to dashboard
+    setTimeout(() => {
+        window.location.href = 'dashboard.html';
+    }, 1000);
 
-            async handleSignup(e) {
-                e.preventDefault();
-                // NOTE: This is still a simulation.
-                // TODO: Implement email/password signup with this.auth.createUserWithEmailAndPassword(...)
-                this.setButtonLoading('signupBtn', true);
-                this.showMessage('Email/Password signup is not yet implemented.', 'error', 'signupMessage');
-                console.warn('handleSignup is still a simulation.');
-                this.setButtonLoading('signupBtn', false);
-            }
+} catch (error) {
+    this.showMessage(error.message, 'error', 'authMessage');
+    console.error('Email login error:', error);
+    this.setButtonLoading('loginBtn', false);
+}
+// No 'finally' here, button loading is handled in success/error paths
+</code></pre>
+<p>}</p>
+<p>async handleSignup(e) {
+e.preventDefault();
+this.setButtonLoading('signupBtn', true);
+const email = document.getElementById('signupEmail').value;
+const password = document.getElementById('signupPassword').value;</p>
+<pre><code>if (!email || !password) {
+    this.showMessage('Please fill in all fields', 'error', 'signupMessage');
+    this.setButtonLoading('signupBtn', false);
+    return;
+}
 
-            async handleGoogleSignIn() {
-                // Show loading on both buttons, just in case
-                this.setButtonLoading('googleSignupBtn', true);
-                this.setButtonLoading('googleLoginBtn', true);
-                this.showMessage('Opening Google Sign-In...', 'success', 'signupMessage');
-                this.showMessage('Opening Google Sign-In...', 'success', 'authMessage');
+try {
+    // START: REAL FIREBASE SIGNUP
+    const userCredential = await this.auth.createUserWithEmailAndPassword(email, password);
+    // END: REAL FIREBASE SIGNUP
+    
+    console.log('New user created with email:', userCredential.user);
+    this.showMessage('Account created! Please complete your profile.', 'success', 'signupMessage');
 
-                try {
-                    // This is the REAL Firebase Google Sign-In
-                    const result = await this.auth.signInWithPopup(this.googleProvider);
-                    const user = result.user;
-                    const isNewUser = result.additionalUserInfo.isNewUser;
-                    
-                    console.log('Google Sign-In Success:', user);
-                    this.showMessage('Sign-in successful!', 'success', 'signupMessage');
+    // Send new user to onboarding
+    document.getElementById('userName').value = ''; // No display name for email signup
+    this.showModal('onboarding');
 
-                    if (isNewUser) {
-                        // New user, show onboarding
-                        console.log('New user detected, showing onboarding.');
-                        document.getElementById('userName').value = user.displayName || '';
-                        this.showModal('onboarding');
-                    } else {
-                        // Existing user, just close modals.
-                        // The auth listener will handle the UI update.
-                        console.log('Existing user, closing modals.');
-                        this.closeAllModals();
-                    }
+} catch (error) {
+    this.showMessage(error.message, 'error', 'signupMessage');
+    console.error('Email signup error:', error);
+} finally {
+    this.setButtonLoading('signupBtn', false);
+}
+</code></pre>
+<p>}</p>
+<p>async handleGoogleSignIn() {
+// Show loading on both buttons
+this.setButtonLoading('googleSignupBtn', true);
+this.setButtonLoading('googleLoginBtn', true);
+this.showMessage('Opening Google Sign-In...', 'success', 'signupMessage');
+this.showMessage('Opening Google Sign-In...', 'success', 'authMessage');</p>
+<pre><code>try {
+    // This is the REAL Firebase Google Sign-In
+    const result = await this.auth.signInWithPopup(this.googleProvider);
+    const user = result.user;
+    const isNewUser = result.additionalUserInfo.isNewUser;
+    
+    console.log('Google Sign-In Success:', user);
+    this.showMessage('Sign-in successful!', 'success', 'signupMessage');
 
-                } catch (error) {
-                    this.showMessage(`Google sign-in failed: ${error.message}`, 'error', 'signupMessage');
-                    this.showMessage(`Google sign-in failed: ${error.message}`, 'error', 'authMessage');
-                    console.error('Google sign-in error:', error);
-                } finally {
-                    this.setButtonLoading('googleSignupBtn', false);
-                    this.setButtonLoading('googleLoginBtn', false);
-                }
-            }
-            
-            async handleSignOut() {
-                try {
-                    await this.auth.signOut();
-                    console.log('User signed out successfully.');
-                    // Auth listener will automatically update the UI
-                } catch (error) {
-                    console.error('Sign out error:', error);
-                }
-            }
+    if (isNewUser) {
+        // New user, show onboarding
+        console.log('New user detected, showing onboarding.');
+        document.getElementById('userName').value = user.displayName || '';
+        this.showModal('onboarding');
+    } else {
+        // START: AUTO-REDIRECT FOR EXISTING USER
+        console.log('Existing user, redirecting to dashboard.');
+        this.closeAllModals();
+        window.location.href = 'dashboard.html';
+        // END: AUTO-REDIRECT FOR EXISTING USER
+    }
 
-            async handleOnboarding(e) {
-                e.preventDefault();
-                const userName = document.getElementById('userName').value;
-                const mobileNumber = document.getElementById('mobileNumber').value;
-                const preparationYear = document.getElementById('preparationYear').value;
+} catch (error) {
+    this.showMessage(`Google sign-in failed: ${error.message}`, 'error', 'signupMessage');
+    this.showMessage(`Google sign-in failed: ${error.message}`, 'error', 'authMessage');
+    console.error('Google sign-in error:', error);
+    
+    // Ensure buttons are re-enabled on error
+    this.setButtonLoading('googleSignupBtn', false);
+    this.setButtonLoading('googleLoginBtn', false);
+} 
+// No 'finally' here, loading is handled in success/error paths
+</code></pre>
+<p>}
+async handleSignOut() {
+try {
+await this.auth.signOut();
+console.log('User signed out successfully.');
+// Auth listener will automatically update the UI
+} catch (error) {
+console.error('Sign out error:', error);
+}
+}</p>
+<p>async handleOnboarding(e) {
+e.preventDefault();
+const userName = document.getElementById('userName').value;
+const mobileNumber = document.getElementById('mobileNumber').value;
+const preparationYear = document.getElementById('preparationYear').value;</p>
+<pre><code>this.setButtonLoading('completeProfileBtn', true);
 
-                this.setButtonLoading('completeProfileBtn', true);
+// Check if a user is logged in
+if (!this.currentUser) {
+    this.showMessage('No user is logged in. Please sign in again.', 'error', 'onboardingMessage');
+    this.setButtonLoading('completeProfileBtn', false);
+    return;
+}
 
-                // Check if a user is logged in
-                if (!this.currentUser) {
-                    this.showMessage('No user is logged in. Please sign in again.', 'error', 'onboardingMessage');
-                    this.setButtonLoading('completeProfileBtn', false);
-                    return;
-                }
-                
-                // Check for empty fields
-                if (!userName || !mobileNumber || !preparationYear) {
-                    this.showMessage('Please fill in all fields.', 'error', 'onboardingMessage');
-                    this.setButtonLoading('completeProfileBtn', false);
-                    return;
-                }
+// Check for empty fields
+if (!userName || !mobileNumber || !preparationYear) {
+    this.showMessage('Please fill in all fields.', 'error', 'onboardingMessage');
+    this.setButtonLoading('completeProfileBtn', false);
+    return;
+}
 
-                try {
-                    // START: UPDATED TO SAVE TO FIRESTORE
-                    // Create a reference to the user's document in the 'users' collection
-                    const userDocRef = this.db.collection('users').doc(this.currentUser.uid);
-                    
-                    const profileData = {
-                        name: userName,
-                        mobile: mobileNumber,
-                        targetYear: preparationYear,
-                        email: this.currentUser.email, // Save email for reference
-                        createdAt: firebase.firestore.FieldValue.serverTimestamp() // Good practice
-                    };
-                    
-                    // Set the data. This will create the document if it doesn't exist
-                    // or overwrite it if it does.
-                    await userDocRef.set(profileData);
-                    
-                    console.log('Onboarding data saved to Firestore:', profileData);
-                    // END: UPDATED TO SAVE TO FIRESTORE
-                    
-                    this.showMessage('Profile completed successfully! Redirecting...', 'success', 'onboardingMessage');
-                    setTimeout(() => {
-                        window.location.href = 'dashboard.html'; // Redirect to dashboard
-                    }, 1500);
+try {
+    // START: UPDATED TO SAVE TO FIRESTORE
+    // Create a reference to the user's document in the 'users' collection
+    const userDocRef = this.db.collection('users').doc(this.currentUser.uid);
+    
+    const profileData = {
+        name: userName,
+        mobile: mobileNumber,
+        targetYear: preparationYear,
+        email: this.currentUser.email, // Save email for reference
+        createdAt: firebase.firestore.FieldValue.serverTimestamp() // Good practice
+    };
+    
+    // Set the data. This will create the document if it doesn't exist
+    // or overwrite it if it does.
+    await userDocRef.set(profileData);
+    
+    console.log('Onboarding data saved to Firestore:', profileData);
+    // END: UPDATED TO SAVE TO FIRESTORE
+    
+    this.showMessage('Profile completed successfully! Redirecting...', 'success', 'onboardingMessage');
+    setTimeout(() => {
+        window.location.href = 'dashboard.html'; // Redirect to dashboard
+    }, 1500);
 
-                } catch (error) {
-                    this.showMessage(`Error saving profile: ${error.message}`, 'error', 'onboardingMessage');
-                    console.error('Onboarding Firestore error:', error);
-                    this.setButtonLoading('completeProfileBtn', false);
-                }
-            }
-
-            setupAuthListener() {
-                // This is the REAL Firebase Auth Listener
-                this.auth.onAuthStateChanged((user) => {
-                    if (user) {
-                        // User is signed in
-                        console.log('Auth state changed: User is LOGGED IN', user);
-                        this.currentUser = user;
-                        this.updateUIForLoggedInUser(user);
-                    } else {
-                        // User is signed out
-                        console.log('Auth state changed: User is LOGGED OUT');
-                        this.currentUser = null;
-                        this.updateUIForLoggedOutUser();
-                    }
-                });
-            }
-            
-            updateUIForLoggedInUser(user) {
-                // Hide logged-out buttons
-                this.ui.loggedOutButtons.classList.add('hidden');
-                
-                // Show logged-in profile
-                this.ui.loggedInProfile.classList.remove('hidden');
-                this.ui.userNameDisplay.textContent = user.displayName || 'NEET Aspirant';
-                
-                // Set avatar
-                if (user.photoURL) {
-                    this.ui.userAvatar.innerHTML = `<img src="${user.photoURL}" alt="${user.displayName}">`;
-                } else {
-                    const initial = (user.displayName || 'N')[0].toUpperCase();
-                    this.ui.userAvatar.innerHTML = `<span>${initial}</span>`;
-                }
-                
-                // Update hero buttons to go to dashboard
-                this.bindHeroButtons(true);
-                
-                // Close any open modals
-                this.closeAllModals();
-            }
-            
-            updateUIForLoggedOutUser() {
-                // Show logged-out buttons
-                this.ui.loggedOutButtons.classList.remove('hidden');
-                
-                // Hide logged-in profile
-                this.ui.loggedInProfile.classList.add('hidden');
-                this.ui.userNameDisplay.textContent = '';
-                this.ui.userAvatar.innerHTML = '';
-                
-                // Update hero buttons to open login modal
-                this.bindHeroButtons(false);
-            }
-        }
-
-        // Initialize the app when DOM is ready
-        document.addEventListener('DOMContentLoaded', function() {
-            window.vidyucationApp = new VidyucationApp();
-        });
-    </script>
+} catch (error) {
+    this.showMessage(`Error saving profile: ${error.message}`, 'error', 'onboardingMessage');
+    console.error('Onboarding Firestore error:', error);
+    this.setButtonLoading('completeProfileBtn', false);
+}
+</code></pre>
+<p>}
+setupAuthListener() {
+// This is the REAL Firebase Auth Listener
+this.auth.onAuthStateChanged((user) => {
+if (user) {
+// User is signed in
+console.log('Auth state changed: User is LOGGED IN', user);
+this.currentUser = user;
+this.updateUIForLoggedInUser(user);
+} else {
+// User is signed out
+console.log('Auth state changed: User is LOGGED OUT');
+this.currentUser = null;
+this.updateUIForLoggedOutUser();
+}
+});
+}
+updateUIForLoggedInUser(user) {
+// Hide logged-out buttons
+this.ui.loggedOutButtons.classList.add('hidden');
+// Show logged-in profile
+this.ui.loggedInProfile.classList.remove('hidden');
+this.ui.userNameDisplay.textContent = user.displayName || 'NEET Aspirant';
+// Set avatar
+if (user.photoURL) {
+this.ui.userAvatar.innerHTML = <code>&lt;img src="${user.photoURL}" alt="${user.displayName}"&gt;</code>;
+} else {
+const initial = (user.displayName || 'N')[0].toUpperCase();
+this.ui.userAvatar.innerHTML = <code>&lt;span&gt;${initial}&lt;/span&gt;</code>;
+}
+// Update hero buttons to go to dashboard
+this.bindHeroButtons(true);
+// Close any open modals
+this.closeAllModals();
+}
+updateUIForLoggedOutUser() {
+// Show logged-out buttons
+this.ui.loggedOutButtons.classList.remove('hidden');
+// Hide logged-in profile
+this.ui.loggedInProfile.classList.add('hidden');
+this.ui.userNameDisplay.textContent = '';
+this.ui.userAvatar.innerHTML = '';
+// Update hero buttons to open login modal
+this.bindHeroButtons(false);
+}
+}
+// Initialize the app when DOM is ready
+document.addEventListener('DOMContentLoaded', function() {
+window.vidyucationApp = new VidyucationApp();
+});
+</script>
 </body>
 </html>
 
