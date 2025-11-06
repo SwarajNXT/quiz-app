@@ -732,7 +732,8 @@
                 // Test creation button (will be updated by auth listener)
                 this.ui.createTestBtn.addEventListener('click', () => {
                     if (!this.currentUser) this.showModal('signup');
-                    else window.location.href = '#'; // Or test creation page
+                    // *** FIX 1: Changed '#' to 'dashboard.html' ***
+                    else window.location.href = 'dashboard.html'; // Or test creation page
                 });
 
 
@@ -791,7 +792,8 @@
             bindHeroButtons(isLoggedIn) {
                 const action = () => {
                     if (isLoggedIn) {
-                        window.location.href = '#'; // Go to dashboard
+                        // *** FIX 2: Changed '#' to 'dashboard.html' ***
+                        window.location.href = 'dashboard.html'; // Go to dashboard
                     } else {
                         this.showModal('login'); // Show login modal
                     }
@@ -1030,7 +1032,8 @@
                     
                     this.showMessage('Profile completed successfully! Redirecting...', 'success', 'onboardingMessage');
                     setTimeout(() => {
-                        window.location.href = '#'; // Redirect to dashboard
+                        // *** FIX 3: Changed '#' to 'dashboard.html' ***
+                        window.location.href = 'dashboard.html'; // Redirect to dashboard
                     }, 1500);
 
                 } catch (error) {
@@ -1102,4 +1105,5 @@
     </script>
 </body>
 </html>
+
 
