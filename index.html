@@ -1087,7 +1087,6 @@
                     </button>
                 </form>
 
-                <!-- START: ADDED GOOGLE BTN TO LOGIN -->
                 <div class="divider">
                     <span>or</span>
                 </div>
@@ -1096,7 +1095,6 @@
                     <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google">
                     Continue with Google
                 </button>
-                <!-- END: ADDED GOOGLE BTN TO LOGIN -->
                 
                 <div class="signup-link">
                     Don't have an account? <a href="#" id="showSignup">Sign up now</a>
@@ -1207,11 +1205,9 @@
 
     <!-- 
       START: FIREBASE INTEGRATION 
-      Load the Firebase SDKs before your main app script
     -->
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
-    <!-- ADDED: Firestore SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
     <!-- 
       END: FIREBASE INTEGRATION 
@@ -1314,7 +1310,7 @@
 
                 // Google Sign In (both buttons call the same function)
                 document.getElementById('googleSignupBtn').addEventListener('click', () => this.handleGoogleSignIn());
-                document.getElementById('googleLoginBtn').addEventListener('click', () => this.handleGoogleSignIn()); // ADDED
+                document.getElementById('googleLoginBtn').addEventListener('click', () => this.handleGoogleSignIn());
 
                 // Modal background clicks
                 Object.values(this.modals).forEach(modal => {
@@ -1389,25 +1385,93 @@
                 }
             }
 
+            /**
+             * START: NEW HELPER FUNCTION
+             * Translates Firebase error codes into friendly messages
+             */
+            getFriendlyAuthError(error) {
+                switch (error.code) {
+                    case 'auth/user-not-found':
+                    case 'auth/wrong-password':
+                        return 'Invalid email or password.';
+                    case 'auth/email-already-in-use':
+                        return 'An account with this email already exists.';
+                    case 'auth/weak-password':
+                        return 'Password is too weak. Must be at least 6 characters.';
+                    case 'auth/invalid-email':
+                        return 'Please enter a valid email address.';
+                    default:
+                        return error.message;
+                }
+            }
+            /**
+             * END: NEW HELPER FUNCTION
+             */
+
+
+            /**
+             * START: UPDATED FUNCTION
+             * Implements real email/password login
+             */
             async handleLogin(e) {
                 e.preventDefault();
-                // NOTE: This is still a simulation.
-                // TODO: Implement email/password login with this.auth.signInWithEmailAndPassword(...)
                 this.setButtonLoading('loginBtn', true);
-                this.showMessage('Email/Password login is not yet implemented.', 'error', 'authMessage');
-                console.warn('handleLogin is still a simulation.');
-                this.setButtonLoading('loginBtn', false);
-            }
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
 
+                try {
+                    // REAL FIREBASE LOGIN
+                    await this.auth.signInWithEmailAndPassword(email, password);
+                    // On success, the onAuthStateChanged listener will automatically
+                    // close the modal and update the UI.
+                    console.log('User logged in successfully.');
+                    
+                } catch (error) {
+                    console.error('Login error:', error.code, error.message);
+                    this.showMessage(this.getFriendlyAuthError(error), 'error', 'authMessage');
+                } finally {
+                    this.setButtonLoading('loginBtn', false);
+                }
+            }
+            /**
+             * END: UPDATED FUNCTION
+             */
+
+            /**
+             * START: UPDATED FUNCTION
+             * Implements real email/password signup
+             */
             async handleSignup(e) {
                 e.preventDefault();
-                // NOTE: This is still a simulation.
-                // TODO: Implement email/password signup with this.auth.createUserWithEmailAndPassword(...)
                 this.setButtonLoading('signupBtn', true);
-                this.showMessage('Email/Password signup is not yet implemented.', 'error', 'signupMessage');
-                console.warn('handleSignup is still a simulation.');
-                this.setButtonLoading('signupBtn', false);
+                const email = document.getElementById('signupEmail').value;
+                const password = document.getElementById('signupPassword').value;
+
+                try {
+                    // REAL FIREBASE SIGNUP
+                    await this.auth.createUserWithEmailAndPassword(email, password);
+                    
+                    // On success, the onAuthStateChanged listener will fire and log the user in.
+                    // We now manually show the onboarding modal for the new user.
+                    this.showMessage('Account created! Please complete your profile.', 'success', 'signupMessage');
+                    
+                    // Manually clear form
+                    document.getElementById('signupEmail').value = '';
+                    document.getElementById('signupPassword').value = '';
+
+                    // Show onboarding
+                    this.showModal('onboarding');
+
+                } catch (error) {
+                    console.error('Signup error:', error.code, error.message);
+                    this.showMessage(this.getFriendlyAuthError(error), 'error', 'signupMessage');
+                } finally {
+                    this.setButtonLoading('signupBtn', false);
+                }
             }
+            /**
+             * END: UPDATED FUNCTION
+             */
 
             async handleGoogleSignIn() {
                 // Show loading on both buttons, just in case
@@ -1457,6 +1521,10 @@
                 }
             }
 
+            /**
+             * START: UPDATED FUNCTION
+             * Now also updates the user's Auth profile display name
+             */
             async handleOnboarding(e) {
                 e.preventDefault();
                 const userName = document.getElementById('userName').value;
@@ -1480,8 +1548,17 @@
                 }
 
                 try {
-                    // START: UPDATED TO SAVE TO FIRESTORE
-                    // Create a reference to the user's document in the 'users' collection
+                    // START: NEW - Update Auth Profile
+                    // This adds the name to the user's main auth profile
+                    await this.currentUser.updateProfile({
+                        displayName: userName
+                    });
+                    console.log('Firebase Auth profile display name updated.');
+                    // END: NEW
+                    
+                    // ---
+                    
+                    // START: EXISTING - Save to Firestore
                     const userDocRef = this.db.collection('users').doc(this.currentUser.uid);
                     
                     const profileData = {
@@ -1492,24 +1569,27 @@
                         createdAt: firebase.firestore.FieldValue.serverTimestamp() // Good practice
                     };
                     
-                    // Set the data. This will create the document if it doesn't exist
-                    // or overwrite it if it does.
-                    await userDocRef.set(profileData);
+                    await userDocRef.set(profileData, { merge: true }); // Use merge:true
                     
                     console.log('Onboarding data saved to Firestore:', profileData);
-                    // END: UPDATED TO SAVE TO FIRESTORE
+                    // END: EXISTING
                     
                     this.showMessage('Profile completed successfully! Redirecting...', 'success', 'onboardingMessage');
                     setTimeout(() => {
+                        // The auth listener will see the updated displayName 
+                        // and the UI will update *before* redirecting.
                         window.location.href = 'dashboard.html'; // Redirect to dashboard
                     }, 1500);
 
                 } catch (error) {
                     this.showMessage(`Error saving profile: ${error.message}`, 'error', 'onboardingMessage');
-                    console.error('Onboarding Firestore error:', error);
+                    console.error('Onboarding Firestore/Auth error:', error);
                     this.setButtonLoading('completeProfileBtn', false);
                 }
             }
+            /**
+             * END: UPDATED FUNCTION
+             */
 
             setupAuthListener() {
                 // This is the REAL Firebase Auth Listener
@@ -1534,21 +1614,26 @@
                 
                 // Show logged-in profile
                 this.ui.loggedInProfile.classList.remove('hidden');
+                
+                // --- UPDATED to handle new email signups with no name yet
                 this.ui.userNameDisplay.textContent = user.displayName || 'NEET Aspirant';
                 
                 // Set avatar
                 if (user.photoURL) {
                     this.ui.userAvatar.innerHTML = `<img src="${user.photoURL}" alt="${user.displayName}">`;
                 } else {
-                    const initial = (user.displayName || 'N')[0].toUpperCase();
-                    this.ui.userAvatar.innerHTML = `<span>${initial}</span>`;
+                    // Use initial from display name, or email, or default 'N'
+                    const initial = (user.displayName || user.email || 'N')[0].toUpperCase();
+                    this.ui.userAvatar.innerHTML = `<span style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">${initial}</span>`;
                 }
                 
                 // Update hero buttons to go to dashboard
                 this.bindHeroButtons(true);
                 
-                // Close any open modals
-                this.closeAllModals();
+                // Close any open modals *except* onboarding
+                if(this.modals.onboarding.style.display !== 'block') {
+                    this.closeAllModals();
+                }
             }
             
             updateUIForLoggedOutUser() {
@@ -1572,4 +1657,5 @@
     </script>
 </body>
 </html>
+
 
