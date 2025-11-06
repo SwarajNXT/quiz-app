@@ -197,6 +197,7 @@
             box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
         }
 
+        /* User Profile styles */
         .user-profile {
             display: flex;
             align-items: center;
@@ -212,6 +213,23 @@
             align-items: center;
             justify-content: center;
             font-weight: 600;
+            overflow: hidden; /* To contain the image */
+        }
+        
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: var(--light);
+        }
+        
+        /* Utility class */
+        .hidden {
+            display: none !important;
         }
 
         /* Hero Section */
@@ -845,9 +863,21 @@
                         <li><a href="#"><i class="fas fa-file-alt"></i> Resources</a></li>
                     </ul>
                 </nav>
-                <div class="auth-buttons" id="authButtons">
-                    <button class="btn btn-outline login-btn"><i class="fas fa-sign-in-alt"></i> Login</button>
-                    <button class="btn btn-primary signup-btn"><i class="fas fa-user-plus"></i> Sign Up</button>
+                <div class="auth-buttons" id="authContainer">
+                    <!-- Logged-out state -->
+                    <div id="loggedOutButtons">
+                        <button class="btn btn-outline login-btn"><i class="fas fa-sign-in-alt"></i> Login</button>
+                        <button class="btn btn-primary signup-btn"><i class="fas fa-user-plus"></i> Sign Up</button>
+                    </div>
+                    
+                    <!-- Logged-in state -->
+                    <div id="loggedInProfile" class="user-profile hidden">
+                        <div class="user-avatar" id="userAvatar">
+                            <!-- Avatar content (initial or image) goes here -->
+                        </div>
+                        <span class="user-name" id="userNameDisplay"></span>
+                        <button class="btn btn-outline" id="signOutBtn"><i class="fas fa-sign-out-alt"></i> Sign Out</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -871,7 +901,9 @@
         </div>
     </section>
 
-    <!-- Progress Section -->
+    <!-- ... [Rest of your sections: Progress, Features, Question Bank, Test Creation] ... -->
+    <!-- (No changes needed in these sections) -->
+        <!-- Progress Section -->
     <section class="progress-section">
         <div class="container">
             <h2 class="section-title">Track Your Learning Progress</h2>
@@ -1152,12 +1184,56 @@
         </div>
     </div>
 
+    <!-- 
+      START: FIREBASE INTEGRATION 
+      Load the Firebase SDKs before your main app script
+    -->
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
+    <!-- 
+      END: FIREBASE INTEGRATION 
+    -->
+
+
     <!-- JavaScript -->
     <script>
+        // Your Firebase configuration provided by you
+        const firebaseConfig = {
+            apiKey: "AIzaSyD7UYp7ApLTpku2y4gAw8QprAkCNGhRsLI",
+            authDomain: "quiz-app-ad5de.firebaseapp.com",
+            projectId: "quiz-app-ad5de",
+            storageBucket: "quiz-app-ad5de.firebasestorage.app",
+            messagingSenderId: "17935383217",
+            appId: "1:17935383217:web:f34559709c88a1d9670090",
+            measurementId: "G-ZWVX3GZ1DX"
+        };
+        
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+
         // Simple modal and auth controller
         class VidyucationApp {
             constructor() {
                 this.modals = {};
+                
+                // Firebase services
+                this.auth = firebase.auth();
+                this.googleProvider = new firebase.auth.GoogleAuthProvider();
+                
+                this.currentUser = null;
+                
+                // DOM Elements
+                this.ui = {
+                    loggedOutButtons: document.getElementById('loggedOutButtons'),
+                    loggedInProfile: document.getElementById('loggedInProfile'),
+                    userAvatar: document.getElementById('userAvatar'),
+                    userNameDisplay: document.getElementById('userNameDisplay'),
+                    signOutBtn: document.getElementById('signOutBtn'),
+                    practiceBtn: document.querySelector('.practice-btn'),
+                    testBtn: document.querySelector('.test-btn'),
+                    createTestBtn: document.querySelector('.create-test-btn')
+                };
+                
                 this.init();
             }
 
@@ -1165,7 +1241,7 @@
                 console.log('🚀 Starting Vidyucation App...');
                 this.setupModals();
                 this.bindEvents();
-                this.setupAuthListener();
+                this.setupAuthListener(); // This is now a REAL listener
             }
 
             setupModals() {
@@ -1179,11 +1255,17 @@
                 // Header buttons
                 document.querySelector('.login-btn').addEventListener('click', () => this.showModal('login'));
                 document.querySelector('.signup-btn').addEventListener('click', () => this.showModal('signup'));
+                this.ui.signOutBtn.addEventListener('click', () => this.handleSignOut());
 
-                // Hero buttons
-                document.querySelector('.practice-btn').addEventListener('click', () => this.showModal('login'));
-                document.querySelector('.test-btn').addEventListener('click', () => this.showModal('login'));
-                document.querySelector('.create-test-btn').addEventListener('click', () => this.showModal('signup'));
+                // Hero buttons (will be updated by auth listener)
+                this.bindHeroButtons(false); // Bind to show modal initially
+                
+                // Test creation button (will be updated by auth listener)
+                this.ui.createTestBtn.addEventListener('click', () => {
+                    if (!this.currentUser) this.showModal('signup');
+                    else window.location.href = 'dashboard.html'; // Or test creation page
+                });
+
 
                 // Modal links
                 document.getElementById('showSignup').addEventListener('click', (e) => {
@@ -1217,6 +1299,19 @@
                 });
 
                 console.log('✅ All events bound successfully');
+            }
+            
+            // Helper to bind hero buttons based on auth state
+            bindHeroButtons(isLoggedIn) {
+                const action = () => {
+                    if (isLoggedIn) {
+                        window.location.href = 'dashboard.html'; // Go to dashboard
+                    } else {
+                        this.showModal('login'); // Show login modal
+                    }
+                };
+                this.ui.practiceBtn.onclick = action; // Use onclick to easily overwrite
+                this.ui.testBtn.onclick = action;
             }
 
             showModal(modalName) {
@@ -1264,77 +1359,71 @@
                     const originalText = button.getAttribute('data-original-text');
                     if (originalText) {
                         button.innerHTML = originalText;
-                    button.removeAttribute('data-original-text');
+                        button.removeAttribute('data-original-text');
                     }
                 }
             }
 
             async handleLogin(e) {
                 e.preventDefault();
-                const email = document.getElementById('email').value;
-                const password = document.getElementById('password').value;
-
+                // NOTE: This is still a simulation.
+                // TODO: Implement email/password login with this.auth.signInWithEmailAndPassword(...)
                 this.setButtonLoading('loginBtn', true);
-
-                try {
-                    // Simulate login for demo (remove this in production)
-                    if (email && password) {
-                        this.showMessage('Login successful! Redirecting...', 'success', 'authMessage');
-                        setTimeout(() => {
-                            window.location.href = 'dashboard.html';
-                        }, 1500);
-                    } else {
-                        this.showMessage('Please fill in all fields', 'error', 'authMessage');
-                    }
-                } catch (error) {
-                    this.showMessage('Login failed. Please try again.', 'error', 'authMessage');
-                    console.error('Login error:', error);
-                } finally {
-                    this.setButtonLoading('loginBtn', false);
-                }
+                this.showMessage('Email/Password login is not yet implemented.', 'error', 'authMessage');
+                console.warn('handleLogin is still a simulation.');
+                this.setButtonLoading('loginBtn', false);
             }
 
             async handleSignup(e) {
                 e.preventDefault();
-                const email = document.getElementById('signupEmail').value;
-                const password = document.getElementById('signupPassword').value;
-
+                // NOTE: This is still a simulation.
+                // TODO: Implement email/password signup with this.auth.createUserWithEmailAndPassword(...)
                 this.setButtonLoading('signupBtn', true);
-
-                try {
-                    // Simulate signup for demo (remove this in production)
-                    if (email && password) {
-                        this.showMessage('Account created successfully!', 'success', 'signupMessage');
-                        setTimeout(() => {
-                            this.showModal('onboarding');
-                        }, 1000);
-                    } else {
-                        this.showMessage('Please fill in all fields', 'error', 'signupMessage');
-                    }
-                } catch (error) {
-                    this.showMessage('Signup failed. Please try again.', 'error', 'signupMessage');
-                    console.error('Signup error:', error);
-                } finally {
-                    this.setButtonLoading('signupBtn', false);
-                }
+                this.showMessage('Email/Password signup is not yet implemented.', 'error', 'signupMessage');
+                console.warn('handleSignup is still a simulation.');
+                this.setButtonLoading('signupBtn', false);
             }
 
             async handleGoogleSignIn() {
                 this.setButtonLoading('googleSignupBtn', true);
+                this.showMessage('Opening Google Sign-In...', 'success', 'signupMessage');
 
                 try {
-                    // Simulate Google sign in for demo
-                    this.showMessage('Redirecting to Google...', 'success', 'signupMessage');
-                    setTimeout(() => {
+                    // This is the REAL Firebase Google Sign-In
+                    const result = await this.auth.signInWithPopup(this.googleProvider);
+                    const user = result.user;
+                    const isNewUser = result.additionalUserInfo.isNewUser;
+                    
+                    console.log('Google Sign-In Success:', user);
+                    this.showMessage('Sign-in successful!', 'success', 'signupMessage');
+
+                    if (isNewUser) {
+                        // New user, show onboarding
+                        console.log('New user detected, showing onboarding.');
+                        document.getElementById('userName').value = user.displayName || '';
                         this.showModal('onboarding');
-                        // Pre-fill with demo name
-                        document.getElementById('userName').value = 'Demo User';
-                    }, 1500);
+                    } else {
+                        // Existing user, just close modals.
+                        // The auth listener will handle the UI update.
+                        console.log('Existing user, closing modals.');
+                        this.closeAllModals();
+                    }
+
                 } catch (error) {
-                    this.showMessage('Google sign-in failed. Please try email signup.', 'error', 'signupMessage');
+                    this.showMessage(`Google sign-in failed: ${error.message}`, 'error', 'signupMessage');
                     console.error('Google sign-in error:', error);
                 } finally {
                     this.setButtonLoading('googleSignupBtn', false);
+                }
+            }
+            
+            async handleSignOut() {
+                try {
+                    await this.auth.signOut();
+                    console.log('User signed out successfully.');
+                    // Auth listener will automatically update the UI
+                } catch (error) {
+                    console.error('Sign out error:', error);
                 }
             }
 
@@ -1347,6 +1436,17 @@
                 this.setButtonLoading('completeProfileBtn', true);
 
                 try {
+                    // TODO: Save this data to Firestore or Realtime Database
+                    // associated with this.currentUser.uid
+                    
+                    console.log('Onboarding data to save:', {
+                        uid: this.currentUser.uid,
+                        name: userName,
+                        mobile: mobileNumber,
+                        year: preparationYear
+                    });
+                    
+                    // Simulate save & redirect
                     if (userName && mobileNumber && preparationYear) {
                         this.showMessage('Profile completed successfully!', 'success', 'signupMessage');
                         setTimeout(() => {
@@ -1354,18 +1454,66 @@
                         }, 1500);
                     } else {
                         this.showMessage('Please fill in all fields', 'error', 'signupMessage');
+                        this.setButtonLoading('completeProfileBtn', false);
                     }
                 } catch (error) {
                     this.showMessage('Error saving profile. Please try again.', 'error', 'signupMessage');
                     console.error('Onboarding error:', error);
-                } finally {
                     this.setButtonLoading('completeProfileBtn', false);
                 }
             }
 
             setupAuthListener() {
-                // This would normally listen to Firebase auth state
-                console.log('✅ Auth listener setup (demo mode)');
+                // This is the REAL Firebase Auth Listener
+                this.auth.onAuthStateChanged((user) => {
+                    if (user) {
+                        // User is signed in
+                        console.log('Auth state changed: User is LOGGED IN', user);
+                        this.currentUser = user;
+                        this.updateUIForLoggedInUser(user);
+                    } else {
+                        // User is signed out
+                        console.log('Auth state changed: User is LOGGED OUT');
+                        this.currentUser = null;
+                        this.updateUIForLoggedOutUser();
+                    }
+                });
+            }
+            
+            updateUIForLoggedInUser(user) {
+                // Hide logged-out buttons
+                this.ui.loggedOutButtons.classList.add('hidden');
+                
+                // Show logged-in profile
+                this.ui.loggedInProfile.classList.remove('hidden');
+                this.ui.userNameDisplay.textContent = user.displayName || 'NEET Aspirant';
+                
+                // Set avatar
+                if (user.photoURL) {
+                    this.ui.userAvatar.innerHTML = `<img src="${user.photoURL}" alt="${user.displayName}">`;
+                } else {
+                    const initial = (user.displayName || 'N')[0].toUpperCase();
+                    this.ui.userAvatar.innerHTML = `<span>${initial}</span>`;
+                }
+                
+                // Update hero buttons to go to dashboard
+                this.bindHeroButtons(true);
+                
+                // Close any open modals
+                this.closeAllModals();
+            }
+            
+            updateUIForLoggedOutUser() {
+                // Show logged-out buttons
+                this.ui.loggedOutButtons.classList.remove('hidden');
+                
+                // Hide logged-in profile
+                this.ui.loggedInProfile.classList.add('hidden');
+                this.ui.userNameDisplay.textContent = '';
+                this.ui.userAvatar.innerHTML = '';
+                
+                // Update hero buttons to open login modal
+                this.bindHeroButtons(false);
             }
         }
 
@@ -1376,3 +1524,4 @@
     </script>
 </body>
 </html>
+
