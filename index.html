@@ -1,653 +1,409 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vidyucation</title>
     
-    <!-- Tailwind CSS CDN -->
+    <title>Vidyucation - The Future of NEET Learning</title>
+    <meta name="description" content="Unlock the universe of learning with Vidyucation. comprehensive NEET preparation platform with AI-driven tracking, mock tests, and performance analytics.">
+    <meta name="keywords" content="NEET, Medical Entrance, Online Learning, AI Education, Mock Tests, Biology, Physics, Chemistry">
+    <meta name="author" content="Vidyucation">
+    <meta name="theme-color" content="#020617">
+    
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://vidyucation.com/">
+    <meta property="og:title" content="Vidyucation - The Future of NEET Learning">
+    <meta property="og:description" content="Join thousands of students mastering NEET with AI-powered insights.">
+    <meta property="og:image" content="https://your-domain.com/og-image.jpg">
+
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Google Fonts: Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
 
-    <style>
-        /* Custom CSS for elements Tailwind doesn't easily control.
-          - Background gradient circles
-          - Custom scrollbar (webkit)
-          - Google Fonts 'Inter'
-        */
-        :root {
-            --primary: #6366f1;
-            --secondary: #8b5cf6;
-            --accent: #f59e0b;
-            --accent-light: #fbbf24;
-            --light: #f8fafc;
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #1e293b;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #4f46e5;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #6366f1;
-        }
-
-        /* Background Animated Circles */
-        .bg-elements {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            overflow: hidden;
-        }
-        .bg-circle {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(80px); /* Increased blur */
-            opacity: 0.15;
-            animation: float 15s infinite ease-in-out alternate;
-        }
-        .circle-1 {
-            width: 400px;
-            height: 400px;
-            background: var(--primary);
-            top: -100px;
-            left: -100px;
-            animation-duration: 20s;
-        }
-        .circle-2 {
-            width: 300px;
-            height: 300px;
-            background: var(--secondary);
-            bottom: -50px;
-            right: 10%;
-            animation-duration: 25s;
-            animation-delay: -5s;
-        }
-        .circle-3 {
-            width: 250px;
-            height: 250px;
-            background: var(--accent);
-            top: 40%;
-            left: 60%;
-            animation-duration: 30s;
-            animation-delay: -10s;
-        }
-
-        @keyframes float {
-            0% {
-                transform: translateY(0px) translateX(0px) rotate(0deg);
-            }
-            100% {
-                transform: translateY(-40px) translateX(20px) rotate(20deg);
-            }
-        }
-        
-        /* Custom styles for form inputs */
-        .input-with-icon input,
-        .form-group select {
-            width: 100%;
-            padding: 12px 15px 12px 45px;
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--light);
-            font-size: 16px;
-            transition: all 0.3s ease;
-        }
-        .input-with-icon input:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: var(--primary);
-            background: rgba(255, 255, 255, 0.08);
-        }
-        
-        /* Custom select for webkit */
-        select {
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%2394a3b8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>');
-            background-repeat: no-repeat;
-            background-position: right 1rem center;
-            background-size: 1.2em;
-            padding-right: 2.5rem; /* Make space for arrow */
-        }
-        
-        select option {
-            background: #1e293b;
-            color: white;
-        }
-        
-        /* Modal transitions */
-        .modal {
-            transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
-        }
-        .modal-content {
-            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
-        }
-        
-        /* Hide/Show utility */
-        .hidden {
-            display: none !important;
-        }
-    </style>
-    
     <script>
-        // Configure Tailwind CSS
         tailwind.config = {
             theme: {
                 extend: {
                     fontFamily: {
-                        inter: ['Inter', 'sans-serif'],
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Plus Jakarta Sans', 'sans-serif'],
                     },
                     colors: {
-                        primary: '#6366f1',
-                        'primary-dark': '#4f46e5',
-                        secondary: '#8b5cf6',
-                        accent: '#f59e0b',
-                        'accent-light': '#fbbf24',
-                        light: '#f8fafc',
-                        dark: '#1e293b',
-                        'dark-light': '#334155',
-                        gray: '#64748b',
+                        // Matching the reference image dark theme
+                        brand: {
+                            dark: '#020617', // Deepest blue/black
+                            surface: '#0f172a', // Slightly lighter
+                            accent: '#3b82f6', // Bright Blue
+                            cyan: '#06b6d4', // Cyan gradient end
+                        }
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        }
                     }
                 }
             }
         }
     </script>
-</head>
-<body class="bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#334155] text-light font-inter min-h-screen overflow-x-hidden">
 
-    <!-- Background Elements -->
-    <div class="bg-elements">
-        <div class="bg-circle circle-1"></div>
-        <div class="bg-circle circle-2"></div>
-        <div class="bg-circle circle-3"></div>
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #020617; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #3b82f6; }
+
+        /* Glassmorphism Utilities */
+        .glass {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .glass-card {
+            background: linear-gradient(180deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.4) 100%);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        /* Text Gradients */
+        .text-gradient {
+            background: linear-gradient(135deg, #38bdf8 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        /* Input Autofill Fix for Dark Mode */
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover, 
+        input:-webkit-autofill:focus, 
+        input:-webkit-autofill:active{
+            -webkit-box-shadow: 0 0 0 30px #1e293b inset !important;
+            -webkit-text-fill-color: white !important;
+            transition: background-color 5000s ease-in-out 0s;
+        }
+        
+        /* Modal transitions */
+        .modal { transition: opacity 0.3s ease, visibility 0.3s ease; }
+        .modal-content { transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease; }
+    </style>
+</head>
+<body class="bg-brand-dark text-slate-200 font-sans min-h-screen overflow-x-hidden selection:bg-brand-accent selection:text-white">
+
+    <div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
+        <div class="absolute top-[-10%] left-[20%] w-[500px] h-[500px] bg-brand-accent/10 rounded-full blur-[100px] animate-pulse-slow"></div>
+        <div class="absolute bottom-[10%] right-[-5%] w-[600px] h-[600px] bg-purple-600/10 rounded-full blur-[120px]"></div>
     </div>
 
-    <!-- Header Section -->
-    <header class="sticky top-0 z-50 p-4">
-        <div class="max-w-6xl mx-auto">
-            <!-- Glassmorphism header content -->
-            <div class="flex flex-wrap justify-between items-center p-4 md:p-5 rounded-2xl bg-white/5 backdrop-blur-lg border border-white/10 shadow-lg">
+    <header class="fixed top-0 w-full z-50 border-b border-white/5 glass">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
                 
-                <!-- Logo -->
-                <div class="logo flex items-center gap-3">
-                    <div class="logo-icon w-10 h-10 bg-gradient-to-br from-primary to-secondary rounded-lg flex items-center justify-center shadow-md text-white text-xl">
-                        <!-- Replaced Font Awesome with SVG -->
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                <div class="flex-shrink-0 flex items-center gap-3 cursor-pointer">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-cyan-500 flex items-center justify-center shadow-lg shadow-blue-500/20">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
                     </div>
-                    <div class="logo-text text-2xl font-bold bg-gradient-to-r from-light to-slate-300 bg-clip-text text-transparent">Vidyucation</div>
+                    <span class="font-display font-bold text-2xl text-white tracking-tight">Vidyucation<span class="text-brand-cyan">.</span></span>
                 </div>
 
-                <!-- Mobile Menu Button (Hamburger) -->
-                <button id="mobileMenuBtn" class="md:hidden p-2 rounded-lg text-slate-200 hover:bg-white/10 transition-colors">
-                    <svg id="menuIconOpen" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="block">
-                        <line x1="3" y1="12" x2="21" y2="12"></line>
-                        <line x1="3" y1="6" x2="21" y2="6"></line>
-                        <line x1="3" y1="18" x2="21" y2="18"></line>
-                    </svg>
-                    <svg id="menuIconClose" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden">
-                        <line x1="18" y1="6" x2="6" y2="18"></line>
-                        <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
-                </button>
+                <nav class="hidden md:flex space-x-8">
+                    <a href="#" class="text-sm font-medium text-white hover:text-brand-cyan transition-colors">Home</a>
+                    <a href="#" class="text-sm font-medium text-slate-400 hover:text-white transition-colors">Courses</a>
+                    <a href="#" class="text-sm font-medium text-slate-400 hover:text-white transition-colors">Institutes</a>
+                    <a href="#" class="text-sm font-medium text-slate-400 hover:text-white transition-colors flex items-center gap-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-brand-accent"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                        AI Chat
+                    </a>
+                </nav>
 
-                <!-- Navigation & Auth (Wrapper for mobile) -->
-                <div id="mobileMenu" class="hidden md:flex flex-col md:flex-row md:items-center gap-6 md:gap-4 w-full md:w-auto mt-4 md:mt-0">
-                    <!-- Navigation -->
-                    <nav>
-                        <ul class="flex flex-col md:flex-row items-start md:items-center gap-2 md:gap-4">
-                            <li><a href="#" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-200 hover:bg-white/10 hover:text-accent-light transition-all">
-                                <!-- SVG Icon -->
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-                                Home
-                            </a></li>
-                            <li><a href="#" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-200 hover:bg-white/10 hover:text-accent-light transition-all">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
-                                Practice
-                            </a></li>
-                            <li><a href="#" class="flex items-center gap-2 px-4 py-2 rounded-lg text-slate-200 hover:bg-white/10 hover:text-accent-light transition-all">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>
-                                Tests
-                            </a></li>
-                            <!-- Removed other links for brevity, add them back as needed -->
-                        </ul>
-                    </nav>
-
-                    <!-- Auth Buttons -->
-                    <div class="auth-buttons flex flex-col md:flex-row gap-3 mt-4 md:mt-0 md:ml-4" id="authContainer">
-                        <!-- Logged-out state -->
-                        <div id="loggedOutButtons" class="flex flex-col md:flex-row gap-3 w-full md:w-auto">
-                            <button class="btn btn-outline login-btn w-full md:w-auto flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg font-medium bg-transparent border border-white/20 text-white hover:bg-white/10 transition-all duration-300">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" y1="12" x2="3" y2="12"></line></svg>
-                                Login
-                            </button>
-                            <button class="btn btn-primary signup-btn w-full md:w-auto flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg font-medium bg-gradient-to-r from-primary to-secondary text-white shadow-lg hover:shadow-primary/50 transition-all duration-300 transform hover:-translate-y-px">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
-                                Sign Up
-                            </button>
-                        </div>
-                        
-                        <!-- Logged-in state -->
-                        <div id="loggedInProfile" class="user-profile hidden flex-col md:flex-row items-start md:items-center gap-3">
-                            <div class="flex items-center gap-3">
-                                <div class="user-avatar w-10 h-10 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center font-semibold overflow-hidden" id="userAvatar">
-                                    <!-- Avatar content (initial or image) goes here -->
-                                </div>
-                                <span class="user-name font-semibold text-light" id="userNameDisplay"></span>
-                            </div>
-                            <button class="btn btn-outline w-full md:w-auto flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg font-medium bg-transparent border border-white/20 text-white hover:bg-white/10 transition-all duration-300" id="signOutBtn">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
-                                Sign Out
-                            </button>
-                        </div>
+                <div id="authContainer" class="hidden md:flex items-center gap-4">
+                    <div id="loggedOutButtons" class="flex items-center gap-4">
+                        <button class="login-btn text-sm font-medium text-slate-300 hover:text-white transition-colors">Log In</button>
+                        <button class="signup-btn px-5 py-2.5 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-500 rounded-full transition-all shadow-[0_0_20px_-5px_rgba(59,130,246,0.5)] hover:shadow-[0_0_25px_-5px_rgba(59,130,246,0.7)]">
+                            Sign Up
+                        </button>
                     </div>
+                    
+                    <div id="loggedInProfile" class="hidden flex items-center gap-4">
+                         <div class="flex items-center gap-3 pl-4 border-l border-white/10">
+                            <div id="userAvatar" class="w-9 h-9 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 flex items-center justify-center text-white font-bold text-sm overflow-hidden border border-white/20"></div>
+                            <div class="hidden lg:block">
+                                <p id="userNameDisplay" class="text-sm font-medium text-white leading-none"></p>
+                                <p class="text-xs text-slate-400 mt-1">Aspirant</p>
+                            </div>
+                        </div>
+                        <button id="signOutBtn" class="p-2 text-slate-400 hover:text-red-400 transition-colors" aria-label="Sign out">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <button id="mobileMenuBtn" class="md:hidden p-2 text-slate-300 hover:text-white" aria-label="Toggle menu">
+                    <svg id="menuIconOpen" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                    <svg id="menuIconClose" class="hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+        </div>
+
+        <div id="mobileMenu" class="hidden md:hidden bg-brand-dark border-b border-white/10">
+            <div class="px-4 pt-2 pb-6 space-y-1">
+                <a href="#" class="block px-3 py-3 text-base font-medium text-white bg-white/5 rounded-lg">Home</a>
+                <a href="#" class="block px-3 py-3 text-base font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-lg">Courses</a>
+                <a href="#" class="block px-3 py-3 text-base font-medium text-slate-400 hover:text-white hover:bg-white/5 rounded-lg">Practice</a>
+                <div class="pt-4 mt-4 border-t border-white/10 flex flex-col gap-3">
+                    <button class="login-btn w-full text-center py-3 text-slate-300 border border-white/10 rounded-lg">Log In</button>
+                    <button class="signup-btn w-full text-center py-3 bg-blue-600 text-white rounded-lg font-medium">Sign Up</button>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- Main Content -->
-    <main>
-        <!-- Hero Section -->
-        <section class="hero py-20 md:py-32 text-center relative overflow-hidden">
-            <div class="container max-w-6xl mx-auto px-6">
-                <div class="hero-content max-w-3xl mx-auto relative z-10">
-                    <div class="hero-badge inline-flex items-center gap-2 bg-yellow-500/10 border border-yellow-500/30 text-yellow-300 px-4 py-1.5 rounded-full text-sm font-medium mb-6 backdrop-blur-sm">
-                        <!-- Rocket Icon -->
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-                        <span>NEET 2026 Preparation Started</span>
-                    </div>
-                    <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent leading-tight">Track Your NEET Learning Progress</h1>
-                    <p class="text-lg md:text-xl text-slate-300 mb-10 max-w-xl mx-auto">Monitor your performance, identify strengths and weaknesses, and achieve your goals with Vidyucation's learning platform.</p>
-                    <div class="hero-buttons flex flex-col sm:flex-row justify-center items-center gap-4">
-                        <button class="btn btn-primary btn-large practice-btn w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-3.5 text-base font-semibold rounded-lg bg-gradient-to-r from-primary to-secondary text-white shadow-lg hover:shadow-primary/50 transition-all duration-300 transform hover:-translate-y-px">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polygon points="10 8 16 12 10 16 10 8"></polygon></svg>
-                            Start Practicing Now
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Progress Section -->
-        <section class="progress-section py-16 md:py-24">
-            <div class="container max-w-6xl mx-auto px-6">
-                <h2 class="section-title text-3xl md:text-4xl font-bold text-center mb-4">Track Your Learning Progress</h2>
-                <p class="section-subtitle text-base md:text-lg text-slate-300 max-w-2xl mx-auto text-center mb-12">Monitor your performance, identify strengths and weaknesses, and achieve your goals with Vidyucation's comprehensive tracking system.</p>
+    <main class="pt-24">
+        <section class="relative pt-16 pb-20 lg:pt-24 lg:pb-32 overflow-hidden text-center px-4 sm:px-6">
+            <div class="max-w-5xl mx-auto relative z-10">
                 
-                <div class="progress-container grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                    <!-- Progress Card 1 -->
-                    <div class="progress-card p-8 rounded-2xl bg-white/5 backdrop-blur-lg border border-white/10 shadow-xl text-center transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
-                        <div class="progress-value text-5xl font-bold mb-2 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">4.0</div>
-                        <div class="progress-label text-slate-300 font-medium">Overall Score</div>
-                    </div>
-                    <!-- Progress Card 2 -->
-                    <div class="progress-card p-8 rounded-2xl bg-white/5 backdrop-blur-lg border border-white/10 shadow-xl text-center transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
-                        <div class="progress-value text-5xl font-bold mb-2 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">92.5%</div>
-                        <div class="progress-label text-slate-300 font-medium">Accuracy</div>
-                    </div>
-                    <!-- Progress Card 3 -->
-                    <div class="progress-card p-8 rounded-2xl bg-white/5 backdrop-blur-lg border border-white/10 shadow-xl text-center transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
-                        <div class="progress-value text-5xl font-bold mb-2 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">8/12</div>
-                        <div class="progress-label text-slate-300 font-medium">Completed Topics</div>
-                    </div>
-                    <!-- Progress Card 4 -->
-                    <div class="progress-card p-8 rounded-2xl bg-white/5 backdrop-blur-lg border border-white/10 shadow-xl text-center transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
-                        <div class="progress-value text-5xl font-bold mb-2 bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">14</div>
-                        <div class="progress-label text-slate-300 font-medium">Tests Taken</div>
-                    </div>
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-blue-500/30 bg-blue-500/10 backdrop-blur-sm mb-8 animate-fadeIn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-blue-400"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"></path></svg>
+                    <span class="text-sm font-medium text-blue-200">The Future of Learning is Here</span>
                 </div>
-            </div>
-        </section>
 
-        <!-- Features Section -->
-        <section class="features-section py-16 md:py-24">
-            <div class="container max-w-6xl mx-auto px-6">
-                <h2 class="section-title text-3xl md:text-4xl font-bold text-center mb-4">Experience Learning Like Never Before</h2>
-                <p class="section-subtitle text-base md:text-lg text-slate-300 max-w-2xl mx-auto text-center mb-12">Stay motivated, track your progress, and connect with a community—all in one platform.</p>
-                
-                <div class="features-grid grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <!-- Feature Card 1 -->
-                    <div class="feature-card p-8 rounded-2xl bg-white/5 backdrop-blur-lg border border-white/10 shadow-xl transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl relative overflow-hidden">
-                        <div class="absolute top-0 left-0 h-1 w-full bg-gradient-to-r from-primary to-secondary"></div>
-                        <div class="feature-icon w-16 h-16 rounded-xl flex items-center justify-center mb-6 bg-primary/10 border border-primary/20 text-primary text-3xl">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V5"></path><path d="M10 2h4"></path><path d="M12 22v-3"></path><path d="M22 12h-3"></path><path d="M5 12H2"></path><path d="M17.61 6.39l-2.12-2.12"></path><path d="M8.51 15.49l-2.12-2.12"></path><path d="M17.61 17.61l-2.12 2.12"></path><path d="M8.51 8.51l-2.12 2.12"></path><circle cx="12" cy="12" r="2"></circle></svg>
-                        </div>
-                        <h3 class="feature-title text-xl font-semibold mb-3">Smart Learning</h3>
-                        <p class="feature-desc text-slate-300 mb-6">Adaptive learning technology that identifies your weak areas and focuses on them with personalized content.</p>
-                        <button class="btn btn-outline px-5 py-2.5 rounded-lg font-medium bg-transparent border border-white/20 text-white hover:bg-white/10 transition-all duration-300">Learn More</button>
-                    </div>
-                    <!-- Feature Card 2 -->
-                    <div class="feature-card p-8 rounded-2xl bg-white/5 backdrop-blur-lg border border-white/10 shadow-xl transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl relative overflow-hidden">
-                        <div class="absolute top-0 left-0 h-1 w-full bg-gradient-to-r from-primary to-secondary"></div>
-                        <div class="feature-icon w-16 h-16 rounded-xl flex items-center justify-center mb-6 bg-primary/10 border border-primary/20 text-primary text-3xl">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V10"></path><path d="M18 20V4"></path><path d="M6 20V16"></path></svg>
-                        </div>
-                        <h3 class="feature-title text-xl font-semibold mb-3">Performance Analytics</h3>
-                        <p class="feature-desc text-slate-300 mb-6">Detailed insights into your performance with actionable feedback for improvement and growth tracking.</p>
-                        <button class="btn btn-outline px-5 py-2.5 rounded-lg font-medium bg-transparent border border-white/20 text-white hover:bg-white/10 transition-all duration-300">Learn More</button>
-                    </div>
-                    <!-- Feature Card 3 -->
-                    <div class="feature-card p-8 rounded-2xl bg-white/5 backdrop-blur-lg border border-white/10 shadow-xl transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl relative overflow-hidden">
-                        <div class="absolute top-0 left-0 h-1 w-full bg-gradient-to-r from-primary to-secondary"></div>
-                        <div class="feature-icon w-16 h-16 rounded-xl flex items-center justify-center mb-6 bg-primary/10 border border-primary/20 text-primary text-3xl">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-                        </div>
-                        <h3 class="feature-title text-xl font-semibold mb-3">Community Support</h3>
-                        <p class="feature-desc text-slate-300 mb-6">Connect with fellow NEET aspirants, share knowledge, ask questions, and grow together.</p>
-                        <button class="btn btn-outline px-5 py-2.5 rounded-lg font-medium bg-transparent border border-white/20 text-white hover:bg-white/10 transition-all duration-300">Learn More</button>
-                    </div>
-                </div>
-            </div>
-        </section>
+                <h1 class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-display font-bold tracking-tight mb-8 leading-[1.1]">
+                    Unlock the Universe <br class="hidden md:block" />
+                    <span class="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 text-transparent bg-clip-text">of Learning</span>
+                </h1>
 
-        <!-- Question Bank Section -->
-        <section class="question-bank py-16 md:py-24">
-            <div class="container max-w-6xl mx-auto px-6">
-                <div class="question-bank-content rounded-3xl p-8 md:p-16 bg-gradient-to-br from-primary/10 to-secondary/10 backdrop-blur-lg border border-white/10 shadow-2xl">
-                    <h2 class="section-title text-3xl md:text-4xl font-bold text-center mb-4">Massive NEET Question Bank</h2>
-                    <p class="section-subtitle text-base md:text-lg text-slate-300 max-w-2xl mx-auto text-center mb-12">Access over 45,000+ questions from previous years and curated by subject matter experts.</p>
-                    
-                    <div class="stats-container grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                        <div class="stat-card p-6 rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 text-center transition-all duration-300 hover:-translate-y-1.5 hover:bg-white/10">
-                            <div class="stat-value text-4xl font-bold mb-1.5 bg-gradient-to-r from-accent-light to-accent bg-clip-text text-transparent">45K+</div>
-                            <div class="stat-label text-slate-300 text-sm">Practice Questions</div>
-                        </div>
-                        <div class="stat-card p-6 rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 text-center transition-all duration-300 hover:-translate-y-1.5 hover:bg-white/10">
-                            <div class="stat-value text-4xl font-bold mb-1.5 bg-gradient-to-r from-accent-light to-accent bg-clip-text text-transparent">12+</div>
-                            <div class="stat-label text-slate-300 text-sm">Years of PYQs</div>
-                        </div>
-                        <div class="stat-card p-6 rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 text-center transition-all duration-300 hover:-translate-y-1.5 hover:bg-white/10">
-                            <div class="stat-value text-4xl font-bold mb-1.5 bg-gradient-to-r from-accent-light to-accent bg-clip-text text-transparent">100%</div>
-                            <div class="stat-label text-slate-300 text-sm">Syllabus Coverage</div>
-                        </div>
-                        <div class="stat-card p-6 rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 text-center transition-all duration-300 hover:-translate-y-1.5 hover:bg-white/10">
-                            <div class="stat-value text-4xl font-bold mb-1.5 bg-gradient-to-r from-accent-light to-accent bg-clip-text text-transparent">3</div>
-                            <div class="stat-label text-slate-300 text-sm">Difficulty Levels</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+                <p class="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto mb-12 leading-relaxed">
+                    Where knowledge meets innovation — explore institutes, courses, and AI intelligence in one seamless ecosystem designed for tomorrow's leaders.
+                </p>
 
-        <!-- Test Creation Section -->
-        <section class="test-creation py-16 md:py-24 text-center">
-            <div class="container max-w-6xl mx-auto px-6">
-                <div class="test-creation-content max-w-3xl mx-auto p-8 md:p-12 rounded-3xl bg-white/5 backdrop-blur-lg border border-white/10 shadow-2xl">
-                    <h2 class="text-3xl md:text-4xl font-bold mb-5">Create Unlimited Custom Tests for NEET - Free!</h2>
-                    <p class="text-base md:text-lg text-slate-300 mb-8">Design your own tests based on topics, difficulty levels, and time constraints. Perfect for targeted practice and revision.</p>
-                    <button class="btn btn-primary btn-large create-test-btn flex items-center justify-center gap-2 px-8 py-3.5 text-base font-semibold rounded-lg bg-gradient-to-r from-primary to-secondary text-white shadow-lg hover:shadow-primary/50 transition-all duration-300 transform hover:-translate-y-px mx-auto">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                        Create Your First Test
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-20">
+                    <button class="practice-btn w-full sm:w-auto px-8 py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-semibold text-lg transition-all transform hover:-translate-y-1 hover:shadow-[0_0_30px_-5px_rgba(59,130,246,0.6)] flex items-center justify-center gap-2">
+                        Explore Institutes
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                    </button>
+                    <button class="create-test-btn w-full sm:w-auto px-8 py-4 bg-white/5 hover:bg-white/10 border border-white/10 text-white rounded-xl font-semibold text-lg transition-all flex items-center justify-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-brand-cyan"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+                        Chat with AI
                     </button>
                 </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 max-w-6xl mx-auto">
+                    <div class="glass-card p-6 rounded-2xl text-center group hover:border-blue-500/30 transition-colors">
+                        <div class="w-12 h-12 mx-auto bg-blue-500/10 rounded-xl flex items-center justify-center text-blue-400 mb-3 group-hover:scale-110 transition-transform">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-1">10K+</h3>
+                        <p class="text-sm text-slate-400">Active Learners</p>
+                    </div>
+                    <div class="glass-card p-6 rounded-2xl text-center group hover:border-blue-500/30 transition-colors">
+                        <div class="w-12 h-12 mx-auto bg-blue-500/10 rounded-xl flex items-center justify-center text-blue-400 mb-3 group-hover:scale-110 transition-transform">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-1">200+</h3>
+                        <p class="text-sm text-slate-400">Courses</p>
+                    </div>
+                    <div class="glass-card p-6 rounded-2xl text-center group hover:border-blue-500/30 transition-colors">
+                        <div class="w-12 h-12 mx-auto bg-blue-500/10 rounded-xl flex items-center justify-center text-blue-400 mb-3 group-hover:scale-110 transition-transform">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-1">98%</h3>
+                        <p class="text-sm text-slate-400">Success Rate</p>
+                    </div>
+                    <div class="glass-card p-6 rounded-2xl text-center group hover:border-blue-500/30 transition-colors">
+                        <div class="w-12 h-12 mx-auto bg-blue-500/10 rounded-xl flex items-center justify-center text-blue-400 mb-3 group-hover:scale-110 transition-transform">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path></svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-1">24/7</h3>
+                        <p class="text-sm text-slate-400">AI Support</p>
+                    </div>
+                </div>
             </div>
         </section>
-    </main>
 
-    <!-- Footer -->
-    <footer class="bg-slate-900/80 backdrop-blur-lg border-t border-white/10 pt-16 pb-8 mt-24">
-        <div class="container max-w-6xl mx-auto px-6">
-            <div class="footer-content grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 mb-12">
-                <!-- Column 1 -->
-                <div class="footer-column sm:col-span-2 md:col-span-1">
-                    <h3 class="text-lg font-semibold mb-5 relative pb-2">Vidyucation</h3>
-                    <div class="absolute bottom-0 left-0 w-10 h-0.5 bg-gradient-to-r from-primary to-secondary"></div>
-                    <p class="text-slate-300 text-sm leading-relaxed">Your comprehensive NEET preparation platform with advanced tracking, analytics, and personalized learning paths.</p>
+        <section class="py-20 bg-[#050b1d]">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-4">Why Choose Vidyucation?</h2>
+                    <p class="text-slate-400 max-w-2xl mx-auto">Advanced tools tailored for NEET aspirants to maximize potential.</p>
                 </div>
-                <!-- Column 2 -->
-                <div class="footer-column">
-                    <h3 class="text-lg font-semibold mb-5 relative pb-2">Quick Links</h3>
-                    <div class="absolute bottom-0 left-0 w-10 h-0.5 bg-gradient-to-r from-primary to-secondary"></div>
-                    <ul class="space-y-3">
-                        <li><a href="#" class="text-slate-300 text-sm hover:text-accent-light hover:pl-1.5 transition-all flex items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                            Home
-                        </a></li>
-                        <li><a href="#" class="text-slate-300 text-sm hover:text-accent-light hover:pl-1.5 transition-all flex items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                            Practice Tests
-                        </a></li>
-                        <li><a href="#" class="text-slate-300 text-sm hover:text-accent-light hover:pl-1.5 transition-all flex items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                            Performance
-                        </a></li>
-                    </ul>
-                </div>
-                <!-- Column 3 -->
-                <div class="footer-column">
-                    <h3 class="text-lg font-semibold mb-5 relative pb-2">Resources</h3>
-                    <div class="absolute bottom-0 left-0 w-10 h-0.5 bg-gradient-to-r from-primary to-secondary"></div>
-                    <ul class="space-y-3">
-                        <li><a href="#" class="text-slate-300 text-sm hover:text-accent-light hover:pl-1.5 transition-all flex items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                            NEET Syllabus
-                        </a></li>
-                        <li><a href="#" class="text-slate-300 text-sm hover:text-accent-light hover:pl-1.5 transition-all flex items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                            Previous Year Papers
-                        </a></li>
-                    </ul>
-                </div>
-                <!-- Column 4 -->
-                <div class="footer-column">
-                    <h3 class="text-lg font-semibold mb-5 relative pb-2">Contact Us</h3>
-                    <div class="absolute bottom-0 left-0 w-10 h-0.5 bg-gradient-to-r from-primary to-secondary"></div>
-                    <ul class="space-y-3">
-                        <li><a href="#" class="text-slate-300 text-sm hover:text-accent-light hover:pl-1.5 transition-all flex items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                            Support
-                        </a></li>
-                        <li><a href="#" class="text-slate-300 text-sm hover:text-accent-light hover:pl-1.5 transition-all flex items-center gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                            Feedback
-                        </a></li>
-                    </ul>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="p-8 rounded-3xl bg-[#0b1120] border border-white/5 hover:border-blue-500/20 transition-all hover:-translate-y-2">
+                        <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-600 to-blue-400 flex items-center justify-center mb-6 shadow-lg shadow-blue-500/20">
+                            <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 text-white">Smart Mock Tests</h3>
+                        <p class="text-slate-400 leading-relaxed">Adaptive testing that evolves with your performance, focusing on your weak areas.</p>
+                    </div>
+                    <div class="p-8 rounded-3xl bg-[#0b1120] border border-white/5 hover:border-purple-500/20 transition-all hover:-translate-y-2">
+                        <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-600 to-purple-400 flex items-center justify-center mb-6 shadow-lg shadow-purple-500/20">
+                            <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 text-white">Performance Analytics</h3>
+                        <p class="text-slate-400 leading-relaxed">Deep insights into your accuracy, speed, and subject-wise mastery.</p>
+                    </div>
+                    <div class="p-8 rounded-3xl bg-[#0b1120] border border-white/5 hover:border-cyan-500/20 transition-all hover:-translate-y-2">
+                        <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-500 to-teal-400 flex items-center justify-center mb-6 shadow-lg shadow-cyan-500/20">
+                            <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3 text-white">45K+ Question Bank</h3>
+                        <p class="text-slate-400 leading-relaxed">Extensive repository of PYQs and curated questions for Physics, Chemistry, and Biology.</p>
+                    </div>
                 </div>
             </div>
-            <div class="copyright text-center pt-8 border-t border-white/10 text-slate-400 text-sm">
-                <p>&copy; 2025 Vidyucation. All rights reserved. | Designed with ❤️ for NEET</p>
+        </section>
+
+    </main>
+
+    <footer class="border-t border-white/5 bg-[#020617] pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="mb-8">
+                <span class="font-display font-bold text-2xl text-white">Vidyucation<span class="text-brand-cyan">.</span></span>
+            </div>
+            <p class="text-slate-500 text-sm mb-8">&copy; 2025 Vidyucation. All rights reserved. | Designed for NEET Aspirants</p>
+            <div class="flex justify-center gap-6">
+                <a href="#" class="text-slate-400 hover:text-white transition-colors">Privacy Policy</a>
+                <a href="#" class="text-slate-400 hover:text-white transition-colors">Terms of Service</a>
             </div>
         </div>
     </footer>
 
-    <!-- 
-    ========================================
-    MODALS
-    ========================================
-    -->
-
-    <!-- Login Modal -->
-    <div id="loginModal" class="modal fixed inset-0 z-[1000] flex items-center justify-center bg-black/70 backdrop-blur-sm p-4 opacity-0 pointer-events-none invisible">
-        <div class="modal-content bg-slate-800/95 backdrop-blur-xl border border-white/10 rounded-3xl w-full max-w-md shadow-2xl overflow-hidden transform scale-95 opacity-0">
-            <!-- Modal Header -->
-            <div class="modal-header p-6 text-center border-b border-white/10 bg-gradient-to-br from-primary/10 to-secondary/10 relative">
-                <span class="close absolute top-4 right-5 text-slate-400 hover:text-accent-light text-2xl cursor-pointer transition-colors">&times;</span>
-                <h2 class="text-2xl font-semibold">Welcome Back</h2>
-                <p class="text-slate-300 text-sm mt-1">Continue your NEET preparation journey</p>
-            </div>
-            
-            <!-- Modal Body -->
-            <div class="modal-body p-6 md:p-8">
-                <div id="authMessage" class="auth-message hidden"></div>
+    <div id="loginModal" class="modal fixed inset-0 z-[1000] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 opacity-0 pointer-events-none invisible">
+        <div class="modal-content bg-[#0f172a] border border-white/10 rounded-2xl w-full max-w-md shadow-2xl overflow-hidden transform scale-95 opacity-0">
+            <div class="p-6 md:p-8">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-white">Welcome Back</h2>
+                    <button class="close text-slate-400 hover:text-white transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    </button>
+                </div>
                 
-                <form id="loginForm">
-                    <div class="form-group mb-5">
-                        <label for="email" class="block mb-2 text-sm font-medium text-slate-200">Email Address</label>
-                        <div class="input-with-icon relative">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22 6 -10 13 2 6"></polyline></svg>
-                            <input type="email" id="email" name="email" placeholder="Enter your email" required>
-                        </div>
+                <div id="authMessage" class="hidden"></div>
+                
+                <form id="loginForm" class="space-y-4">
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-slate-300 mb-1.5">Email Address</label>
+                        <input type="email" id="email" name="email" class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-slate-500 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-all" placeholder="Enter your email" required>
+                    </div>
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-slate-300 mb-1.5">Password</label>
+                        <input type="password" id="password" name="password" class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-slate-500 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-all" placeholder="Enter your password" required>
                     </div>
                     
-                    <div class="form-group mb-5">
-                        <label for="password" class="block mb-2 text-sm font-medium text-slate-200">Password</label>
-                        <div class="input-with-icon relative">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-                            <input type="password" id="password" name="password" placeholder="Enter your password" required>
-                        </div>
-                    </div>
-                    
-                    <button type="submit" class="btn btn-primary w-full flex items-center justify-center gap-2 px-5 py-3 rounded-lg font-semibold bg-gradient-to-r from-primary to-secondary text-white shadow-lg hover:shadow-primary/50 transition-all duration-300 transform hover:-translate-y-px mt-2 mb-4" id="loginBtn">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" y1="12" x2="3" y2="12"></line></svg>
-                        Login to Your Account
+                    <button type="submit" id="loginBtn" class="w-full py-3.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold shadow-lg shadow-blue-500/25 transition-all transform active:scale-95">
+                        Login to Account
                     </button>
                 </form>
 
-                <div class="divider text-center my-6 relative">
-                    <span class="absolute left-0 right-0 top-1/2 h-px bg-white/20"></span>
-                    <span class="relative bg-slate-800 px-3 text-slate-400 text-sm z-10">or</span>
+                <div class="relative my-6">
+                    <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-white/10"></div></div>
+                    <div class="relative flex justify-center text-sm"><span class="px-2 bg-[#0f172a] text-slate-500">Or continue with</span></div>
                 </div>
 
-                <button class="google-signin-btn w-full flex items-center justify-center gap-3 px-4 py-2.5 rounded-lg border-2 border-white/20 bg-white/5 hover:bg-white/10 transition-colors cursor-pointer" id="googleLoginBtn">
+                <button id="googleLoginBtn" class="w-full flex items-center justify-center gap-3 py-3 rounded-xl bg-white text-slate-900 font-medium hover:bg-slate-100 transition-colors">
                     <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google" class="w-5 h-5">
-                    <span class="font-medium text-slate-200">Continue with Google</span>
+                    <span>Google</span>
                 </button>
                 
-                <div class="signup-link text-center mt-6 text-slate-300">
-                    Don't have an account? <a href="#" id="showSignup" class="font-semibold text-primary hover:underline">Sign up now</a>
-                </div>
+                <p class="text-center mt-6 text-slate-400 text-sm">
+                    Don't have an account? <a href="#" id="showSignup" class="text-blue-400 hover:text-blue-300 font-medium">Sign up</a>
+                </p>
             </div>
         </div>
     </div>
 
-    <!-- Signup Modal -->
-    <div id="signupModal" class="modal fixed inset-0 z-[1000] flex items-center justify-center bg-black/70 backdrop-blur-sm p-4 opacity-0 pointer-events-none invisible">
-        <div class="modal-content bg-slate-800/95 backdrop-blur-xl border border-white/10 rounded-3xl w-full max-w-md shadow-2xl overflow-hidden transform scale-95 opacity-0">
-            <!-- Modal Header -->
-            <div class="modal-header p-6 text-center border-b border-white/10 bg-gradient-to-br from-primary/10 to-secondary/10 relative">
-                <span class="close absolute top-4 right-5 text-slate-400 hover:text-accent-light text-2xl cursor-pointer transition-colors">&times;</span>
-                <h2 class="text-2xl font-semibold">Join Vidyucation</h2>
-                <p class="text-slate-300 text-sm mt-1">Start your NEET preparation journey</p>
-            </div>
-            
-            <!-- Modal Body -->
-            <div class="modal-body p-6 md:p-8">
-                <div id="signupMessage" class="auth-message hidden"></div>
-                
-                <button class="google-signin-btn w-full flex items-center justify-center gap-3 px-4 py-2.5 rounded-lg border-2 border-white/20 bg-white/5 hover:bg-white/10 transition-colors cursor-pointer mb-5" id="googleSignupBtn">
-                    <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google" class="w-5 h-5">
-                    <span class="font-medium text-slate-200">Continue with Google</span>
-                </button>
-                
-                <div class="divider text-center my-6 relative">
-                    <span class="absolute left-0 right-0 top-1/2 h-px bg-white/20"></span>
-                    <span class="relative bg-slate-800 px-3 text-slate-400 text-sm z-10">or continue with email</span>
+    <div id="signupModal" class="modal fixed inset-0 z-[1000] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 opacity-0 pointer-events-none invisible">
+        <div class="modal-content bg-[#0f172a] border border-white/10 rounded-2xl w-full max-w-md shadow-2xl overflow-hidden transform scale-95 opacity-0">
+            <div class="p-6 md:p-8">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-white">Join Vidyucation</h2>
+                    <button class="close text-slate-400 hover:text-white transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    </button>
                 </div>
                 
-                <form id="signupForm">
-                    <div class="form-group mb-5">
-                        <label for="signupEmail" class="block mb-2 text-sm font-medium text-slate-200">Email Address</label>
-                        <div class="input-with-icon relative">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22 6 -10 13 2 6"></polyline></svg>
-                            <input type="email" id="signupEmail" name="email" placeholder="Enter your email" required>
-                        </div>
+                <div id="signupMessage" class="hidden"></div>
+
+                <button id="googleSignupBtn" class="w-full flex items-center justify-center gap-3 py-3 rounded-xl bg-white text-slate-900 font-medium hover:bg-slate-100 transition-colors mb-6">
+                    <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google" class="w-5 h-5">
+                    <span>Continue with Google</span>
+                </button>
+                
+                <form id="signupForm" class="space-y-4">
+                    <div>
+                        <label for="signupEmail" class="block text-sm font-medium text-slate-300 mb-1.5">Email Address</label>
+                        <input type="email" id="signupEmail" name="email" class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-slate-500 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-all" placeholder="Enter your email" required>
+                    </div>
+                    <div>
+                        <label for="signupPassword" class="block text-sm font-medium text-slate-300 mb-1.5">Password</label>
+                        <input type="password" id="signupPassword" name="password" class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-slate-500 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-all" placeholder="Create password" required>
                     </div>
                     
-                    <div class="form-group mb-5">
-                        <label for="signupPassword" class="block mb-2 text-sm font-medium text-slate-200">Password</label>
-                        <div class="input-with-icon relative">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-                            <input type="password" id="signupPassword" name="password" placeholder="Create a password (min. 6 characters)" required>
-                        </div>
-                    </div>
-                    
-                    <button type="submit" class="btn btn-primary w-full flex items-center justify-center gap-2 px-5 py-3 rounded-lg font-semibold bg-gradient-to-r from-primary to-secondary text-white shadow-lg hover:shadow-primary/50 transition-all duration-300 transform hover:-translate-y-px mt-2 mb-4" id="signupBtn">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
+                    <button type="submit" id="signupBtn" class="w-full py-3.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold shadow-lg shadow-blue-500/25 transition-all transform active:scale-95">
                         Create Account
                     </button>
                 </form>
                 
-                <div class="login-link text-center mt-6 text-slate-300">
-                    Already have an account? <a href="#" id="showLogin" class="font-semibold text-primary hover:underline">Login here</a>
-                </div>
+                <p class="text-center mt-6 text-slate-400 text-sm">
+                    Already have an account? <a href="#" id="showLogin" class="text-blue-400 hover:text-blue-300 font-medium">Log in</a>
+                </p>
             </div>
         </div>
     </div>
 
-    <!-- Onboarding Modal -->
-    <div id="onboardingModal" class="modal fixed inset-0 z-[1000] flex items-center justify-center bg-black/70 backdrop-blur-sm p-4 opacity-0 pointer-events-none invisible">
-        <div class="modal-content bg-slate-800/95 backdrop-blur-xl border border-white/10 rounded-3xl w-full max-w-md shadow-2xl overflow-hidden transform scale-95 opacity-0">
-            <!-- Modal Header -->
-            <div class="modal-header p-6 text-center border-b border-white/10 bg-gradient-to-br from-primary/10 to-secondary/10">
-                <h2 class="text-2xl font-semibold">Welcome to Vidyucation! 🎉</h2>
-                <p class="text-slate-300 text-sm mt-1">Let's set up your profile</p>
-            </div>
-            
-            <!-- Modal Body -->
-            <div class="modal-body p-6 md:p-8">
-                <div id="onboardingMessage" class="auth-message hidden"></div>
+    <div id="onboardingModal" class="modal fixed inset-0 z-[1000] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 opacity-0 pointer-events-none invisible">
+        <div class="modal-content bg-[#0f172a] border border-white/10 rounded-2xl w-full max-w-md shadow-2xl overflow-hidden transform scale-95 opacity-0">
+            <div class="p-6 md:p-8">
+                <div class="text-center mb-6">
+                    <h2 class="text-2xl font-bold text-white">Complete Profile 🚀</h2>
+                    <p class="text-slate-400 text-sm mt-1">Help us personalize your learning</p>
+                </div>
                 
-                <form id="onboardingForm">
-                    <div class="form-group mb-5">
-                        <label for="userName" class="block mb-2 text-sm font-medium text-slate-200">What should we call you?</label>
-                        <div class="input-with-icon relative">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                            <input type="text" id="userName" name="userName" placeholder="Enter your full name" required>
-                        </div>
+                <div id="onboardingMessage" class="hidden"></div>
+                
+                <form id="onboardingForm" class="space-y-4">
+                    <div>
+                        <label for="userName" class="block text-sm font-medium text-slate-300 mb-1.5">Full Name</label>
+                        <input type="text" id="userName" name="userName" class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-slate-500 focus:border-blue-500 outline-none transition-all" placeholder="Your name" required>
+                    </div>
+                    <div>
+                        <label for="mobileNumber" class="block text-sm font-medium text-slate-300 mb-1.5">Mobile Number</label>
+                        <input type="tel" id="mobileNumber" name="mobileNumber" pattern="[0-9]{10}" class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-slate-500 focus:border-blue-500 outline-none transition-all" placeholder="10-digit mobile number" required>
+                    </div>
+                    <div>
+                        <label for="preparationYear" class="block text-sm font-medium text-slate-300 mb-1.5">Target Year</label>
+                        <select id="preparationYear" name="preparationYear" class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white focus:border-blue-500 outline-none transition-all appearance-none" required>
+                            <option value="" class="bg-slate-900">Select Year</option>
+                            <option value="2026" class="bg-slate-900" selected>NEET 2026</option>
+                            <option value="2027" class="bg-slate-900">NEET 2027</option>
+                        </select>
                     </div>
                     
-                    <div class="form-group mb-5">
-                        <label for="mobileNumber" class="block mb-2 text-sm font-medium text-slate-200">Mobile Number</label>
-                        <div class="input-with-icon relative">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-                            <input type="tel" id="mobileNumber" name="mobileNumber" placeholder="Enter your 10-digit mobile number" pattern="[0-9]{10}" required>
-                        </div>
-                        <small class="block mt-1.5 text-xs text-slate-400">Enter without +91 or country code</small>
-                    </div>
-                    
-                    <div class="form-group mb-5">
-                        <label for="preparationYear" class="block mb-2 text-sm font-medium text-slate-200">Target NEET Preparation Year</label>
-                        <div class="relative">
-                            <select id="preparationYear" name="preparationYear" class="form-group" required>
-                                <option value="">Select your target year</option>
-                                <option value="2026" selected>NEET 2026</option>
-                                <option value="2027">NEET 2027</option>
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <button type="submit" class="btn btn-primary w-full flex items-center justify-center gap-2 px-5 py-3 rounded-lg font-semibold bg-gradient-to-r from-primary to-secondary text-white shadow-lg hover:shadow-primary/50 transition-all duration-300 transform hover:-translate-y-px mt-2" id="completeProfileBtn">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                        Complete Profile & Continue
+                    <button type="submit" id="completeProfileBtn" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white font-semibold shadow-lg transition-all mt-2">
+                        Start Learning
                     </button>
                 </form>
             </div>
         </div>
     </div>
 
-
-    <!-- 
-      START: FIREBASE INTEGRATION 
-    -->
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore-compat.js"></script>
-    <!-- 
-      END: FIREBASE INTEGRATION 
-    -->
 
-
-    <!-- JavaScript -->
     <script>
-        // Your Firebase configuration provided by you
+        // Firebase Configuration
         const firebaseConfig = {
             apiKey: "AIzaSyD7UYp7ApLTpku2y4gAw8QprAkCNGhRsLI",
             authDomain: "quiz-app-ad5de.firebaseapp.com",
@@ -661,19 +417,15 @@
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
 
-        // Simple modal and auth controller
+        // App Logic
         class VidyucationApp {
             constructor() {
                 this.modals = {};
-                
-                // Firebase services
                 this.auth = firebase.auth();
-                this.db = firebase.firestore(); // Initialize Firestore
+                this.db = firebase.firestore();
                 this.googleProvider = new firebase.auth.GoogleAuthProvider();
-                
                 this.currentUser = null;
                 
-                // DOM Elements
                 this.ui = {
                     loggedOutButtons: document.getElementById('loggedOutButtons'),
                     loggedInProfile: document.getElementById('loggedInProfile'),
@@ -681,10 +433,7 @@
                     userNameDisplay: document.getElementById('userNameDisplay'),
                     signOutBtn: document.getElementById('signOutBtn'),
                     practiceBtn: document.querySelector('.practice-btn'),
-                    // testBtn: document.querySelector('.test-btn'), // This class wasn't in the HTML, so I'm commenting it out.
                     createTestBtn: document.querySelector('.create-test-btn'),
-                    
-                    // Mobile Menu
                     mobileMenuBtn: document.getElementById('mobileMenuBtn'),
                     mobileMenu: document.getElementById('mobileMenu'),
                     menuIconOpen: document.getElementById('menuIconOpen'),
@@ -695,212 +444,117 @@
             }
 
             init() {
-                console.log('🚀 Starting Vidyucation App with Firestore...');
                 this.setupModals();
                 this.bindEvents();
-                this.setupAuthListener(); // This is now a REAL listener
+                this.setupAuthListener();
             }
 
             setupModals() {
-                this.modals.login = {
-                    el: document.getElementById('loginModal'),
-                    content: document.getElementById('loginModal').querySelector('.modal-content')
-                };
-                this.modals.signup = {
-                    el: document.getElementById('signupModal'),
-                    content: document.getElementById('signupModal').querySelector('.modal-content')
-                };
-                this.modals.onboarding = {
-                    el: document.getElementById('onboardingModal'),
-                    content: document.getElementById('onboardingModal').querySelector('.modal-content')
-                };
-                console.log('✅ Modals initialized');
+                this.modals.login = { el: document.getElementById('loginModal'), content: document.getElementById('loginModal').querySelector('.modal-content') };
+                this.modals.signup = { el: document.getElementById('signupModal'), content: document.getElementById('signupModal').querySelector('.modal-content') };
+                this.modals.onboarding = { el: document.getElementById('onboardingModal'), content: document.getElementById('onboardingModal').querySelector('.modal-content') };
             }
 
             bindEvents() {
-                // Header buttons
-                document.querySelector('.login-btn').addEventListener('click', () => this.showModal('login'));
-                document.querySelector('.signup-btn').addEventListener('click', () => this.showModal('signup'));
+                // Auth buttons
+                document.querySelectorAll('.login-btn').forEach(btn => btn.addEventListener('click', () => this.showModal('login')));
+                document.querySelectorAll('.signup-btn').forEach(btn => btn.addEventListener('click', () => this.showModal('signup')));
                 this.ui.signOutBtn.addEventListener('click', () => this.handleSignOut());
                 
-                // Mobile Menu Toggle
+                // Mobile Menu
                 this.ui.mobileMenuBtn.addEventListener('click', () => this.toggleMobileMenu());
 
-                // Hero buttons (will be updated by auth listener)
-                this.bindHeroButtons(false); // Bind to show modal initially
+                // Hero Buttons
+                this.bindHeroButtons(false);
                 
-                // Test creation button (will be updated by auth listener)
                 this.ui.createTestBtn.addEventListener('click', () => {
                     if (!this.currentUser) this.showModal('signup');
-                    // *** FIX 1: Changed '#' to 'dashboard.html' ***
-                    else window.location.href = 'dashboard.html'; // Or test creation page
+                    else window.location.href = 'dashboard.html';
                 });
 
-
-                // Modal links
-                document.getElementById('showSignup').addEventListener('click', (e) => {
-                    e.preventDefault();
-                    this.showModal('signup');
+                // Modal Links
+                document.getElementById('showSignup').addEventListener('click', (e) => { e.preventDefault(); this.showModal('signup'); });
+                document.getElementById('showLogin').addEventListener('click', (e) => { e.preventDefault(); this.showModal('login'); });
+                
+                // Close Modals
+                document.querySelectorAll('.close').forEach(btn => btn.addEventListener('click', () => this.closeAllModals()));
+                Object.values(this.modals).forEach(modal => {
+                    modal.el.addEventListener('click', (e) => { if (e.target === modal.el) this.closeAllModals(); });
                 });
 
-                document.getElementById('showLogin').addEventListener('click', (e) => {
-                    e.preventDefault();
-                    this.showModal('login');
-                });
-
-                // Close buttons
-                document.querySelectorAll('.close').forEach(btn => {
-                    btn.addEventListener('click', () => this.closeAllModals());
-                });
-
-                // Form submissions
+                // Forms
                 document.getElementById('loginForm').addEventListener('submit', (e) => this.handleLogin(e));
                 document.getElementById('signupForm').addEventListener('submit', (e) => this.handleSignup(e));
                 document.getElementById('onboardingForm').addEventListener('submit', (e) => this.handleOnboarding(e));
 
-                // Google Sign In (both buttons call the same function)
+                // Google Auth
                 document.getElementById('googleSignupBtn').addEventListener('click', () => this.handleGoogleSignIn());
                 document.getElementById('googleLoginBtn').addEventListener('click', () => this.handleGoogleSignIn());
-
-                // Modal background clicks
-                Object.values(this.modals).forEach(modal => {
-                    modal.el.addEventListener('click', (e) => {
-                        if (e.target === modal.el) this.closeAllModals();
-                    });
-                });
-
-                console.log('✅ All events bound successfully');
             }
             
-            // NEW: Toggle Mobile Menu
             toggleMobileMenu() {
                 const isHidden = this.ui.mobileMenu.classList.contains('hidden');
                 if (isHidden) {
                     this.ui.mobileMenu.classList.remove('hidden');
-                    this.ui.mobileMenu.classList.add('flex');
                     this.ui.menuIconOpen.classList.add('hidden');
                     this.ui.menuIconClose.classList.remove('hidden');
                 } else {
                     this.ui.mobileMenu.classList.add('hidden');
-                    this.ui.mobileMenu.classList.remove('flex');
                     this.ui.menuIconOpen.classList.remove('hidden');
                     this.ui.menuIconClose.classList.add('hidden');
                 }
             }
             
-            // Helper to bind hero buttons based on auth state
             bindHeroButtons(isLoggedIn) {
-                const action = () => {
-                    if (isLoggedIn) {
-                        // *** FIX 2: Changed '#' to 'dashboard.html' ***
-                        window.location.href = 'dashboard.html'; // Go to dashboard
-                    } else {
-                        this.showModal('login'); // Show login modal
-                    }
-                };
-                this.ui.practiceBtn.onclick = action; // Use onclick to easily overwrite
-                // this.ui.testBtn.onclick = action; // testBtn is not in the HTML
+                const action = () => { isLoggedIn ? window.location.href = 'dashboard.html' : this.showModal('login'); };
+                this.ui.practiceBtn.onclick = action;
             }
 
-            // UPDATED: showModal to use Tailwind classes for transitions
             showModal(modalName) {
                 this.closeAllModals();
                 if (this.modals[modalName]) {
                     const modal = this.modals[modalName];
                     modal.el.classList.remove('opacity-0', 'pointer-events-none', 'invisible');
                     modal.el.classList.add('opacity-100', 'visible');
-                    
                     modal.content.classList.remove('scale-95', 'opacity-0');
                     modal.content.classList.add('scale-100', 'opacity-100');
-                    
-                    console.log(`📱 Opened ${modalName} modal`);
                 }
             }
 
-            // UPDATED: closeAllModals to use Tailwind classes for transitions
             closeAllModals() {
                 Object.values(this.modals).forEach(modal => {
                     modal.el.classList.add('opacity-0', 'invisible');
                     modal.el.classList.remove('opacity-100', 'visible');
-                    // Give it time to fade out before disabling pointer events
-                    setTimeout(() => {
-                        if(modal.el.classList.contains('opacity-0')) {
-                             modal.el.classList.add('pointer-events-none');
-                        }
-                    }, 300);
-                    
+                    setTimeout(() => { if(modal.el.classList.contains('opacity-0')) modal.el.classList.add('pointer-events-none'); }, 300);
                     modal.content.classList.add('scale-95', 'opacity-0');
                     modal.content.classList.remove('scale-100', 'opacity-100');
                 });
             }
 
-            // UPDATED: showMessage to use Tailwind classes
             showMessage(message, type, elementId) {
                 const messageEl = document.getElementById(elementId);
                 if (messageEl) {
                     messageEl.textContent = message;
-                    // Reset classes
-                    messageEl.className = 'auth-message';
-                    messageEl.classList.add('p-3', 'rounded-lg', 'mb-4', 'text-center', 'font-medium', 'border');
-                    
-                    if (type === 'success') {
-                        messageEl.classList.add('bg-green-500/10', 'border-green-500/30', 'text-green-400');
-                    } else if (type === 'error') {
-                        messageEl.classList.add('bg-red-500/10', 'border-red-500/30', 'text-red-400');
-                    } else {
-                         messageEl.classList.add('bg-blue-500/10', 'border-blue-500/30', 'text-blue-400');
-                    }
-                    
-                    messageEl.classList.remove('hidden'); // Show it
-                    
-                    setTimeout(() => {
-                        messageEl.classList.add('hidden');
-                    }, 5000);
+                    messageEl.className = 'p-3 rounded-lg mb-4 text-center text-sm font-medium border';
+                    if (type === 'success') messageEl.classList.add('bg-green-500/10', 'border-green-500/30', 'text-green-400');
+                    else messageEl.classList.add('bg-red-500/10', 'border-red-500/30', 'text-red-400');
+                    messageEl.classList.remove('hidden');
+                    setTimeout(() => messageEl.classList.add('hidden'), 5000);
                 }
             }
 
             setButtonLoading(buttonId, loading) {
                 const button = document.getElementById(buttonId);
                 if (!button) return;
-
                 if (loading) {
                     button.disabled = true;
-                    button.classList.add('opacity-60', 'cursor-not-allowed');
-                    const originalText = button.innerHTML;
-                    button.setAttribute('data-original-text', originalText);
-                    
-                    // SVG Spinner
-                    const spinnerIcon = '<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>';
-                    
-                    if (buttonId.startsWith('google')) {
-                        button.innerHTML = `${spinnerIcon} <span>Connecting...</span>`;
-                    } else {
-                        button.innerHTML = `${spinnerIcon} <span>Loading...</span>`;
-                    }
+                    button.classList.add('opacity-70', 'cursor-not-allowed');
+                    button.dataset.originalText = button.innerHTML;
+                    button.innerHTML = '<svg class="animate-spin h-5 w-5 mx-auto text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>';
                 } else {
                     button.disabled = false;
-                    button.classList.remove('opacity-60', 'cursor-not-allowed');
-                    const originalText = button.getAttribute('data-original-text');
-                    if (originalText) {
-                        button.innerHTML = originalText;
-                        button.removeAttribute('data-original-text');
-                    }
-                }
-            }
-
-            getFriendlyAuthError(error) {
-                switch (error.code) {
-                    case 'auth/user-not-found':
-                    case 'auth/wrong-password':
-                        return 'Invalid email or password.';
-                    case 'auth/email-already-in-use':
-                        return 'An account with this email already exists.';
-                    case 'auth/weak-password':
-                        return 'Password is too weak. Must be at least 6 characters.';
-                    case 'auth/invalid-email':
-                        return 'Please enter a valid email address.';
-                    default:
-                        return error.message;
+                    button.classList.remove('opacity-70', 'cursor-not-allowed');
+                    if (button.dataset.originalText) button.innerHTML = button.dataset.originalText;
                 }
             }
 
@@ -909,14 +563,10 @@
                 this.setButtonLoading('loginBtn', true);
                 const email = document.getElementById('email').value;
                 const password = document.getElementById('password').value;
-
                 try {
                     await this.auth.signInWithEmailAndPassword(email, password);
-                    console.log('User logged in successfully.');
-                    // onAuthStateChanged will handle UI and modal closing
                 } catch (error) {
-                    console.error('Login error:', error.code, error.message);
-                    this.showMessage(this.getFriendlyAuthError(error), 'error', 'authMessage');
+                    this.showMessage(error.message, 'error', 'authMessage');
                 } finally {
                     this.setButtonLoading('loginBtn', false);
                 }
@@ -927,21 +577,11 @@
                 this.setButtonLoading('signupBtn', true);
                 const email = document.getElementById('signupEmail').value;
                 const password = document.getElementById('signupPassword').value;
-
                 try {
                     await this.auth.createUserWithEmailAndPassword(email, password);
-                    
-                    this.showMessage('Account created! Please complete your profile.', 'success', 'signupMessage');
-                    
-                    document.getElementById('signupEmail').value = '';
-                    document.getElementById('signupPassword').value = '';
-
-                    // Show onboarding
                     this.showModal('onboarding');
-
                 } catch (error) {
-                    console.error('Signup error:', error.code, error.message);
-                    this.showMessage(this.getFriendlyAuthError(error), 'error', 'signupMessage');
+                    this.showMessage(error.message, 'error', 'signupMessage');
                 } finally {
                     this.setButtonLoading('signupBtn', false);
                 }
@@ -950,160 +590,78 @@
             async handleGoogleSignIn() {
                 this.setButtonLoading('googleSignupBtn', true);
                 this.setButtonLoading('googleLoginBtn', true);
-                this.showMessage('Opening Google Sign-In...', 'info', 'signupMessage');
-                this.showMessage('Opening Google Sign-In...', 'info', 'authMessage');
-
                 try {
                     const result = await this.auth.signInWithPopup(this.googleProvider);
-                    const user = result.user;
-                    const isNewUser = result.additionalUserInfo.isNewUser;
-                    
-                    console.log('Google Sign-In Success:', user);
-                    this.showMessage('Sign-in successful!', 'success', 'signupMessage');
-
-                    if (isNewUser) {
-                        console.log('New user detected, showing onboarding.');
-                        document.getElementById('userName').value = user.displayName || '';
+                    if (result.additionalUserInfo.isNewUser) {
+                        document.getElementById('userName').value = result.user.displayName || '';
                         this.showModal('onboarding');
                     } else {
-                        console.log('Existing user, closing modals.');
                         this.closeAllModals();
                     }
-
                 } catch (error) {
-                    this.showMessage(`Google sign-in failed: ${error.message}`, 'error', 'signupMessage');
-                    this.showMessage(`Google sign-in failed: ${error.message}`, 'error', 'authMessage');
-                    console.error('Google sign-in error:', error);
+                    this.showMessage(error.message, 'error', 'authMessage');
                 } finally {
                     this.setButtonLoading('googleSignupBtn', false);
                     this.setButtonLoading('googleLoginBtn', false);
                 }
             }
-            
-            async handleSignOut() {
-                try {
-                    await this.auth.signOut();
-                    console.log('User signed out successfully.');
-                    // Auth listener will automatically update the UI
-                } catch (error) {
-                    console.error('Sign out error:', error);
-                }
-            }
 
             async handleOnboarding(e) {
                 e.preventDefault();
-                const userName = document.getElementById('userName').value;
-                const mobileNumber = document.getElementById('mobileNumber').value;
-                const preparationYear = document.getElementById('preparationYear').value;
-
                 this.setButtonLoading('completeProfileBtn', true);
-
-                if (!this.currentUser) {
-                    this.showMessage('No user is logged in. Please sign in again.', 'error', 'onboardingMessage');
-                    this.setButtonLoading('completeProfileBtn', false);
-                    return;
-                }
-                
-                if (!userName || !mobileNumber || !preparationYear) {
-                    this.showMessage('Please fill in all fields.', 'error', 'onboardingMessage');
-                    this.setButtonLoading('completeProfileBtn', false);
-                    return;
-                }
-
                 try {
-                    await this.currentUser.updateProfile({
-                        displayName: userName
-                    });
-                    console.log('Firebase Auth profile display name updated.');
+                    const user = this.currentUser;
+                    if (!user) throw new Error("No user logged in");
                     
-                    const userDocRef = this.db.collection('users').doc(this.currentUser.uid);
-                    
-                    const profileData = {
-                        name: userName,
-                        mobile: mobileNumber,
-                        targetYear: preparationYear,
-                        email: this.currentUser.email,
+                    await user.updateProfile({ displayName: document.getElementById('userName').value });
+                    await this.db.collection('users').doc(user.uid).set({
+                        name: document.getElementById('userName').value,
+                        mobile: document.getElementById('mobileNumber').value,
+                        targetYear: document.getElementById('preparationYear').value,
+                        email: user.email,
                         createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                    };
+                    }, { merge: true });
                     
-                    await userDocRef.set(profileData, { merge: true }); 
-                    
-                    console.log('Onboarding data saved to Firestore:', profileData);
-                    
-                    this.showMessage('Profile completed successfully! Redirecting...', 'success', 'onboardingMessage');
-                    setTimeout(() => {
-                        // *** FIX 3: Changed '#' to 'dashboard.html' ***
-                        window.location.href = 'dashboard.html'; // Redirect to dashboard
-                    }, 1500);
-
+                    window.location.href = 'dashboard.html';
                 } catch (error) {
-                    this.showMessage(`Error saving profile: ${error.message}`, 'error', 'onboardingMessage');
-                    console.error('Onboarding Firestore/Auth error:', error);
+                    this.showMessage(error.message, 'error', 'onboardingMessage');
                     this.setButtonLoading('completeProfileBtn', false);
                 }
             }
+
+            handleSignOut() { this.auth.signOut(); }
 
             setupAuthListener() {
                 this.auth.onAuthStateChanged((user) => {
                     if (user) {
-                        console.log('Auth state changed: User is LOGGED IN', user);
                         this.currentUser = user;
-                        this.updateUIForLoggedInUser(user);
+                        this.updateUI(true, user);
                     } else {
-                        console.log('Auth state changed: User is LOGGED OUT');
                         this.currentUser = null;
-                        this.updateUIForLoggedOutUser();
+                        this.updateUI(false);
                     }
                 });
             }
             
-            updateUIForLoggedInUser(user) {
-                this.ui.loggedOutButtons.classList.add('hidden');
-                this.ui.loggedInProfile.classList.remove('hidden');
-                
-                this.ui.userNameDisplay.textContent = user.displayName || 'NEET Aspirant';
-                
-                if (user.photoURL) {
-                    this.ui.userAvatar.innerHTML = `<img src="${user.photoURL}" alt="${user.displayName}" class="w-full h-full object-cover">`;
+            updateUI(isLoggedIn, user = null) {
+                if (isLoggedIn) {
+                    this.ui.loggedOutButtons.classList.add('hidden');
+                    this.ui.loggedInProfile.classList.remove('hidden');
+                    this.ui.loggedInProfile.classList.add('flex');
+                    this.ui.userNameDisplay.textContent = user.displayName || 'Student';
+                    const initial = (user.displayName || 'U')[0].toUpperCase();
+                    this.ui.userAvatar.innerHTML = user.photoURL ? `<img src="${user.photoURL}" class="w-full h-full object-cover">` : initial;
+                    if(!this.modals.onboarding.el.classList.contains('opacity-100')) this.closeAllModals();
                 } else {
-                    const initial = (user.displayName || user.email || 'N')[0].toUpperCase();
-                    this.ui.userAvatar.innerHTML = `<span class="w-full h-full flex items-center justify-center text-lg">${initial}</span>`;
+                    this.ui.loggedOutButtons.classList.remove('hidden');
+                    this.ui.loggedInProfile.classList.add('hidden');
+                    this.ui.loggedInProfile.classList.remove('flex');
                 }
-                
-                this.bindHeroButtons(true);
-                
-                // Close any open modals *except* onboarding
-                if(this.modals.onboarding.el.classList.contains('opacity-0')) {
-                    this.closeAllModals();
-                }
-                
-                // If mobile menu is open, close it
-                if (!this.ui.mobileMenu.classList.contains('hidden')) {
-                    this.toggleMobileMenu();
-                }
-            }
-            
-            updateUIForLoggedOutUser() {
-                this.ui.loggedOutButtons.classList.remove('hidden');
-                this.ui.loggedInProfile.classList.add('hidden');
-                this.ui.userNameDisplay.textContent = '';
-                this.ui.userAvatar.innerHTML = '';
-                
-                this.bindHeroButtons(false);
-                
-                // If mobile menu is open, close it
-                if (!this.ui.mobileMenu.classList.contains('hidden')) {
-                    this.toggleMobileMenu();
-                }
+                this.bindHeroButtons(isLoggedIn);
             }
         }
 
-        // Initialize the app when DOM is ready
-        document.addEventListener('DOMContentLoaded', function() {
-            window.vidyucationApp = new VidyucationApp();
-        });
+        document.addEventListener('DOMContentLoaded', () => { window.vidyucationApp = new VidyucationApp(); });
     </script>
 </body>
 </html>
-
-
